@@ -36,4 +36,8 @@ describe Dphil::Transliterate do
   it "normalizes IAST" do
     expect(described_class.normalize_iast(iast)).to eq(norm)
   end
+
+  it "normalization properly processes control words"
+
+  it "normalization doesn't double-normalize control words"
 end
