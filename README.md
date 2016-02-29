@@ -1,5 +1,9 @@
 # Dphil
 
+[![Build Status](https://travis-ci.org/ubcsanskrit/dphil.svg?branch=master)](https://travis-ci.org/ubcsanskrit/dphil)
+[![Code Climate](https://codeclimate.com/github/ubcsanskrit/dphil/badges/gpa.svg)](https://codeclimate.com/github/ubcsanskrit/dphil)
+[![Test Coverage](https://codeclimate.com/github/ubcsanskrit/dphil/badges/coverage.svg)](https://codeclimate.com/github/ubcsanskrit/dphil/coverage)
+
 UBC Sanskrit Digital Philology ruby tools. This gem will eventually be broken apart into individual component gems.
 
 ## Installation
