@@ -55,6 +55,9 @@ Metrics/PerceivedComplexity:
   Enabled: false
 
 # Style
+Style/AsciiComments:
+  Enabled: false
+
 Style/CollectionMethods:
   Enabled: true
 
