@@ -1,9 +1,7 @@
 language: ruby
 rvm:
   - 2.3.0
-script:
-  - bundle exec rubocop --format p
-  - bundle exec rspec --format p
+script: bundle exec rake spec SPEC_OPTS="--format p"
 addons:
   code_climate:
     repo_token: 7a8729db8d28ece935336bae76c859dc0e7ad29882c418c5fadc3c8e014c1089
