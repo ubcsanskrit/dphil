@@ -2,12 +2,19 @@
 require "spec_helper"
 
 describe Dphil::Transliterate do
-  iast = "kaḥ khagaughāṅciccaujā jhāñjño 'ṭauṭhīḍḍaṇḍhaṇaḥ | tathodadhīn papharbābhīrmayo 'rilvāśiṣāṃ sahaḥ ||".unicode_normalize(:nfkc)
-  kh = "kaH khagaughAGciccaujA jhAJjJo 'TauThIDDaNDhaNaH | tathodadhIn papharbAbhIrmayo 'rilvAziSAM sahaH ||".unicode_normalize(:nfkc)
-  slp1 = "kaH KagOGANciccOjA JAYjYo 'wOWIqqaRQaRaH | taTodaDIn paParbABIrmayo 'rilvASizAM sahaH ||".unicode_normalize(:nfkc)
+  iast_up = "ĀAĪIŪUṚ Ṝ Ḷ Ḹ ṬḌṄṆÑṂŚṢḤ || KAḤ KHAGAUGHĀṄCICCAUJĀ JHĀÑJÑO 'ṬAUṬHĪḌḌAṆḌHAṆAḤ | TATHODADHĪN PAPHARBĀBHĪRMAYO 'RILVĀŚIṢĀṂ SAHAḤ ||"
+  iast = "āaīiūuṛ ṝ ḷ ḹ ṭḍṅṇñṃśṣḥ || kaḥ khagaughāṅciccaujā jhāñjño 'ṭauṭhīḍḍaṇḍhaṇaḥ | tathodadhīn papharbābhīrmayo 'rilvāśiṣāṃ sahaḥ ||"
+  kh = "AaIiUuR RR lR lRR TDGNJMzSH || kaH khagaughAGciccaujA jhAJjJo 'TauThIDDaNDhaNaH | tathodadhIn papharbAbhIrmayo 'rilvAziSAM sahaH ||"
+  slp1 = "AaIiUuf F x X wqNRYMSzH || kaH KagOGANciccOjA JAYjYo 'wOWIqqaRQaRaH | taTodaDIn paParbABIrmayo 'rilvASizAM sahaH ||"
+  ascii = "aaiiuur r l l tdnnnmssh || kah khagaughanciccauja jhanjno 'tauthiddandhanah | tathodadhin papharbabhirmayo 'rilvasisam sahah ||"
+  norm = "AaIiUuf F x X wqMMMMSz || ka KagOGAMciccOjA JAMjMo 'wOWIqqaMQaMa | taTodaDIM paParvABIrMayo 'rilvASizAM saha ||"
 
-  ascii = "kah khagaughanciccauja jhanjno 'tauthiddandhanah | tathodadhin papharbabhirmayo 'rilvasisam sahah ||"
-  norm = "kaH KagOGAMciccOjA JAMjMo 'wOWIqqaMQaMaH | taTodaDIM paParvABIrMayo 'rilvASizAM sahaH ||"
+  control_word = "{{test}}"
+  control_word_processed = "{{#4cee64562d96c832de8354ee3cdd4cbce66d10cd#}}"
+
+  it "downcases unicode properly" do
+    expect(described_class.unicode_downcase(iast_up)).to eq(iast)
+  end
 
   it "transliterates IAST to ASCII" do
     expect(described_class.iast_ascii(iast)).to eq(ascii)
@@ -37,7 +44,11 @@ describe Dphil::Transliterate do
     expect(described_class.normalize_iast(iast)).to eq(norm)
   end
 
-  it "normalization properly processes control words"
+  it "normalization properly processes control words" do
+    expect(described_class.normalize_slp1(control_word)).to eq(control_word_processed)
+  end
 
-  it "normalization doesn't double-normalize control words"
+  it "normalization doesn't double-normalize control words" do
+    expect(described_class.normalize_slp1(control_word_processed)).to eq(control_word_processed)
+  end
 end

@@ -2,18 +2,25 @@
 module Dphil
   # Transliteration module for basic romanization formats.
   module Transliterate
-    @iast_chars  = "ĀāÄäAaĪīÏïIiŪūÜüUuṛḷṬṭḌḍṄṅṆṇÑñṂṃŚśṢṣḤḥ".unicode_normalize(:nfkc).freeze
-    @kh_chars    = "AAaaaaIIiiiiUUuuuuRLTTDDGGNNJJMMzzSSHH".unicode_normalize(:nfkc).freeze
-    @ascii_chars = "aaaaaaiiiiiiuuuuuurlttddnnnnnnmmsssshh".unicode_normalize(:nfkc).freeze
+    @iast_chars  = "āäaīïiūüuṭḍṅṇñṃśṣḥṛṝḷḹ"
+    @kh_chars    = "AaaIiiUuuTDGNJMzSHṛṝḷḹ"
+    @ascii_chars = "aaaiiiuuutdnnnmsshrrll"
+
+    @iast_kh_comp = {
+      "ḹ" => "lRR",
+      "ḷ" => "lR",
+      "ṝ" => "RR",
+      "ṛ" => "R",
+    }
 
     @slp1_match = {
       "A" => "ā",
       "I" => "ī",
       "U" => "ū",
       "f" => "ṛ",
-      "F" => "ṝ",
+      "F" => "ṝ",
       "x" => "ḷ",
-      "X" => "ḹ",
+      "X" => "ḹ",
       "E" => "ai",
       "O" => "au",
       "K" => "kh",
@@ -34,59 +41,68 @@ module Dphil
       "S" => "ś",
       "z" => "ṣ",
       "M" => "ṃ",
-      "H" => "ḥ"
+      "H" => "ḥ",
     }
 
-    @slp1_match.keys.each do |k|
-      @slp1_match[k] = @slp1_match[k].unicode_normalize(:nfkc)
+    @control_word = /\A[{]{2}(.*)[}]{2}\z/
+    @control_word_processed = /\A#[0-9a-f]{40}#\z/
+
+    module_function
+
+    def unicode_downcase(st)
+      out = st.dup
+      out.unicode_normalize!(:nfd)
+      out.downcase!
+      out.unicode_normalize!(:nfc)
+      out
     end
 
-    @control_match = /\{\{.*\}\}/
-
-    def self.iast_ascii(st)
-      out = st.dup
+    def iast_ascii(st)
+      out = unicode_downcase(st)
       out.tr!(@iast_chars, @ascii_chars)
       out
     end
 
-    def self.iast_kh(st)
-      out = st.downcase.unicode_normalize(:nfkc)
+    def iast_kh(st)
+      out = unicode_downcase(st)
       out.tr!(@iast_chars, @kh_chars)
+      @iast_kh_comp.each { |k, v| out.gsub!(k, v) }
       out
     end
 
-    def self.kh_iast(st)
+    def kh_iast(st)
       out = st.dup
       out.tr!(@kh_chars, @iast_chars)
+      @iast_kh_comp.each { |k, v| out.gsub!(v, k) }
       out
     end
 
-    def self.iast_slp1(st)
-      out = st.downcase.unicode_normalize(:nfkc)
-      @slp1_match.each do |k, v|
-        out.gsub!(v, k)
-      end
+    def iast_slp1(st)
+      out = unicode_downcase(st)
+      @slp1_match.each { |k, v| out.gsub!(v, k) }
       out
     end
 
-    def self.slp1_iast(st)
+    def slp1_iast(st)
       out = st.dup
-      @slp1_match.each do |k, v|
-        out.gsub!(k, v)
+      @slp1_match.each { |k, v| out.gsub!(k, v) }
+      out
+    end
+
+    def normalize_slp1(word)
+      match = word[@control_word, 1]
+      if match
+        return word if match[@control_word_processed]
+        return "{{##{Digest::SHA1.hexdigest(word)}#}}"
       end
-      out
-    end
-
-    def self.normalize_slp1(word)
-      return Digest::SHA1.hexdigest(word) if @control_match.match(word)
       out = word.dup
-      out.tr!("b", "v") # b->v
+      out.tr!("b", "v")
       out.gsub!(/\B[NYRnm]/, "M") # Medial and final nasals
-      out.gsub!(/\B[Hrs]\z/, "") # Final visarga/r/s
+      out.gsub!(/\B[Hrs]\b/, "") # Final visarga/r/s
       out
     end
 
-    def self.normalize_iast(word)
+    def normalize_iast(word)
       out = iast_slp1(word)
       normalize_slp1(out)
     end

@@ -78,3 +78,6 @@ Style/StringLiterals:
 
 Style/SymbolArray:
   Enabled: true
+
+Style/TrailingCommaInLiteral:
+  EnforcedStyleForMultiline: comma
