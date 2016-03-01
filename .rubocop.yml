@@ -73,6 +73,13 @@ Style/HashSyntax:
 Style/MethodCalledOnDoEndBlock:
   Enabled: true
 
+Style/PercentLiteralDelimiters:
+  PreferredDelimiters:
+    '%i': '[]'
+    '%I': '[]'
+    '%w': '[]'
+    '%W': '[]'
+
 Style/StringLiterals:
   EnforcedStyle: double_quotes
 
