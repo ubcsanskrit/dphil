@@ -80,6 +80,7 @@ module Dphil
       process_string(st, all) do |out|
         out = unicode_downcase(out, true)
         out.tr!(@iast_chars, @ascii_chars)
+        out
       end
     end
 
