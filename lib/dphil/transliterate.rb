@@ -44,62 +44,91 @@ module Dphil
       "H" => "ḥ",
     }
 
-    @control_word = /\A[{]{2}(.*)[}]{2}\z/
-    @control_word_processed = /\A#[0-9a-f]{40}#\z/
+    @control_word = /\{{2}[^\}]*\}{2}/
+    @control_word_content = /\{{2}([^\}]*)\}{2}/
+    @control_word_processed = /#[a-f0-9]{40}#/
+
+    private_class_method
+
+    def self.process_string(st, all = false)
+      return yield st.dup if all
+
+      scan = st.scan(@control_word)
+      return yield st.dup if scan.empty?
+      return st if scan[0] == st
+
+      out = st.dup
+      out.gsub!(@control_word, "\uE000")
+      out = yield out
+      out.gsub!("\uE000") do
+        scan.shift
+      end
+      out
+    end
 
     module_function
 
-    def unicode_downcase(st)
-      out = st.dup
-      out.unicode_normalize!(:nfd)
-      out.downcase!
-      out.unicode_normalize!(:nfc)
-      out
-    end
-
-    def iast_ascii(st)
-      out = unicode_downcase(st)
-      out.tr!(@iast_chars, @ascii_chars)
-      out
-    end
-
-    def iast_kh(st)
-      out = unicode_downcase(st)
-      out.tr!(@iast_chars, @kh_chars)
-      @iast_kh_comp.each { |k, v| out.gsub!(k, v) }
-      out
-    end
-
-    def kh_iast(st)
-      out = st.dup
-      out.tr!(@kh_chars, @iast_chars)
-      @iast_kh_comp.each { |k, v| out.gsub!(v, k) }
-      out
-    end
-
-    def iast_slp1(st)
-      out = unicode_downcase(st)
-      @slp1_match.each { |k, v| out.gsub!(v, k) }
-      out
-    end
-
-    def slp1_iast(st)
-      out = st.dup
-      @slp1_match.each { |k, v| out.gsub!(k, v) }
-      out
-    end
-
-    def normalize_slp1(word)
-      match = word[@control_word, 1]
-      if match
-        return word if match[@control_word_processed]
-        return "{{##{Digest::SHA1.hexdigest(word)}#}}"
+    def unicode_downcase(st, all = false)
+      process_string(st, all) do |out|
+        out.unicode_normalize!(:nfd)
+        out.downcase!
+        out.unicode_normalize!(:nfc)
       end
-      out = word.dup
-      out.tr!("b", "v")
-      out.gsub!(/\B[NYRnm]/, "M") # Medial and final nasals
-      out.gsub!(/\B[Hrs]\b/, "") # Final visarga/r/s
-      out
+    end
+
+    def iast_ascii(st, all = false)
+      process_string(st, all) do |out|
+        out = unicode_downcase(out, true)
+        out.tr!(@iast_chars, @ascii_chars)
+      end
+    end
+
+    def iast_kh(st, all = false)
+      process_string(st, all) do |out|
+        out = unicode_downcase(out, true)
+        out.tr!(@iast_chars, @kh_chars)
+        @iast_kh_comp.each { |k, v| out.gsub!(k, v) }
+        out
+      end
+    end
+
+    def kh_iast(st, all = false)
+      process_string(st, all) do |out|
+        out.tr!(@kh_chars, @iast_chars)
+        @iast_kh_comp.each { |k, v| out.gsub!(v, k) }
+        out
+      end
+    end
+
+    def iast_slp1(st, all = false)
+      process_string(st, all) do |out|
+        out = unicode_downcase(out, true)
+        @slp1_match.each { |k, v| out.gsub!(v, k) }
+        out
+      end
+    end
+
+    def slp1_iast(st, all = false)
+      process_string(st, all) do |out|
+        @slp1_match.each { |k, v| out.gsub!(k, v) }
+        out
+      end
+    end
+
+    def normalize_slp1(st)
+      out = st.dup
+      out.gsub!(@control_word) do |match|
+        control_content = match[@control_word_content, 1]
+        next match if control_content&.match(@control_word_processed)
+        "{{##{Digest::SHA1.hexdigest(control_content).rjust(40, '0')}#}}"
+      end
+
+      process_string(out, false) do |token|
+        token.tr!("b", "v")
+        token.gsub!(/\B[NYRnm]/, "M") # Medial and final nasals
+        token.gsub!(/\B[Hrs]\b/, "") # Final visarga/r/s
+        token
+      end
     end
 
     def normalize_iast(word)
