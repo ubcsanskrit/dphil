@@ -127,6 +127,7 @@ module Dphil
         token.tr!("b", "v")
         token.gsub!(/\B[NYRnm]/, "M") # Medial and final nasals
         token.gsub!(/\B[Hrs]\b/, "") # Final visarga/r/s
+        token.gsub!(/[\.\-\_]/, "") # Punctuation
         token
       end
     end
