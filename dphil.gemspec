@@ -27,4 +27,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "nyan-cat-formatter", "~> 0.11"
   spec.add_development_dependency "codeclimate-test-reporter", "~> 0.4"
   spec.add_development_dependency "rubocop", "~> 0.37"
+
+  spec.add_runtime_dependency "nokogiri", "~> 1.6"
 end
