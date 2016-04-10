@@ -10,8 +10,6 @@ module Dphil
       xml_normalize!
 
       @empty = true if @xml.xpath("//text()[normalize-space()]").empty?
-
-
     rescue Nokogiri::XML::SyntaxError => e
       raise "TEIDocument (source: #{source}) caught exception: #{e}"
     end
@@ -23,7 +21,7 @@ module Dphil
     alias to_s to_xml
 
     def empty?
-      @empty?
+      @empty
     end
 
     # Public: Return a portion of the document as a new document
