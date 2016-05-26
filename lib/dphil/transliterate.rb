@@ -44,23 +44,23 @@ module Dphil
       "H" => "ḥ",
     }
 
-    @control_word = /\{{2}[^\}]*\}{2}/
-    @control_word_content = /\{{2}([^\}]*)\}{2}/
-    @control_word_processed = /#[a-f0-9]{40}#/
+    CTRL_WORD = /\{{2}[^\}]*\}{2}/
+    CTRL_WORD_CONTENT = /\{{2}([^\}]*)\}{2}/
+    CTRL_WORD_PROCESSED = /#[a-f0-9]{40}#/
 
     private_class_method
 
     def self.process_string(st, all = false)
       return yield st.dup if all
 
-      scan = st.scan(@control_word)
+      scan = st.scan(CTRL_WORD)
       return yield st.dup if scan.empty?
       return st if scan[0] == st
 
       out = st.dup
-      out.gsub!(@control_word, "\uE000")
+      out.gsub!(CTRL_WORD, "\uFFFC")
       out = yield out
-      out.gsub!("\uE000") do
+      out.gsub!("\uFFFC") do
         scan.shift
       end
       out
@@ -118,9 +118,9 @@ module Dphil
 
     def normalize_slp1(st)
       out = st.dup
-      out.gsub!(@control_word) do |match|
-        control_content = match[@control_word_content, 1]
-        next match if control_content&.match(@control_word_processed)
+      out.gsub!(CTRL_WORD) do |match|
+        control_content = match[CTRL_WORD_CONTENT, 1]
+        next match if control_content&.match(CTRL_WORD_PROCESSED)
         "{{##{Digest::SHA1.hexdigest(control_content).rjust(40, '0')}#}}"
       end
 
