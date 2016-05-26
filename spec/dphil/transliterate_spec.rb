@@ -2,13 +2,21 @@
 require "spec_helper"
 
 describe Dphil::Transliterate do
-  iast_up = "ĀAĪIŪUṚ Ṝ Ḷ Ḹ ṬḌṄṆÑṂŚṢḤ || KAḤ KHAGAUGHĀṄCICCAUJĀ JHĀÑJÑO 'ṬAUṬHĪḌḌAṆḌHAṆAḤ | TATHODADHĪN PAPHARBĀBHĪRMAYO 'RILVĀŚIṢĀṂ SAHAḤ || {{Ś01-1.1}} {{Ś01-1.2BḤ}} .-_"
-  iast = "āaīiūuṛ ṝ ḷ ḹ ṭḍṅṇñṃśṣḥ || kaḥ khagaughāṅciccaujā jhāñjño 'ṭauṭhīḍḍaṇḍhaṇaḥ | tathodadhīn papharbābhīrmayo 'rilvāśiṣāṃ sahaḥ || {{Ś01-1.1}} {{Ś01-1.2BḤ}} .-_"
-  kh = "AaIiUuR RR lR lRR TDGNJMzSH || kaH khagaughAGciccaujA jhAJjJo 'TauThIDDaNDhaNaH | tathodadhIn papharbAbhIrmayo 'rilvAziSAM sahaH || {{Ś01-1.1}} {{Ś01-1.2BḤ}} .-_"
-  slp1 = "AaIiUuf F x X wqNRYMSzH || kaH KagOGANciccOjA JAYjYo 'wOWIqqaRQaRaH | taTodaDIn paParbABIrmayo 'rilvASizAM sahaH || {{Ś01-1.1}} {{Ś01-1.2BḤ}} .-_"
-  ascii = "aaiiuur r l l tdnnnmssh || kah khagaughanciccauja jhanjno 'tauthiddandhanah | tathodadhin papharbabhirmayo 'rilvasisam sahah || {{Ś01-1.1}} {{Ś01-1.2BḤ}} .-_"
+  iast_up = "ĀAĪIŪUṚ Ṝ Ḷ Ḹ ṬḌṄṆÑṂŚṢḤ || KAḤ KHAGAUGHĀṄCICCAUJĀ JHĀÑJÑO 'ṬAUṬHĪḌḌAṆḌHAṆAḤ | " \
+            "TATHODADHĪN PAPHARBĀBHĪRMAYO 'RILVĀŚIṢĀṂ SAHAḤ || {{Ś01-1.1}} {{Ś01-1.2BḤ}} .-_"
+  iast = "āaīiūuṛ ṝ ḷ ḹ ṭḍṅṇñṃśṣḥ || kaḥ khagaughāṅciccaujā jhāñjño 'ṭauṭhīḍḍaṇḍhaṇaḥ | " \
+         "tathodadhīn papharbābhīrmayo 'rilvāśiṣāṃ sahaḥ || {{Ś01-1.1}} {{Ś01-1.2BḤ}} .-_"
+  kh = "AaIiUuR RR lR lRR TDGNJMzSH || kaH khagaughAGciccaujA jhAJjJo 'TauThIDDaNDhaNaH | " \
+       "tathodadhIn papharbAbhIrmayo 'rilvAziSAM sahaH || {{Ś01-1.1}} {{Ś01-1.2BḤ}} .-_"
+  slp1 = "AaIiUuf F x X wqNRYMSzH || kaH KagOGANciccOjA JAYjYo 'wOWIqqaRQaRaH | " \
+         "taTodaDIn paParbABIrmayo 'rilvASizAM sahaH || {{Ś01-1.1}} {{Ś01-1.2BḤ}} .-_"
+  ascii = "aaiiuur r l l tdnnnmssh || kah khagaughanciccauja jhanjno 'tauthiddandhanah | " \
+          "tathodadhin papharbabhirmayo 'rilvasisam sahah || {{Ś01-1.1}} {{Ś01-1.2BḤ}} .-_"
 
-  norm = "AaIiUuf F x X wqMMMMSz || ka KagOGAMciccOjA JAMjMo 'wOWIqqaMQaMa | taTodaDIM paParvABIrMayo 'rilvASizAM saha || {{#a232b8c9daf123038c5c13aee182144f774dc452#}} {{#c186324615c533a5167d622fbaa51e9725676eab#}} "
+  norm = "AaIiUuf F x X wqMMMMSz || ka KagOGAMciccOjA JAMjMo wOWIqqaMQaMa | " \
+         "taTodaDIM paParvABIrMayo rilvASizAM saha || " \
+         "{{#a232b8c9daf123038c5c13aee182144f774dc452#}} " \
+         "{{#c186324615c533a5167d622fbaa51e9725676eab#}} "
 
   control_word = "{{test}}"
   control_word_processed = "{{#a94a8fe5ccb19ba61c4c0873d391e987982fbbd3#}}"
