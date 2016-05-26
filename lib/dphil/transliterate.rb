@@ -126,9 +126,10 @@ module Dphil
 
       process_string(out, false) do |token|
         token.tr!("b", "v")
+        token.gsub!(/['‘]\b/, "") # Avagraha
         token.gsub!(/\B[NYRnm]/, "M") # Medial and final nasals
         token.gsub!(/\B[Hrs]\b/, "") # Final visarga/r/s
-        token.gsub!(/[\.\-\_]/, "") # Punctuation
+        token.gsub!(%r{[\.\-\_\\\/]}, "") # Punctuation
         token
       end
     end
