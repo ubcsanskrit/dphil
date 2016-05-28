@@ -29,4 +29,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "pry", "~> 0.10"
 
   spec.add_runtime_dependency "nokogiri", "~> 1.6"
+  spec.add_runtime_dependency "psych", "~> 2.0"
+  spec.add_runtime_dependency "hamster", "~> 3.0"
 end

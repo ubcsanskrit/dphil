@@ -4,3 +4,5 @@ CodeClimate::TestReporter.start
 
 $LOAD_PATH.unshift File.expand_path("../../lib", __FILE__)
 require "dphil"
+
+RSpec::Matchers.define_negated_matcher :not_be_empty, :be_empty
