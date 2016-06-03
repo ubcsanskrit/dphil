@@ -16,7 +16,7 @@ module Dphil
 
     # This loads and processes the data into the module.
     def self.load_data!
-      yml_data = Psych.load_file(File.join("vendor", "metrical_data.yml"))
+      yml_data = Psych.load_file(File.join(__dir__, "..", "..", "vendor", "metrical_data.yml"))
 
       @version = yml_data["commit"].freeze
 
