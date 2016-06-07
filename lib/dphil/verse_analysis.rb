@@ -5,7 +5,7 @@ module Dphil
 
     def syllables(str)
       vowel_match = /[aAiIuUfFxXeEoO]/ # /a|e|i|o|u|f|ḷ|ā|ṝ|ī|ū/s
-      str = Dphil::Transliterate.iast_slp1(str)
+      str = Transliterate.iast_slp1(str.gsub(%r{[\|\.\,/'\s\\]+}, ""))
 
       start = -1
       indices = []
@@ -16,14 +16,19 @@ module Dphil
       indices[0] = 1
       indices << str.length + 1
       (1...indices.length).map do |i|
-        Dphil::Transliterate.slp1_iast(str.slice!(0, indices[i] - indices[i - 1]))
+        Transliterate.slp1_iast(str.slice!(0, indices[i] - indices[i - 1]))
       end
     end
 
     def syllable_weight(syllables_array)
-      syllables_array.map do |syl|
-        Dphil::Transliterate.iast_slp1(syl)[-1, 1] =~ /[aiufx]/ ? "l" : "g"
+      weight_arr = syllables_array.map do |syl|
+        Transliterate.iast_slp1(syl)[-1, 1] =~ /[aiufx]/ ? "L" : "G"
       end
+      weight_arr.join("")
+    end
+
+    def verse_weight(str)
+      syllable_weight(syllables(str))
     end
   end
 end
