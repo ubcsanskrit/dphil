@@ -31,4 +31,5 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency "nokogiri", "~> 1.6"
   spec.add_runtime_dependency "psych", "~> 2.0"
   spec.add_runtime_dependency "hamster", "~> 3.0"
+  spec.add_runtime_dependency "amatch"
 end
