@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 require "psych"
-require "hamster"
+require "ice_nine"
+require "hashie"
 
 module Dphil
   #
@@ -18,13 +19,13 @@ module Dphil
     def self.load_data!
       yml_data = Psych.load_file(File.join(__dir__, "..", "..", "vendor", "metrical_data.yml"))
 
-      @version = yml_data["commit"].freeze
+      @version = IceNine.deep_freeze(yml_data["commit"])
 
       # Hash of meters with names as keys and patterns as values
       meters_h = yml_data["meters"].each_with_object({}) do |(name, patterns), h|
         h[Transliterate.unicode_downcase(name)] = patterns
       end
-      @meters = Hamster.from(meters_h)
+      @meters = IHash.new(meters_h)
 
       # Hash of meters with patterns for keys and names/padas as values
       patterns_h = yml_data["patterns"].each_with_object({}) do |(type, patterns), type_h|
@@ -34,7 +35,7 @@ module Dphil
           end
         end
       end
-      @patterns = Hamster.from(patterns_h)
+      @patterns = IHashM.new(patterns_h)
 
       # Hash of meters with regular expressions for keys and names/padas as values
       regexes_h = yml_data["regexes"].each_with_object({}) do |(type, patterns), type_h|
@@ -44,13 +45,28 @@ module Dphil
           end
         end
       end
-      @regexes = Hamster.from(regexes_h)
+      @regexes = IHashM.new(regexes_h)
 
-      @all = Hamster::Hash.new(version: version,
-                               meters: meters,
-                               patterns: patterns,
-                               regexes: regexes)
+      @all = IHashM.new(version: version,
+                        meters: meters,
+                        patterns: patterns,
+                        regexes: regexes)
       self
+    end
+
+    # Immutable Hash
+    class IHash < ::Hash
+      include Hashie::Extensions::MergeInitializer
+
+      def initialize(*)
+        super
+        IceNine.deep_freeze(self)
+      end
+    end
+
+    # Immutable Hash with method access (for :full, :half, :pada hashes)
+    class IHashM < IHash
+      include Hashie::Extensions::MethodAccess
     end
 
     # Load the data when we load the module
