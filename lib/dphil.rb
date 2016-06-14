@@ -5,6 +5,7 @@ require "dphil/metrical_data"
 require "dphil/verse_analysis"
 require "dphil/tei_xml"
 require "dphil/lemma_list"
+require "dphil/lemma"
 
 # Namespace module definition
 module Dphil
