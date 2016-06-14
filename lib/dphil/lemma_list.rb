@@ -63,8 +63,8 @@ module Dphil
     def cx_tokens
       @members.map do |lemma|
         out = {
-          t: DPhil::Transliterate.normalize_iast(lemma.text),
-          c: lemma.text,
+          t: lemma.text,
+          n: Dphil::Transliterate.normalize_iast(lemma.text),
           i: lemma.index,
           p: lemma.page,
           f: lemma.facs,
@@ -124,7 +124,6 @@ module Dphil
           next
         end
 
-        # text = lemma.gsub(/^\-|\-$/, '').strip
         text = lemma.strip
         @current_lemma << text unless text.empty?
       end
