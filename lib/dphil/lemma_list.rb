@@ -110,7 +110,7 @@ module Dphil
     def characters(string)
       @empty_element = false
       string.split(/(\s)/).reject(&:empty?).each do |lemma|
-        @current_chars << lemma.strip
+        @current_chars += lemma.strip
 
         if lemma =~ /\-$/
           @inside_hyphen = true
