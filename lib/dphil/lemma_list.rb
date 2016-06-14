@@ -149,7 +149,7 @@ module Dphil
     def append_lemma
       return if @current_chars =~ /[^\s\-\.\|]+/ # if not .empty?
       new_lemma_source = @current_lemma.join("")
-      new_lemma = Lemma.new(new_lemma_source, @index)
+      new_lemma = { source: new_lemma_source, index: @index }
       @index += 1
       @members << new_lemma
     end
