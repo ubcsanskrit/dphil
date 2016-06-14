@@ -10,10 +10,9 @@ module Dphil
 
     attr_reader :name
 
-    @lemma_ignore_start_tags = Set.new(%w[TEI text body pre post div])
-    @lemma_ignore_end_tags = @lemma_ignore_start_tags + Set.new(%w[pb lb])
-
     def initialize(source)
+      @lemma_ignore_start_tags = Set.new(%w[TEI text body pre post div])
+      @lemma_ignore_end_tags = @lemma_ignore_start_tags + Set.new(%w[pb lb])
       @members = []
       source = source.to_s.strip
       return if source.empty?
