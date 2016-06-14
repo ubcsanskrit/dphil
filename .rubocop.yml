@@ -88,3 +88,7 @@ Style/SymbolArray:
 
 Style/TrailingCommaInLiteral:
   EnforcedStyleForMultiline: comma
+
+Style/TrivialAccessors:
+  ExactNameMatch: true
+  AllowPredicates: true
