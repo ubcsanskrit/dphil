@@ -7,10 +7,8 @@ module Dphil
       vowel_match = /[aAiIuUfFxXeEoO]/ # /a|e|i|o|u|f|ḷ|ā|ṝ|ī|ū/s
       str = Transliterate.iast_slp1(str.gsub(%r{[\|\.\,/'\s\\]+}, ""))
 
-      start = -1
-      indices = []
-      while start = str.index(vowel_match, start + 1)
-        indices << start
+      indices = (0...str.length).each_with_object([]) do |index, acc|
+        acc << index if str[index] =~ vowel_match
       end
 
       indices[0] = 1
