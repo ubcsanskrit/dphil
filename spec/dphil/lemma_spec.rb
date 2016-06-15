@@ -7,6 +7,4 @@ describe Dphil::Lemma do
   it "instantiates" do
     expect(described_class.new(lemma_source, 1)).to be_a(described_class)
   end
-
-  it "has tests"
 end
