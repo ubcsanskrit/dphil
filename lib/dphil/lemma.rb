@@ -17,7 +17,7 @@ module Dphil
       xml = Nokogiri::XML("<lemma>#{source}</lemma>") { |config| config.strict.noent }
       xml.encoding = "UTF-8"
 
-      @text = xml.text.strip.gsub(/\-+\s+\-*/, "")
+      @text = xml.text.strip.gsub(/\-+\s*\-*/, "")
       @page = xml.css("pb").map { |el| el.attr("n") }.join(",")
       @facs = xml.css("pb").map { |el| el.attr("facs") }.join(",")
       @line = xml.css("lb").map { |el| el.attr("n") }.join(",")
