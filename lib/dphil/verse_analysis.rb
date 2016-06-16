@@ -5,7 +5,8 @@ module Dphil
 
     def syllables(str)
       vowel_match = /[aAiIuUfFxXeEoO]/ # /a|e|i|o|u|f|ḷ|ā|ṝ|ī|ū/s
-      str = Transliterate.iast_slp1(str.gsub(%r{[\|\.\,/'\s\\]+}, ""))
+      str = Transliterate.iast_slp1(str.gsub(%r{[\|\.\,/'\\0-9]+}, ""))
+      str.gsub!(/([aAiIuUfFxXeEoO])([aAiIuUfFxXeEoO])/, "\\1 \\2")
 
       indices = (0...str.length).each_with_object([]) do |index, acc|
         acc << index if str[index] =~ vowel_match
@@ -14,7 +15,7 @@ module Dphil
       indices[0] = 1
       indices << str.length + 1
       (1...indices.length).map do |i|
-        Transliterate.slp1_iast(str.slice!(0, indices[i] - indices[i - 1]))
+        Transliterate.slp1_iast(str.slice!(0, indices[i] - indices[i - 1])).strip
       end
     end
 
