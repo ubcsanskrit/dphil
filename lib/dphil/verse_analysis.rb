@@ -1,27 +1,43 @@
 # frozen_string_literal: true
 module Dphil
   module VerseAnalysis
+    module Regexes
+      vow = "aAiIuUfFxXeEoO"
+      con = "kKgGNcCjJYwWqQRtTdDnpPbBmyrlvzSsh"
+      add = "MH"
+
+      SYL_R = /[#{con}]*[#{vow}][#{con}#{add}]*(?![#{vow}])\s*/
+      G_VOW_R = /[AIUFXeEoO]|[MH]$/
+      G_CON_R = /[#{con}]{2}/
+    end
+
     module_function
 
     def syllables(str)
-      vowel_match = /[aAiIuUfFxXeEoO]/ # /a|e|i|o|u|f|ḷ|ā|ṝ|ī|ū/s
-      str = Transliterate.iast_slp1(str.gsub(%r{[\|\.\,/'\\0-9]+}, ""))
-      str.gsub!(/([aAiIuUfFxXeEoO])([aAiIuUfFxXeEoO])/, "\\1 \\2")
+      str = str.gsub(%r{[\|\.\,/'\\0-9]+}, "")
+      str.gsub!(/\s+/, " ")
+      str = Transliterate.iast_slp1(str)
 
-      indices = (0...str.length).each_with_object([]) do |index, acc|
-        acc << index if str[index] =~ vowel_match
-      end
-
-      indices[0] = 1
-      indices << str.length + 1
-      (1...indices.length).map do |i|
-        Transliterate.slp1_iast(str.slice!(0, indices[i] - indices[i - 1])).strip
-      end
+      syllables = str.scan(Regexes::SYL_R)
+      syllables.map { |syl| Transliterate.slp1_iast(syl).strip }
     end
 
-    def syllable_weight(syllables_array)
-      weight_arr = syllables_array.map do |syl|
-        Transliterate.iast_slp1(syl)[-1, 1] =~ /[aiufx]/ ? "L" : "G"
+    def syllable_weight(syllables)
+      syllables = syllables.map { |syl| Transliterate.iast_slp1(syl) }
+      weight_arr = []
+      (0...syllables.length).each do |i|
+        cur_syl = syllables[i]
+        next_syl = syllables[i + 1]
+
+        weight_arr << if cur_syl =~ Regexes::G_VOW_R
+                        # Guru if current syllable contains a long vowel or end in a ṃ or ḥ
+                        "G"
+                      elsif "#{cur_syl[-1]}#{next_syl&.slice(0)}" =~ Regexes::G_CON_R
+                        # Guru if current syllable ends in a consonant cluster (look ahead)
+                        "G"
+                      else
+                        "L"
+                      end
       end
       weight_arr.join("")
     end

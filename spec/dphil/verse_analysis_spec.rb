@@ -13,12 +13,12 @@ describe Dphil::VerseAnalysis do
 
   it "returns correct weights of corresponding syllables" do
     sample_verses.each do |v|
-      expect(described_class.syllable_weight(v["syllables"])).to eq(v["weights"])
+      expect(described_class.syllable_weight(v["syllables"])).to eq(v["weights"].gsub(/\s+/, ""))
     end
   end
 
   it "combines syllable and weight function into one method" do
     sample = sample_verses.first
-    expect(described_class.verse_weight(sample["verse"])).to eq(sample["weights"])
+    expect(described_class.verse_weight(sample["verse"])).to eq(sample["weights"].gsub(/\s+/, ""))
   end
 end
