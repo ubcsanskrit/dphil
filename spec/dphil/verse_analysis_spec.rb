@@ -33,7 +33,6 @@ describe Dphil::VerseAnalysis do
   it ".identify returns exact matches for sample set" do
     sample_verses.each do |v|
       a = described_class.identify(v["verse"])
-      ap a
       expect(a).to be_kind_of(Hash)
       expect(a[:status]).to eq("exact match")
       expect(a[:meter]).to eq(v["meter"])
