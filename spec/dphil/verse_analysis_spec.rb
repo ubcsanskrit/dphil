@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 require "spec_helper"
 require "support/sample_verses"
+require "support/sample_verses_defective"
 
 describe Dphil::VerseAnalysis do
   include_context "sample_verses"
