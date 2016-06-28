@@ -4,6 +4,7 @@ require "support/sample_verses"
 
 describe Dphil::VerseAnalysis do
   include_context "sample_verses"
+  include_context "sample_verses_defective"
 
   it "returns syllables of a string" do
     sample_verses.each do |v|

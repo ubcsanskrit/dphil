@@ -1,0 +1,34 @@
+---
+- meter: mandākrāntā
+  verse: >
+    smāraṃ smaraṃ bhuvana viditaṃ gauravaṃ pūrvajānāṃ
+      dhyāyaṃ dhyāyaṃ mananakuśalaiḥ āyatiṃ santatīnāṃ
+    vijñaiḥ sarvaiḥ amala matibhiḥ sāmprataṃ tadvidheyaṃ
+      mandākrāntā na bhavati yathā saṃskṛtorvī pavitrā
+  syllables: [smā, "raṃ ", sma, "raṃ ", bhu, va, "na ", vi, di, "taṃ ", gau, ra, "vaṃ ", pūr, va, jā, "nāṃ ",
+              dhyā, "yaṃ ", dhyā, "yaṃ ", ma, na, na, ku, śa, "laiḥ ", ā, ya, "tiṃ ", san, ta, tī, "nāṃ ",
+              vij, "ñaiḥ ", sar, "vaiḥ ", a, ma, "la ", ma, ti, "bhiḥ ", sāmp, ra, "taṃ ", tad, vi, dhe, "yaṃ ",
+              man, dāk, rān, "tā ", "na ", bha, va, "ti ", ya, "thā ", saṃs, kṛ, tor, "vī ", pa, vit, rā]
+  weights: >
+    GGLGLLLLLGGLGGLGG
+    GGGGLLLLLGGLGGLGG
+    GGGGLLLLLGGLGGLGG
+    GGGGLLLLLGGLGGLGG
+
+---
+- meter: mandākrāntā
+  verse: >
+    smāraṃ raṃ bhuvana viditaṃ gauravaṃ pūrvajānāṃ
+      dhyāyaṃ dhyāyaṃ mananakuśalaiḥ āyatiṃ santatīnāṃ
+    vijñaiḥ sarvaiḥ amala matibhiḥ sāmprataṃ tadvidheyaṃ
+      mandākrāntā na bhavati yathā saṃskṛtorvī pavitrā
+  syllables: [smā, "raṃ ", "raṃ ", bhu, va, "na ", vi, di, "taṃ ", gau, ra, "vaṃ ", pūr, va, jā, "nāṃ ",
+              dhyā, "yaṃ ", dhyā, "yaṃ ", ma, na, na, ku, śa, "laiḥ ", ā, ya, "tiṃ ", san, ta, tī, "nāṃ ",
+              vij, "ñaiḥ ", sar, "vaiḥ ", a, ma, "la ", ma, ti, "bhiḥ ", sāmp, ra, "taṃ ", tad, vi, dhe, "yaṃ ",
+              man, dāk, rān, "tā ", "na ", bha, va, "ti ", ya, "thā ", saṃs, kṛ, tor, "vī ", pa, vit, rā]
+  weights: >
+    GGGLLLLLGGLGGLGG
+    GGGGLLLLLGGLGGLGG
+    GGGGLLLLLGGLGGLGG
+    GGGGLLLLLGGLGGLGG
+
