@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require "awesome_print"
 require "dphil/version"
 require "dphil/transliterate"
 require "dphil/metrical_data"
