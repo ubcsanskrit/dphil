@@ -5,10 +5,10 @@
       samavetā yuyutsavaḥ
     māmakāḥ pāṇḍavāś caiva
       kim akurvata saṃjaya
-  syllables: [dhar, mak, ṣet, re, ku, ruk, ṣet, re,
-              sa, ma, ve, tā, yu, yut, sa, vaḥ,
-              mā, ma, kāḥ, pāṇ, ḍa, vāś, cai, va,
-              kim, a, kur, va, ta, saṃ, ja, ya]
+  syllables: [dhar, mak, ṣet, "re ", ku, ruk, ṣet, "re ",
+              sa, ma, ve, "tā ", yu, yut, sa, "vaḥ ",
+              mā, ma, "kāḥ ", pāṇ, ḍa, "vāś ", cai, "va ",
+              "kim ", a, kur, va, "ta " , saṃ, ja, ya]
   weights: >
     GGGGLGGG
     LLGGLGLG
@@ -21,9 +21,9 @@
       guṇojjvaleṣvapyakṛtādarāḥ syuḥ
     avāpya kundaṃ madhupo hi jajñe
       gatopajātibhramaṇābhilāpaḥ
-  syllables: [prā, yaḥ, pu, māṃ, so, bhi, na, vār, tha, lā, bhe,
-              gu, ṇojj, va, leṣ, vap, ya, kṛ, tā, da, rāḥ, syuḥ,
-              a, vāp, ya, kun, daṃ, ma, dhu, po, hi, jaj, ñe,
+  syllables: [prā, "yaḥ ", pu, māṃ, "so ", "'bhi", na, vār, tha, lā, "bhe ",
+              gu, ṇojj, va, leṣ, vap, ya, kṛ, tā, da, "rāḥ ", "syuḥ ",
+              a, vāp, "ya ", kun, "daṃ ", ma, dhu, "po ", "hi ", jaj, "ñe ",
               ga, to, pa, jā, tibh, ra, ma, ṇā, bhi, lā, paḥ]
   weights: >
     GGLGGLLGLGG
@@ -37,10 +37,10 @@
       navyasphuradrucirapatralatāvalīkām
     diṣṭyā vasanta tilakāñcitacāruśobhāṃ
       kāntāṃ vanaśriyamimāṃ tvam upāgato 'si
-  syllables: [sat, kar, ṇi, kā, ra, ci, ta, vibh, ra, ma, bhā, sa, mā, nāṃ,
-              nav, yas, phu, rad, ru, ci, ra, pat, ra, la, tā, va, lī, kām,
-              diṣṭ, yā, va, san, ta, ti, la, kāñ, ci, ta, cā, ru, śo, bhāṃ,
-              kān, tāṃ, va, naś, ri, ya, mi, māṃ, tvam, u, pā, ga, to, si]
+  syllables: [sat, kar, ṇi, kā, ra, ci, ta, vibh, ra, ma, bhā, sa, mā, "nāṃ ",
+              nav, yas, phu, rad, ru, ci, ra, pat, ra, la, tā, va, lī, "kām ",
+              diṣṭ, "yā ", va, san, "ta ", ti, la, kāñ, ci, ta, cā, ru, śo, "bhāṃ ",
+              kān, "tāṃ ", va, naś, ri, ya, mi, "māṃ ", "tvam ", u, pā, ga, "to ", "'si"]
   weights: >
     GGLGLLLGLLGLGG
     GGLGLLLGLLGLGG
@@ -53,10 +53,10 @@
       dhyāyaṃ dhyāyaṃ mananakuśalaiḥ āyatiṃ santatīnāṃ
     vijñaiḥ sarvaiḥ amala matibhiḥ sāmprataṃ tadvidheyaṃ
       mandākrāntā na bhavati yathā saṃskṛtorvī pavitrā
-  syllables: [smā, raṃ, smā, raṃ, bhu, va, na, vi, di, taṃ, gau, ra, vaṃ, pūr, va, jā, nāṃ,
-              dhyā, yaṃ, dhyā, yaṃ, ma, na, na, ku, śa, laiḥ, ā, ya, tiṃ, san, ta, tī, nāṃ,
-              vij, ñaiḥ, sar, vaiḥ, a, ma, la, ma, ti, bhiḥ, sāmp, ra, taṃ, tad, vi, dhe, yaṃ,
-              man, dāk, rān, tā, na, bha, va, ti, ya, thā, saṃs, kṛ, tor, vī, pa, vit, rā]
+  syllables: [smā, "raṃ ", smā, "raṃ ", bhu, va, "na ", vi, di, "taṃ ", gau, ra, "vaṃ ", pūr, va, jā, "nāṃ ",
+              dhyā, "yaṃ ", dhyā, "yaṃ ", ma, na, na, ku, śa, "laiḥ ", ā, ya, "tiṃ ", san, ta, tī, "nāṃ ",
+              vij, "ñaiḥ ", sar, "vaiḥ ", a, ma, "la ", ma, ti, "bhiḥ ", sāmp, ra, "taṃ ", tad, vi, dhe, "yaṃ ",
+              man, dāk, rān, "tā ", "na ", bha, va, "ti ", ya, "thā ", saṃs, kṛ, tor, "vī ", pa, vit, rā]
   weights: >
     GGGGLLLLLGGLGGLGG
     GGGGLLLLLGGLGGLGG
@@ -69,10 +69,10 @@
       krīḍāsūnmadavairivāraṇaghaṭākumbhasthalīḥ pāṭayan
     daṃṣṭrālo navalagnamoktikamaṇistomairamṛglekhayā
       jihvālaḥ karavāla eṣa tanute śārdūlavikrīḍitam
-  syllables: [kṣmā, bhṛt, puṃ, ga, va, ko, śa, kan, da, ra, mu, khān, nir, gat, ya, te, saṃ, ga, ra,
-              krī, ḍā, sūn, ma, da, vai, ri, vā, ra, ṇa, gha, ṭā, kum, bhas, tha, līḥ, pā, ṭa, yan,
-              daṃṣṭ, rā, lo, na, va, lag, na, mok, ti, ka, ma, ṇis, to, mai, ra, mṛg, le, kha, yā,
-              jih, vā, laḥ, ka, ra, vā, la, e, ṣa, ta, nu, te, śār, dū, la, vik, rī, ḍi, tam]
+  syllables: [kṣmā, bhṛt, puṃ, ga, "va ", ko, śa, kan, da, ra, mu, khān, nir, gat, "ya ", "te ", saṃ, ga, "ra ",
+              krī, ḍā, sūn, ma, da, vai, ri, vā, ra, ṇa, gha, ṭā, kum, bhas, tha, "līḥ ", pā, ṭa, "yan ",
+              daṃṣṭ, rā, "lo ", na, va, lag, na, mok, ti, ka, ma, ṇis, to, mai, ra, mṛg, le, kha, "yā ",
+              jih, vā, "laḥ ", ka, ra, vā, "la ", e, "ṣa ", ta, nu, "te ", śār, dū, la, vik, rī, ḍi, tam]
   weights: >
     GGGLLGLGLLLGGGLGGLL
     GGGLLGLGLLLGGGLGGLG
