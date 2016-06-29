@@ -9,8 +9,7 @@ module Dphil
     include Amatch
 
     def syllables(str)
-      str = str.gsub(/[\|\.\,\\0-9]+/, "").strip
-      str.gsub!(/\s+/, " ")
+      str = str.gsub(/[\|\.\,\\0-9]+/, "").gsub(/\s+/, " ").strip
       str = Transliterate.iast_slp1(str)
       syllables = str.scan(Constants::R_SYL)
       syllables.map { |syl| Transliterate.slp1_iast(syl) }
@@ -20,8 +19,8 @@ module Dphil
       syllables = syllables.map { |syl| Transliterate.iast_slp1(syl) }
       weight_arr = []
       (0...syllables.length).each do |i|
-        cur_syl = syllables[i].to_s.delete("'").strip
-        next_syl = syllables[i + 1].to_s.delete("'").strip
+        cur_syl = syllables[i].delete("'").strip
+        next_syl = syllables[i + 1]&.delete("'")&.strip
 
         weight_arr << if cur_syl =~ Constants::R_GVOW
                         # Guru if current syllable contains a long vowel or end in a ṃ or ḥ
