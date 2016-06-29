@@ -25,6 +25,25 @@ describe Dphil::Transliterate do
     expect(described_class.unicode_downcase(iast_up)).to eq(iast)
   end
 
+  describe ".detect" do
+    it "detects IAST" do
+      expect(described_class.detect(iast_up)).to eq(:iast)
+      expect(described_class.detect(iast)).to eq(:iast)
+    end
+
+    it "detects SLP1" do
+      expect(described_class.detect(slp1)).to eq(:slp1)
+    end
+
+    it "detects KH" do
+      expect(described_class.detect(kh)).to eq(:kh)
+    end
+
+    it "returns nil if it can't tell" do
+      expect(described_class.detect(ascii)).to be_nil
+    end
+  end
+
   it "transliterates IAST to ASCII" do
     expect(described_class.iast_ascii(iast)).to eq(ascii)
   end

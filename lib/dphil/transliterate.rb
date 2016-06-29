@@ -70,6 +70,13 @@ module Dphil
       end
     end
 
+    def detect(st)
+      st = unicode_downcase(st.dup)
+      return :iast if Constants::CHARS_R_IAST_UNIQ.match(st)
+      return :slp1 if Constants::CHARS_R_SLP1_UNIQ.match(st)
+      return :kh if Constants::CHARS_R_KH_UNIQ.match(st)
+    end
+
     def normalize_slp1(st)
       out = st.dup
       out.gsub!(Constants::TRANS_CTRL_WORD) do |match|
