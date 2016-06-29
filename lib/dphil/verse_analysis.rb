@@ -4,16 +4,6 @@ require "amatch"
 
 module Dphil
   module VerseAnalysis
-    module Regexes
-      vow = "aAiIuUfFxXeEoO"
-      con = "kKgGNcCjJYwWqQRtTdDnpPbBmyrlvzSsh"
-      add = "MH"
-
-      SYL_R = /[']?[#{con}]*[#{vow}][#{con}#{add}]*(?![#{vow}])\s*/
-      G_VOW_R = /[AIUFXeEoO]|[MH]$/
-      G_CON_R = /[#{con}]{2}/
-    end
-
     module_function
 
     include Amatch
@@ -22,8 +12,7 @@ module Dphil
       str = str.gsub(/[\|\.\,\\0-9]+/, "").strip
       str.gsub!(/\s+/, " ")
       str = Transliterate.iast_slp1(str)
-
-      syllables = str.scan(Regexes::SYL_R)
+      syllables = str.scan(Constants::R_SYL)
       syllables.map { |syl| Transliterate.slp1_iast(syl) }
     end
 
@@ -34,10 +23,10 @@ module Dphil
         cur_syl = syllables[i].to_s.delete("'").strip
         next_syl = syllables[i + 1].to_s.delete("'").strip
 
-        weight_arr << if cur_syl =~ Regexes::G_VOW_R
+        weight_arr << if cur_syl =~ Constants::R_GVOW
                         # Guru if current syllable contains a long vowel or end in a ṃ or ḥ
                         "G"
-                      elsif "#{cur_syl[-1]}#{next_syl&.slice(0)}" =~ Regexes::G_CON_R
+                      elsif "#{cur_syl[-1]}#{next_syl&.slice(0)}" =~ Constants::R_GCON
                         # Guru if current syllable ends in a consonant cluster (look ahead)
                         "G"
                       else

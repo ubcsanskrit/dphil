@@ -2,63 +2,17 @@
 module Dphil
   # Transliteration module for basic romanization formats.
   module Transliterate
-    @iast_chars  = "āäaīïiūüuṭḍṅṇñṃśṣḥṛṝḷḹ"
-    @kh_chars    = "AaaIiiUuuTDGNJMzSHṛṝḷḹ"
-    @ascii_chars = "aaaiiiuuutdnnnmsshrrll"
-
-    @iast_kh_comp = {
-      "ḹ" => "lRR",
-      "ḷ" => "lR",
-      "ṝ" => "RR",
-      "ṛ" => "R",
-    }
-
-    @slp1_match = {
-      "A" => "ā",
-      "I" => "ī",
-      "U" => "ū",
-      "f" => "ṛ",
-      "F" => "ṝ",
-      "x" => "ḷ",
-      "X" => "ḹ",
-      "E" => "ai",
-      "O" => "au",
-      "K" => "kh",
-      "G" => "gh",
-      "C" => "ch",
-      "J" => "jh",
-      "W" => "ṭh",
-      "Q" => "ḍh",
-      "T" => "th",
-      "D" => "dh",
-      "P" => "ph",
-      "B" => "bh",
-      "w" => "ṭ",
-      "q" => "ḍ",
-      "N" => "ṅ",
-      "Y" => "ñ",
-      "R" => "ṇ",
-      "S" => "ś",
-      "z" => "ṣ",
-      "M" => "ṃ",
-      "H" => "ḥ",
-    }
-
-    CTRL_WORD = /\{{2}[^\}]*\}{2}/
-    CTRL_WORD_CONTENT = /\{{2}([^\}]*)\}{2}/
-    CTRL_WORD_PROCESSED = /#[a-f0-9]{40}#/
-
     private_class_method
 
     def self.process_string(st, all = false)
       return yield st.dup if all
 
-      scan = st.scan(CTRL_WORD)
+      scan = st.scan(Constants::TRANS_CTRL_WORD)
       return yield st.dup if scan.empty?
       return st if scan[0] == st
 
       out = st.dup
-      out.gsub!(CTRL_WORD, "\uFFFC")
+      out.gsub!(Constants::TRANS_CTRL_WORD, "\uFFFC")
       out = yield out
       out.gsub!("\uFFFC") do
         scan.shift
@@ -79,7 +33,7 @@ module Dphil
     def iast_ascii(st, all = false)
       process_string(st, all) do |out|
         out = unicode_downcase(out, true)
-        out.tr!(@iast_chars, @ascii_chars)
+        out.tr!(Constants::CHARS_IAST, Constants::CHARS_ASCII)
         out
       end
     end
@@ -87,16 +41,16 @@ module Dphil
     def iast_kh(st, all = false)
       process_string(st, all) do |out|
         out = unicode_downcase(out, true)
-        out.tr!(@iast_chars, @kh_chars)
-        @iast_kh_comp.each { |k, v| out.gsub!(k, v) }
+        out.tr!(Constants::CHARS_IAST, Constants::CHARS_KH)
+        Constants::CHARS_COMP_IAST_KH.each { |k, v| out.gsub!(k, v) }
         out
       end
     end
 
     def kh_iast(st, all = false)
       process_string(st, all) do |out|
-        out.tr!(@kh_chars, @iast_chars)
-        @iast_kh_comp.each { |k, v| out.gsub!(v, k) }
+        out.tr!(Constants::CHARS_KH, Constants::CHARS_IAST)
+        Constants::CHARS_COMP_IAST_KH.each { |k, v| out.gsub!(v, k) }
         out
       end
     end
@@ -104,23 +58,23 @@ module Dphil
     def iast_slp1(st, all = false)
       process_string(st, all) do |out|
         out = unicode_downcase(out, true)
-        @slp1_match.each { |k, v| out.gsub!(v, k) }
+        Constants::CHARS_SLP1_IAST.each { |k, v| out.gsub!(v, k) }
         out
       end
     end
 
     def slp1_iast(st, all = false)
       process_string(st, all) do |out|
-        @slp1_match.each { |k, v| out.gsub!(k, v) }
+        Constants::CHARS_SLP1_IAST.each { |k, v| out.gsub!(k, v) }
         out
       end
     end
 
     def normalize_slp1(st)
       out = st.dup
-      out.gsub!(CTRL_WORD) do |match|
-        control_content = match[CTRL_WORD_CONTENT, 1]
-        next match if control_content&.match(CTRL_WORD_PROCESSED)
+      out.gsub!(Constants::TRANS_CTRL_WORD) do |match|
+        control_content = match[Constants::TRANS_CTRL_WORD_CONTENT, 1]
+        next match if control_content&.match(Constants::TRANS_CTRL_WORD_PROCESSED)
         "{{##{Digest::SHA1.hexdigest(control_content).rjust(40, '0')}#}}"
       end
 
