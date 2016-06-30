@@ -25,7 +25,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rake", "~> 11.0"
   spec.add_development_dependency "rspec", "~> 3.0"
   spec.add_development_dependency "codeclimate-test-reporter", "~> 0.4"
-  spec.add_development_dependency "rubocop", "~> 0.37"
+  spec.add_development_dependency "rubocop", ">= 0.37"
   spec.add_development_dependency "pry", "~> 0.10"
 
   spec.add_runtime_dependency "awesome_print"
