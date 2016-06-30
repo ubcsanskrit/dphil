@@ -9,34 +9,40 @@ module Dphil
     include Amatch
 
     def syllables(str)
-      str = str.gsub(/[\|\.\,\\0-9]+/, "").gsub(/\s+/, " ").strip
-      str = Transliterate.iast_slp1(str)
-      syllables = str.scan(Constants::R_SYL)
-      syllables.map { |syl| Transliterate.slp1_iast(syl) }
+      Dphil.cache("VerseAnalysis.syllables", str) do
+        str = str.gsub(/[\|\.\,\\0-9]+/, "").gsub(/\s+/, " ").strip
+        str = Transliterate.iast_slp1(str)
+        syllables = str.scan(Constants::R_SYL)
+        syllables.map { |syl| Transliterate.slp1_iast(syl) }
+      end
     end
 
     def syllable_weight(syllables)
-      syllables = syllables.map { |syl| Transliterate.iast_slp1(syl) }
-      weight_arr = []
-      (0...syllables.length).each do |i|
-        cur_syl = syllables[i].delete("'").strip
-        next_syl = syllables[i + 1]&.delete("'")&.strip
+      Dphil.cache("VerseAnalysis.syllable_weight", syllables) do
+        syllables = syllables.map { |syl| Transliterate.iast_slp1(syl) }
+        weight_arr = []
+        (0...syllables.length).each do |i|
+          cur_syl = syllables[i].delete("'").strip
+          next_syl = syllables[i + 1]&.delete("'")&.strip
 
-        weight_arr << if cur_syl =~ Constants::R_GVOW
-                        # Guru if current syllable contains a long vowel or end in a ṃ or ḥ
-                        "G"
-                      elsif "#{cur_syl[-1]}#{next_syl&.slice(0)}" =~ Constants::R_GCON
-                        # Guru if current syllable ends in a consonant cluster (look ahead)
-                        "G"
-                      else
-                        "L"
-                      end
+          weight_arr << if cur_syl =~ Constants::R_GVOW
+                          # Guru if current syllable contains a long vowel or end in a ṃ or ḥ
+                          "G"
+                        elsif "#{cur_syl[-1]}#{next_syl&.slice(0)}" =~ Constants::R_GCON
+                          # Guru if current syllable ends in a consonant cluster (look ahead)
+                          "G"
+                        else
+                          "L"
+                        end
+        end
+        weight_arr.join("")
       end
-      weight_arr.join("")
     end
 
     def verse_weight(str)
-      syllable_weight(syllables(str))
+      Dphil.cache("VerseAnalysis.verse_weight", str) do
+        syllable_weight(syllables(str))
+      end
     end
 
     #
