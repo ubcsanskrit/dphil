@@ -318,7 +318,7 @@ module Dphil
         n = 0
         temp = []
         len = m_hsh[meter]
-        len.slice!(0, 4).each do |val|
+        len.slice(0, 4).each do |val|
           (1..val).each do
             if correct[k] == "d"      # still to figure out
               n += 1
