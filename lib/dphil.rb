@@ -15,7 +15,10 @@ require "dphil/lemma"
 module Dphil
   module_function
 
-  def cache
+  def cache(key, obj = nil)
     @cache ||= ActiveSupport::Cache::MemoryStore.new
+    key = "#{key}:#{obj.hash}"
+    @cache.fetch(key, &Proc.new) if block_given?
+    @cache.fetch(key)
   end
 end
