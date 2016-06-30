@@ -88,7 +88,7 @@ module Dphil
       candidates = []
       syllable_count = weight_string.length
       length_variance = 10
-      edit_tolerance = 3
+      edit_tolerance = 10
       str = Levenshtein.new(weight_string)
 
       #  test = []
