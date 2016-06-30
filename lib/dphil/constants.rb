@@ -10,6 +10,7 @@ module Dphil
       R_SYL = /[']?[#{con}]*[#{vow}][#{con}#{add}]*(?![#{vow}])\s*/
       R_GVOW = /[AIUFXeEoO]|[MH]$/
       R_GCON = /[#{con}]{2}/
+      R_GCONF = /[#{con}]{2}$/
     end
 
     CHARS_IAST  = "āäaīïiūüuṭḍṅṇñṃśṣḥṛṝḷḹ"

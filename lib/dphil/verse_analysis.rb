@@ -28,6 +28,8 @@ module Dphil
           weight_arr << if cur_syl =~ Constants::R_GVOW
                           # Guru if current syllable contains a long vowel or end in a ṃ or ḥ
                           "G"
+                        elsif cur_syl =~ Constants::R_GCONF
+                          "G"
                         elsif "#{cur_syl[-1]}#{next_syl&.slice(0)}" =~ Constants::R_GCON
                           # Guru if current syllable ends in a consonant cluster (look ahead)
                           "G"
