@@ -20,22 +20,18 @@ module Dphil
     def syllable_weight(syllables)
       Dphil.cache("VerseAnalysis.syllable_weight", syllables) do
         syllables = syllables.map { |syl| Transliterate.iast_slp1(syl) }
-        weight_arr = []
-        (0...syllables.length).each do |i|
+        weight_arr = (0...syllables.length).map do |i|
           cur_syl = syllables[i].delete("'").strip
           next_syl = syllables[i + 1]&.delete("'")&.strip
-
-          weight_arr << if cur_syl =~ Constants::R_GVOW
-                          # Guru if current syllable contains a long vowel or end in a ṃ or ḥ
-                          "G"
-                        elsif cur_syl =~ Constants::R_GCONF
-                          "G"
-                        elsif "#{cur_syl[-1]}#{next_syl&.slice(0)}" =~ Constants::R_GCON
-                          # Guru if current syllable ends in a consonant cluster (look ahead)
-                          "G"
-                        else
-                          "L"
-                        end
+          if cur_syl =~ Constants::R_GSYL
+            # Guru if current syllable contains a long vowel, or end in a ṃ/ḥ/conjunct
+            "G"
+          elsif "#{cur_syl[-1]}#{next_syl&.slice(0)}" =~ Constants::R_CCON
+            # Guru if current syllable ends in a consonant cluster (look ahead)
+            "G"
+          else
+            "L"
+          end
         end
         weight_arr.join("")
       end

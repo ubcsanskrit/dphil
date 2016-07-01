@@ -8,9 +8,8 @@ module Dphil
       add = "MH"
 
       R_SYL = /[']?[#{con}]*[#{vow}][#{con}#{add}]*(?![#{vow}])\s*/
-      R_GVOW = /[AIUFXeEoO]|[MH]$/
-      R_GCON = /[#{con}]{2}/
-      R_GCONF = /[#{con}]{2}$/
+      R_GSYL = /[AIUFXeEoO]|[MH]$|[#{con}]{2}$/
+      R_CCON = /[#{con}]{2}/
     end
 
     CHARS_IAST  = "āäaīïiūüuṭḍṅṇñṃśṣḥṛṝḷḹ"
