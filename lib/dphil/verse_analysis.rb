@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 require "json"
 require "amatch"
+require "ice_nine"
 
 module Dphil
   module VerseAnalysis
@@ -369,13 +370,10 @@ module Dphil
     def metercount
       @metercount ||= begin
         meter_data = {}
-        MetricalData.meters.keys.sort.each do |key|
-          d = 0
-          len = []
-          MetricalData.meters[key].each { |val| len << val.length }
-          MetricalData.meters[key].each { |val| d += val.length }
-          len << d
-          meter_data[key] = len
+        MetricalData.meters.map do |meter_name, pada_arr|
+          arr = pada_arr.map(&:length)
+          arr << arr.reduce(&:+)
+          meter_data[meter_name] = arr
         end
         MetricalData.regexes.full.each do |r, v|
           meter_name = v.keys.first
@@ -383,11 +381,11 @@ module Dphil
           source = r.source
           next if source["|"] || source["("].nil?
           groups = source.scan(/\(([^()]*)\)/).flatten
-          source = source.gsub!(/[\^\$\(\)]/, "")
+          source.gsub!(/[\^\$\(\)]/, "")
           meter_data[meter_name] = groups.map(&:length) << source.length
         end
 
-        meter_data
+        IceNine.deep_freeze(meter_data.sort.to_h)
       end
     end
 
