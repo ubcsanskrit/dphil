@@ -14,25 +14,25 @@ Gem::Specification.new do |spec|
   spec.homepage      = "https://github.com/ubcsanskrit/dphil"
   spec.license       = "MIT"
 
-  spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
+  spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^spec/}) }
   spec.bindir        = "exe"
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
-  spec.required_ruby_version = ">= 2.3.0"
+  spec.required_ruby_version = "~> 2.3"
 
   spec.add_development_dependency "bundler", "~> 1.11"
   spec.add_development_dependency "rake", "~> 11.0"
-  spec.add_development_dependency "rspec", "~> 3.0"
-  spec.add_development_dependency "codeclimate-test-reporter", "~> 0.4"
-  spec.add_development_dependency "rubocop", ">= 0.37"
+  spec.add_development_dependency "rspec", "~> 3.5"
+  spec.add_development_dependency "codeclimate-test-reporter", "~> 0.6"
+  spec.add_development_dependency "rubocop", "~> 0.41"
   spec.add_development_dependency "pry", "~> 0.10"
 
-  spec.add_runtime_dependency "awesome_print"
-  spec.add_runtime_dependency "activesupport", "~> 5.0rc"
+  spec.add_runtime_dependency "awesome_print", "~> 1.7"
+  spec.add_runtime_dependency "activesupport", "~> 5.0"
   spec.add_runtime_dependency "nokogiri", "~> 1.6"
   spec.add_runtime_dependency "psych", "~> 2.0"
   spec.add_runtime_dependency "hashie", "~> 3.0"
   spec.add_runtime_dependency "ice_nine", "~> 0.11"
-  spec.add_runtime_dependency "amatch"
+  spec.add_runtime_dependency "amatch", "~> 0.3"
 end
