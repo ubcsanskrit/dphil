@@ -15,10 +15,10 @@ require "dphil/lemma"
 module Dphil
   module_function
 
-  def cache(key, obj = nil)
-    @cache ||= ActiveSupport::Cache::MemoryStore.new
-    key = "#{key}:#{obj.hash}"
-    @cache.fetch(key, &Proc.new) if block_given?
-    @cache.fetch(key)
+  def cache(key, *params)
+    @cache ||= defined?(::Rails) ? ::Rails.cache : ActiveSupport::Cache::MemoryStore.new(size: 16_384)
+    key = "Dphil::cache.#{key}"
+    params&.each { |p| key += ".#{Digest::SHA1.base64digest(p.to_s)}" }
+    block_given? ? @cache.fetch(key, &Proc.new) : @cache.fetch(key)
   end
 end
