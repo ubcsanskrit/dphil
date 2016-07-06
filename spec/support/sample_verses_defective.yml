@@ -1,6 +1,16 @@
 ---
 - meter: mandākrāntā
   verse: >
+    smāraṃ smāraṃ bhuvana viditaṃ gauravaṃ pūrvajānāṃ
+      dhyāyaṃ dhyāyaṃ mananakuśalaiḥ āyatiṃ santatīnāṃ
+  syllables: [smā, "raṃ ", sma, "raṃ ", bhu, va, "na ", vi, di, "taṃ ", gau, ra, "vaṃ ", pūr, va, jā, "nāṃ ",
+              dhyā, "yaṃ ", dhyā, "yaṃ ", ma, na, na, ku, śa, "laiḥ ", ā, ya, "tiṃ ", san, ta, tī, nāṃ]
+  weights: >
+    GGGGLLLLLGGLGGLGG
+    GGGGLLLLLGGLGGLGG
+
+- meter: mandākrāntā
+  verse: >
     smāraṃ smaraṃ bhuvana viditaṃ gauravaṃ pūrvajānāṃ
       dhyāyaṃ dhyāyaṃ mananakuśalaiḥ āyatiṃ santatīnāṃ
     vijñaiḥ sarvaiḥ amala matibhiḥ sāmprataṃ tadvidheyaṃ
