@@ -50,6 +50,22 @@ EOS
       self.class.new(source)
     end
 
+    def crop_each(expr)
+      xml.search(expr).map do |segment|
+        pb = page_of(segment)
+        lb = line_of(segment)
+
+        source = <<EOS
+<TEI version="5.0" xmlns="http://www.tei-c.org/ns/1.0">
+  <pre>#{pb.to_xml unless pb.nil?}#{lb.to_xml unless lb.nil?}</pre>
+  #{segment.to_xml}
+  <post></post>
+</TEI>
+EOS
+        self.class.new(source)
+      end
+    end
+
     # Public: Remove elements from the document based on CSS selector.
     #
     # expr - a CSS selector or XPath expression
