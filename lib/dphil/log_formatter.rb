@@ -12,7 +12,7 @@ module Dphil
       out = ""
       out += colorize(severity, "[#{timestamp.strftime('%Y-%m-%d %H:%M:%S %Z')}][#{severity}] ")
       out += colorize("PROGNAME", "#{progname}: ") unless progname.nil?
-      out + "#{msg.is_a?(String) ? msg : msg.ai}\n"
+      out + (msg.is_a?(String) ? msg : msg.ai(indent: -2)) + "\n"
     end
 
     COLOR_MAP = {
