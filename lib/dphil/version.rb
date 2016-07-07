@@ -8,7 +8,7 @@ module Dphil
 
     def gem_files
       (Pathname.glob(File.join(GEM_ROOT, "{lib,vendor}", "**", "*.{rb,yml,xml}")) +
-        Pathname.glob(File.join(GEM_ROOT, "{Gemfile*,*.gemspec}"))).sort
+        Pathname.glob(File.join(GEM_ROOT, "{Gemfile,dphil.gemspec}"))).sort
     end
 
     def gem_files_hashes
@@ -18,7 +18,7 @@ module Dphil
     end
 
     def gem_files_hash
-      Digest::SHA1.base64digest(gem_files_hashes.join("\n")).slice(0, 5)
+      Digest::SHA1.base64digest(gem_files_hashes.join("\n"))[/[A-Za-z1-9][A-Za-z0-9]{0,4}/]
     end
   end
 
