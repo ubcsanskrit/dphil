@@ -79,7 +79,6 @@ module Dphil
         candidates.concat(matches)
       end
       # candidates = candidates.uniq
-      # ap candidates
       candidates
     end
 
@@ -90,7 +89,6 @@ module Dphil
       edit_tolerance = 5
       str = Levenshtein.new(weight_string)
 
-      #  test = []
       %i[patterns regexes].each do |type|
         matches = MetricalData.all[type][size].each_with_object([]) do |(pattern, meter), acc|
           meter_name = meter.keys.first
@@ -104,29 +102,18 @@ module Dphil
           when Regexp # FIXME : approximate matching in case of regexes
             next if pattern.source["|"]
             pattern = pattern.source.gsub!(/[\^\$\(\)]/, "")
-            #puts pattern
             next if (pattern.length - syllable_count).abs > length_variance
             pattern2 = pattern.gsub(".", "L")
-            #puts pattern2
+
             edit_distance = str.match(pattern2)
-            puts edit_distance
             c = corrected_string(weight_string, pattern2)
             c = c.join("")
-            puts c
-
-            pattern3 = pattern.gsub(".", "G")
-            e = str.match(pattern3)
-            puts e
-            d = corrected_string(weight_string, pattern3)
-            d = d.join("")
-            puts d
 
             pattern_string = []
             x1 = 0 # for pattern
             xw = 0 # for weight string
             pattern = pattern.lstrip
             (0...c.length).each do |i|
-              #puts c[i]
               if (c[i] == "L" || c[i] == "G")
                 x1 += 1
                 pattern_string << c[i]
@@ -143,19 +130,14 @@ module Dphil
                 x1 += 1
                 edit_distance -= 1
                 pattern_string << weight_string[xw]
-                #puts pattern_string.inspect
                 xw += 1
               else
                 pattern_string << pattern[x1]
-                #puts pattern
-                #puts pattern_string.inspect
                 x1 += 1
                 xw += 1
               end
             end
-            #puts pattern_string.join("")
             pattern_string = pattern_string.join("")
-            #puts edit_distance
             next if edit_distance > edit_tolerance
           end
           acc << {
@@ -197,7 +179,7 @@ module Dphil
       v_syllables = syllables.dup
       v_weight = syllable_weight(v_syllables)
 
-      meter_candidates = {} # { |h, k| h[k] = Hash.new(&h.default_proc) }
+      meter_candidates = {}
 
       meter_search_exact(v_weight).each do |val|
         if meter_candidates[val[:meter]].nil?
@@ -218,7 +200,6 @@ module Dphil
         end
         status = "fuzzy match"
       else
-        # puts meter_candidates.keys.first
         v_weight_halves = weight_try_half(v_weight, meter_candidates.keys.first)
         unless v_weight_halves.nil?
           v_weight_halves.each_with_index do |v_weight_half, index|
@@ -279,13 +260,15 @@ module Dphil
       # 4. Output object containing input data, result status, and candidate meters
       #    (with corrections if appropriate). No un-necessary results.
 
-     #  puts m[:status]
       meter_candidates = m[:meters]
       v_padas = []
       m_hsh = metercount
 
       if meter_candidates == {}
-        return "verse highly defective , can't find match"
+        m[:status] = "Verse highly defective , Can't find neter"
+        v_meters = {}
+        correct = []
+
       elsif m[:status] == "exact match"
         meter = meter_candidates.keys.first
 
@@ -301,7 +284,7 @@ module Dphil
         d = 100.0
         pattern = []
         meter_candidates.each do |(key, val)|
-          if val[0][:edit_distance].to_i < d
+          if val[0][:edit_distance].to_i < d #multiple verses with same edit distance???
             d = val[0][:edit_distance]
             meter = key
             pattern = val[0][:pattern].split("")
@@ -347,8 +330,7 @@ module Dphil
       actual = weights.split("")
       actual.insert(0, " ")
       pattern.insert(0, " ")
-        # ap actual
-        # ap pattern
+
       table = Array.new(actual.length) { Array.new(pattern.length) }
 
       (0...actual.length).each do |i|
@@ -368,7 +350,6 @@ module Dphil
         end
       end
 
-      # puts table[actual.length - 1][pattern.length - 1]
       correct = []
       i = actual.length - 1
       j = pattern.length - 1
@@ -404,14 +385,12 @@ module Dphil
     def fuzzy_correction(weights, meter, pattern, syllables)
       correct = corrected_string(weights, pattern)
 
-      puts correct.inspect
       k = 0
       n = 0
       p = 0
       temp = []
       v_padas = []
-      m_hsh = metercount
-      len = m_hsh[meter]
+      len = metercount[meter].dup
       len.slice!(0, 4).each do |val|
         (1..val).each do
           if correct[k] == "d"    # still to figure out
@@ -445,7 +424,6 @@ module Dphil
               else
                 temp << syllables[n]
               end
-                  # n += 1
             when 1
               if correct[k] == "G"
                 temp << " } " + syllables[n]
@@ -453,7 +431,6 @@ module Dphil
               else
                 temp << syllables[n]
               end
-                  # n += 1
             when 0
               temp << syllables[n]
             end
@@ -463,7 +440,6 @@ module Dphil
         end
         v_padas << temp.join("")
         temp = []
-        # v_corrections[:
       end
 
       result = {
@@ -506,7 +482,6 @@ module Dphil
           diff = a.match(second)
           e << diff if diff <= 5
         end
-         # puts e.inspect
         e = []
       end
       return nil
