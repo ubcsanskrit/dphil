@@ -1,6 +1,14 @@
 # frozen_string_literal: true
 module Dphil
   module Constants
+    DEBUG = if defined?(::Rails) && ::Rails.env[/^(test|dev)/]
+              true
+            elsif !ENV["RUBY_ENV"].nil? && ENV["RUBY_ENV"][/^(test|dev)/]
+              true
+            else
+              false
+            end
+
     # Regular expressions for SLP1 syllables
     begin
       vow = "aAiIuUfFxXeEoO"

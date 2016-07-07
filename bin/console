@@ -2,6 +2,8 @@
 # frozen_string_literal: true
 
 require "bundler/setup"
+
+ENV["RUBY_ENV"] = "development" # for logger debug purposes
 require "dphil"
 
 # You can add fixtures and/or initialization code here to make experimenting
