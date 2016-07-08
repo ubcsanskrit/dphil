@@ -10,6 +10,7 @@ module Dphil
     include Amatch
 
     def syllables(str)
+      return unless str.respond_to?(:gsub)
       Dphil.cache("VerseAnalysis.syllables", str) do
         str = str.gsub(/[\|\.\,\\0-9]+/, "").gsub(/\s+/, " ").strip
         str = Transliterate.iast_slp1(str)
@@ -19,6 +20,7 @@ module Dphil
     end
 
     def syllable_weight(syllables)
+      return unless syllables.respond_to?(:map)
       Dphil.cache("VerseAnalysis.syllable_weight", syllables) do
         syllables = syllables.map { |syl| Transliterate.iast_slp1(syl) }
         weight_arr = (0...syllables.length).map do |i|
@@ -39,6 +41,7 @@ module Dphil
     end
 
     def verse_weight(str)
+      return unless str.respond_to?(:gsub)
       Dphil.cache("VerseAnalysis.verse_weight", str) do
         syllable_weight(syllables(str))
       end
