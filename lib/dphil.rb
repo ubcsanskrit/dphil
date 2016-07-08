@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 require "awesome_print"
 require "active_support"
+require "ice_nine"
+require 'ice_nine/core_ext/object'
 
 require "dphil/version"
 require "dphil/constants"

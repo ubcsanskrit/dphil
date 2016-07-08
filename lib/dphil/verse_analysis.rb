@@ -385,7 +385,7 @@ module Dphil
           meter_data[meter_name] = groups.map(&:length) << source.length
         end
 
-        IceNine.deep_freeze(meter_data.sort.to_h)
+        meter_data.sort.to_h.deep_freeze
       end
     end
 
