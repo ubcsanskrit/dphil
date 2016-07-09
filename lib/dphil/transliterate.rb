@@ -4,14 +4,6 @@ module Dphil
   module Transliterate
     module_function
 
-    def unicode_downcase(st, all = false)
-      process_string(st, all) do |out|
-        out.unicode_normalize!(:nfd)
-        out.downcase!
-        out.unicode_normalize!(:nfc)
-      end
-    end
-
     def iast_ascii(st, all = false)
       process_string(st, all) do |out|
         out = unicode_downcase(out, true)
@@ -81,6 +73,24 @@ module Dphil
       out = iast_slp1(word)
       normalize_slp1(out)
     end
+
+    def unicode_downcase!(st, ignore_control = false)
+      return UNICODE_DOWNCASE_PROC.call(st) if ignore_control
+      process_string!(st, &UNICODE_DOWNCASE_PROC)
+    end
+
+    def unicode_downcase(st, ignore_control = false)
+      unicode_downcase!(st.dup, ignore_control)
+    end
+
+    UNICODE_DOWNCASE_PROC = lambda do |st|
+      st.unicode_normalize!(:nfd)
+      st.downcase!
+      st.unicode_normalize!(:nfc)
+      st
+    end
+
+    private_constant :UNICODE_DOWNCASE_PROC
 
     class << self
       private
