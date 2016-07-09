@@ -2,24 +2,6 @@
 module Dphil
   # Transliteration module for basic romanization formats.
   module Transliterate
-    private_class_method
-
-    def self.process_string(st, all = false)
-      return yield st.dup if all
-
-      scan = st.scan(Constants::TRANS_CTRL_WORD)
-      return yield st.dup if scan.empty?
-      return st if scan[0] == st
-
-      out = st.dup
-      out.gsub!(Constants::TRANS_CTRL_WORD, "\uFFFC")
-      out = yield out
-      out.gsub!("\uFFFC") do
-        scan.shift
-      end
-      out
-    end
-
     module_function
 
     def unicode_downcase(st, all = false)
@@ -98,6 +80,27 @@ module Dphil
     def normalize_iast(word)
       out = iast_slp1(word)
       normalize_slp1(out)
+    end
+
+    class << self
+      private
+
+      def process_string!(st, ignore_control = false, &_block)
+        return yield st if ignore_control
+
+        scan = st.scan(Constants::TRANS_CTRL_WORD)
+        return yield st if scan.empty?
+        return st if scan[0] == st
+
+        st.gsub!(Constants::TRANS_CTRL_WORD, "\uFFFC")
+        st = yield st
+        st.gsub!("\uFFFC") { scan.shift }
+        st
+      end
+
+      def process_string(st, ignore_control = false, &block)
+        process_string!(st.dup, ignore_control, &block)
+      end
     end
   end
 end
