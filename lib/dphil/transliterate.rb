@@ -6,7 +6,7 @@ module Dphil
 
     def iast_ascii(st, all = false)
       process_string(st, all) do |out|
-        out = unicode_downcase(out, true)
+        unicode_downcase!(out, true)
         out.tr!(Constants::CHARS_IAST, Constants::CHARS_ASCII)
         out
       end
@@ -14,7 +14,7 @@ module Dphil
 
     def iast_kh(st, all = false)
       process_string(st, all) do |out|
-        out = unicode_downcase(out, true)
+        unicode_downcase!(out, true)
         out.tr!(Constants::CHARS_IAST, Constants::CHARS_KH)
         Constants::CHARS_COMP_IAST_KH.each { |k, v| out.gsub!(k, v) }
         out
@@ -31,7 +31,7 @@ module Dphil
 
     def iast_slp1(st, all = false)
       process_string(st, all) do |out|
-        out = unicode_downcase(out, true)
+        unicode_downcase!(out, true)
         Constants::CHARS_SLP1_IAST.each { |k, v| out.gsub!(v, k) }
         out
       end
@@ -74,20 +74,20 @@ module Dphil
       normalize_slp1(out)
     end
 
-    def unicode_downcase!(st, ignore_control = false)
-      return UNICODE_DOWNCASE_PROC.call(st) if ignore_control
-      process_string!(st, &UNICODE_DOWNCASE_PROC)
+    def unicode_downcase!(str, ignore_control = false)
+      return UNICODE_DOWNCASE_PROC.call(str) if ignore_control
+      process_string!(str, &UNICODE_DOWNCASE_PROC)
     end
 
     def unicode_downcase(st, ignore_control = false)
       unicode_downcase!(st.dup, ignore_control)
     end
 
-    UNICODE_DOWNCASE_PROC = lambda do |st|
-      st.unicode_normalize!(:nfd)
-      st.downcase!
-      st.unicode_normalize!(:nfc)
-      st
+    UNICODE_DOWNCASE_PROC = lambda do |str|
+      str.unicode_normalize!(:nfd)
+      str.downcase!
+      str.unicode_normalize!(:nfc)
+      str
     end
 
     private_constant :UNICODE_DOWNCASE_PROC
