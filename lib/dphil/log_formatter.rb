@@ -2,6 +2,7 @@
 require "awesome_print"
 
 module Dphil
+  using Helpers::Refinements
   class LogFormatter < ::Logger::Formatter
     def colorize(severity, string)
       color = SEVERITY_MAP[severity] || :none
@@ -10,7 +11,7 @@ module Dphil
 
     def call(severity, timestamp, progname, msg)
       out = ""
-      out += colorize(severity, "[#{timestamp.strftime('%Y-%m-%d %H:%M:%S %Z')}][#{severity}] ")
+      out += colorize(severity, "[#{VERSION}][#{timestamp.strftime('%Y-%m-%d %H:%M:%S %Z')}][#{severity}] ")
       out += colorize("PROGNAME", "#{progname}: ") unless progname.nil?
       out + (msg.is_a?(String) ? msg : msg.ai(indent: -2)) + "\n"
     end

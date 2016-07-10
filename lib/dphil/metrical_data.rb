@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 require "psych"
-require "ice_nine"
 require "hashie"
 
 module Dphil
+  using Helpers::Refinements
   #
   # Metrical Data structure imported and parsed from "metrical_data" module at:
   # https://github.com/shreevatsa/sanskrit
@@ -19,7 +19,7 @@ module Dphil
     def self.load_data!
       yml_data = Psych.load_file(File.join(GEM_ROOT, "vendor", "metrical_data.yml"))
 
-      @version = IceNine.deep_freeze(yml_data["commit"])
+      @version = yml_data["commit"].deep_freeze
 
       # Hash of meters with names as keys and patterns as values
       meters_h = yml_data["meters"].each_with_object({}) do |(name, patterns), h|
@@ -60,7 +60,7 @@ module Dphil
 
       def initialize(*)
         super
-        IceNine.deep_freeze(self)
+        deep_freeze
       end
     end
 

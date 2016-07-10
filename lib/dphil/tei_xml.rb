@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 module Dphil
+  using Helpers::Refinements
   class TeiXML
     # Public: Initialize a TeiXML object
     #
