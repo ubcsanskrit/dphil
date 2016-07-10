@@ -2,7 +2,10 @@
 require "digest"
 require "pathname"
 
+require "dphil/helpers"
+
 module Dphil
+  using Helpers::Refinements
   class << self
     private
 

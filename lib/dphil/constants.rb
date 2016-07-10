@@ -2,6 +2,7 @@
 require "set"
 
 module Dphil
+  using Helpers::Refinements
   module Constants
     DEBUG = if defined?(::Rails) && ::Rails.env[/^(test|dev)/]
               true

@@ -4,8 +4,6 @@ require "active_support/cache"
 require "active_support/logger"
 require "active_support/notifications"
 require "active_support/core_ext/object/try"
-require "ice_nine"
-require "ice_nine/core_ext/object"
 
 require "dphil/version"
 require "dphil/helpers"

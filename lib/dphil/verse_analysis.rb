@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 require "json"
 require "amatch"
-require "ice_nine"
 
 module Dphil
+  using Helpers::Refinements
   module VerseAnalysis
     module_function
 

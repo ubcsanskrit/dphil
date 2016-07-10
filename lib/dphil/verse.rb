@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 module Dphil
+  using Helpers::Refinements
   class Verse
     attr_reader :ms, :id, :verse, :syllables, :weights, :identify
 

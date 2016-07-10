@@ -2,6 +2,7 @@
 require "forwardable"
 
 module Dphil
+  using Helpers::Refinements
   class ScriptString
     extend Forwardable
     def_delegators :@string, :<=>, :==, :===, :to_s, :to_str, :empty?, :length
