@@ -1,18 +1,15 @@
 # frozen_string_literal: true
 require "awesome_print"
-require "active_support"
+require "active_support/cache"
+require "active_support/logger"
+require "active_support/notifications"
+require "active_support/core_ext/object/try"
 require "ice_nine"
-require 'ice_nine/core_ext/object'
+require "ice_nine/core_ext/object"
 
 require "dphil/version"
+require "dphil/helpers"
 require "dphil/constants"
-require "dphil/log_formatter"
-require "dphil/transliterate"
-require "dphil/metrical_data"
-require "dphil/verse_analysis"
-require "dphil/tei_xml"
-require "dphil/lemma_list"
-require "dphil/lemma"
 
 # Namespace module definition
 module Dphil
@@ -42,3 +39,11 @@ module Dphil
     end
   end
 end
+
+require "dphil/log_formatter"
+require "dphil/transliterate"
+require "dphil/metrical_data"
+require "dphil/verse_analysis"
+require "dphil/tei_xml"
+require "dphil/lemma_list"
+require "dphil/lemma"

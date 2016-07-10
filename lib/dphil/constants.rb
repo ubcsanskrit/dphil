@@ -1,4 +1,6 @@
 # frozen_string_literal: true
+require "set"
+
 module Dphil
   module Constants
     DEBUG = if defined?(::Rails) && ::Rails.env[/^(test|dev)/]
@@ -8,6 +10,8 @@ module Dphil
             else
               false
             end
+
+    TRANS_SCRIPTS = Set.new(%i[deva iast slp1 kh ascii]).freeze
 
     # Regular expressions for SLP1 syllables
     begin
@@ -24,9 +28,17 @@ module Dphil
     CHARS_KH    = "AaaIiiUuuTDGNJMzSHṛṝḷḹ"
     CHARS_ASCII = "aaaiiiuuutdnnnmsshrrll"
 
-    CHARS_R_IAST_UNIQ = /[āīūṭḍṅṇñṃśṣḥṛṝḷḹ]/
-    CHARS_R_SLP1_UNIQ = /[fFxXwWqQY]/
-    CHARS_R_KH_UNIQ = /[AIUTDNJMzSR]/
+    CHARS_R = {
+      unique: {
+        deva: /\p{Devanagari}/,
+        iast: /[āīūṭḍṅṇñṃśṣḥṛṝḷḹĀĪŪṬḌṄṆÑṂŚṢḤṚṜḶḸ]/,
+        slp1: /[fFxXwWqQ]/,
+      },
+      shared: {
+        slp1: /[EOY]/, # Allowed in IAST as capital e, o, ya
+        kh: /[AIUTDNJMzSR]/, # Allowed in IAST as capital or SLP1 as various.
+      },
+    }.freeze
 
     CHARS_COMP_IAST_KH = {
       "ḹ" => "lRR",

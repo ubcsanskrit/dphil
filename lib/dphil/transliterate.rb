@@ -2,7 +2,35 @@
 module Dphil
   # Transliteration module for basic romanization formats.
   module Transliterate
+    using Helpers::Refinements
+    @default_script = nil
+
     module_function
+
+    def default_script
+      @default_script
+    end
+
+    def default_script=(scr)
+      @default_script = scr
+    end
+
+    def transliterate(str, all = false, from: nil, to:)
+      from = detect_or_raise(str) if from.nil?
+      from.try(:delete, to)
+      from = from.try_first
+      return str if from == to
+      raise "Source script unsupported [:#{from}]" unless support_script?(from)
+      raise "Destination script unsupported [:#{to}]" unless support_script?(to)
+      public_send("#{from}_#{to}", str, all)
+    rescue RuntimeError => e
+      Dphil.logger.error "Transliteration Error: #{e}"
+      return str
+    end
+
+    def support_script?(script)
+      Constants::TRANS_SCRIPTS.include?(script)
+    end
 
     def iast_ascii(st, all = false)
       process_string(st, all) do |out|
@@ -44,11 +72,13 @@ module Dphil
       end
     end
 
-    def detect(st)
-      st = unicode_downcase(st.dup)
-      return :iast if Constants::CHARS_R_IAST_UNIQ.match(st)
-      return :slp1 if Constants::CHARS_R_SLP1_UNIQ.match(st)
-      return :kh if Constants::CHARS_R_KH_UNIQ.match(st)
+    def detect(str, ignore_control = false)
+      str = str.gsub(Constants::TRANS_CTRL_WORD, "") unless ignore_control
+      scr_arr = detect_str_type(str, :unique)
+      return scr_arr unless scr_arr.nil?
+
+      scr_arr = detect_str_type(str, :shared)
+      scr_arr || @default_script
     end
 
     def normalize_slp1(st)
@@ -59,7 +89,7 @@ module Dphil
         "{{##{Digest::SHA1.hexdigest(control_content).rjust(40, '0')}#}}"
       end
 
-      process_string(out, false) do |token|
+      process_string!(out) do |token|
         token.tr!("b", "v")
         token.gsub!(/['‘]\b/, "") # Avagraha
         token.gsub!(/\B[NYRnm]/, "M") # Medial and final nasals
@@ -93,23 +123,42 @@ module Dphil
     private_constant :UNICODE_DOWNCASE_PROC
 
     class << self
+      alias t transliterate
+
       private
 
-      def process_string!(st, ignore_control = false, &_block)
-        return yield st if ignore_control
+      def process_string!(str, ignore_control = false, &_block)
+        return yield str if ignore_control
 
-        scan = st.scan(Constants::TRANS_CTRL_WORD)
-        return yield st if scan.empty?
-        return st if scan[0] == st
+        scan = str.scan(Constants::TRANS_CTRL_WORD)
+        return yield str if scan.empty?
+        return str if scan.first == str
 
-        st.gsub!(Constants::TRANS_CTRL_WORD, "\uFFFC")
-        st = yield st
-        st.gsub!("\uFFFC") { scan.shift }
-        st
+        str.gsub!(Constants::TRANS_CTRL_WORD, "\uFFFC")
+        str = yield str
+        str.gsub!("\uFFFC") { scan.shift }
+        str
       end
 
-      def process_string(st, ignore_control = false, &block)
-        process_string!(st.dup, ignore_control, &block)
+      def process_string(str, ignore_control = false, &block)
+        process_string!(str.dup, ignore_control, &block)
+      end
+
+      def detect_str_type(str, type)
+        scr_arr = Constants::CHARS_R[type].each_with_object([]) do |(script, regex), memo|
+          memo << script if str =~ regex
+        end
+        scr_arr.length > 1 ? scr_arr : scr_arr.first
+      end
+
+      def detect_or_raise(str)
+        script = detect(str)
+        if script.nil?
+          raise("Could not determine encoding for \"#{str}\" and no default specified.")
+        elsif script.is_a?(Array)
+          warn "Multiple encodings detected for \"#{str}\" #{script.inspect}."
+        end
+        script
       end
     end
   end

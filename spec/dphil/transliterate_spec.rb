@@ -21,8 +21,16 @@ describe Dphil::Transliterate do
   control_word = "{{test}}"
   control_word_processed = "{{#a94a8fe5ccb19ba61c4c0873d391e987982fbbd3#}}"
 
-  it "downcases unicode properly" do
-    expect(described_class.unicode_downcase(iast_up)).to eq(iast)
+  it "downcases unicode properly (non-destructive)" do
+    iast_up_copy = iast_up.dup
+    expect(described_class.unicode_downcase(iast_up_copy)).to eq(iast)
+    expect(iast_up_copy).to eq(iast_up)
+  end
+
+  it "downcases unicode properly (destructive)" do
+    iast_up_copy = iast_up.dup
+    described_class.unicode_downcase!(iast_up_copy)
+    expect(iast_up_copy).to eq(iast)
   end
 
   describe ".detect" do
