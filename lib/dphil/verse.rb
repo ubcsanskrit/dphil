@@ -5,11 +5,9 @@ module Dphil
     attr_reader :ms, :id, :verse, :syllables, :weights, :identify
 
     def initialize(verse, ms: nil, id: nil)
-      unless verse.respond_to?(:to_str)
-        raise ArgumentError, "first argument must be have a String representation"
-      end
-      @ms = ms.dup rescue ms # rubocop:disable Style/RescueModifier
-      @id = id.dup rescue id # rubocop:disable Style/RescueModifier
+      @verse = verse.to_str.safe_copy
+      @ms = ms.safe_copy
+      @id = id.safe_copy
       @identify = VerseAnalysis.identify(@verse)
       deep_freeze
     end

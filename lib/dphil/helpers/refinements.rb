@@ -28,6 +28,10 @@ module Dphil
         rescue TypeError
           self
         end
+
+        def safe_copy
+          deep_dup
+        end
       end
 
       class NilClass
@@ -36,6 +40,10 @@ module Dphil
         end
 
         def deep_dup
+          self
+        end
+
+        def safe_copy
           self
         end
       end
@@ -48,6 +56,10 @@ module Dphil
         def deep_dup
           self
         end
+
+        def safe_copy
+          self
+        end
       end
 
       class TrueClass
@@ -56,6 +68,10 @@ module Dphil
         end
 
         def deep_dup
+          self
+        end
+
+        def safe_copy
           self
         end
       end
@@ -68,6 +84,10 @@ module Dphil
         def deep_dup
           self
         end
+
+        def safe_copy
+          self
+        end
       end
 
       class Numeric
@@ -76,6 +96,10 @@ module Dphil
         end
 
         def deep_dup
+          self
+        end
+
+        def safe_copy
           self
         end
       end
@@ -89,6 +113,16 @@ module Dphil
         def deep_dup
           dup
         end
+
+        def safe_copy
+          frozen? ? self : dup
+        end
+      end
+
+      class String
+        def safe_copy
+          frozen? ? self : dup
+        end
       end
 
       class Array
@@ -101,7 +135,7 @@ module Dphil
         def deep_dup
           hash = dup
           each_pair do |key, value|
-            if key.frozen? && ::String === key # rubocop:disable Style/CaseEquality
+            if ::String === key # rubocop:disable Style/CaseEquality
               hash[key] = value.deep_dup
             else
               hash.delete(key)
@@ -116,7 +150,7 @@ module Dphil
         def deep_dup
           set_a = to_a
           set_a.map! do |val|
-            next val if val.frozen? && ::String === val # rubocop:disable Style/CaseEquality
+            next val if ::String === val # rubocop:disable Style/CaseEquality
             val.deep_dup
           end
           self.class[set_a]

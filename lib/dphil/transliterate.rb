@@ -12,36 +12,42 @@ module Dphil
     end
 
     def default_script=(scr)
-      @default_script = scr
+      scr = scr.to_sym
+      if script_supported?(scr)
+        @default_script = scr
+      else
+        warn "Script unsupported [:#{scr}]"
+      end
     end
 
-    def transliterate(str, all = false, from: nil, to:)
+    def transliterate(str, ignore_control = false, from: nil, to:)
+      str = str.to_str
       from = detect_or_raise(str) if from.nil?
-      from.try(:delete, to)
-      from = from.try_first
+      from.delete(to)
+      from = from.first
       return str if from == to
-      raise "Source script unsupported [:#{from}]" unless support_script?(from)
-      raise "Destination script unsupported [:#{to}]" unless support_script?(to)
-      public_send("#{from}_#{to}", str, all)
+      raise "Source script unsupported [:#{from}]" unless script_supported?(from)
+      raise "Destination script unsupported [:#{to}]" unless script_supported?(to)
+      public_send("#{from}_#{to}", str, ignore_control)
     rescue RuntimeError => e
       Dphil.logger.error "Transliteration Error: #{e}"
       return str
     end
 
-    def support_script?(script)
+    def script_supported?(script)
       Constants::TRANS_SCRIPTS.include?(script)
     end
 
-    def iast_ascii(st, all = false)
-      process_string(st, all) do |out|
+    def iast_ascii(st, ignore_control = false)
+      process_string(st, ignore_control) do |out|
         unicode_downcase!(out, true)
         out.tr!(Constants::CHARS_IAST, Constants::CHARS_ASCII)
         out
       end
     end
 
-    def iast_kh(st, all = false)
-      process_string(st, all) do |out|
+    def iast_kh(st, ignore_control = false)
+      process_string(st, ignore_control) do |out|
         unicode_downcase!(out, true)
         out.tr!(Constants::CHARS_IAST, Constants::CHARS_KH)
         Constants::CHARS_COMP_IAST_KH.each { |k, v| out.gsub!(k, v) }
@@ -49,33 +55,34 @@ module Dphil
       end
     end
 
-    def kh_iast(st, all = false)
-      process_string(st, all) do |out|
+    def kh_iast(st, ignore_control = false)
+      process_string(st, ignore_control) do |out|
         out.tr!(Constants::CHARS_KH, Constants::CHARS_IAST)
         Constants::CHARS_COMP_IAST_KH.each { |k, v| out.gsub!(v, k) }
         out
       end
     end
 
-    def iast_slp1(st, all = false)
-      process_string(st, all) do |out|
+    def iast_slp1(st, ignore_control = false)
+      process_string(st, ignore_control) do |out|
         unicode_downcase!(out, true)
         Constants::CHARS_SLP1_IAST.each { |k, v| out.gsub!(v, k) }
         out
       end
     end
 
-    def slp1_iast(st, all = false)
-      process_string(st, all) do |out|
+    def slp1_iast(st, ignore_control = false)
+      process_string(st, ignore_control) do |out|
         Constants::CHARS_SLP1_IAST.each { |k, v| out.gsub!(k, v) }
         out
       end
     end
 
     def detect(str, ignore_control = false)
+      str = str.to_str
       str = str.gsub(Constants::TRANS_CTRL_WORD, "") unless ignore_control
       scr_arr = detect_str_type(str, :unique)
-      return scr_arr unless scr_arr.nil?
+      return scr_arr unless scr_arr.empty?
 
       scr_arr = detect_str_type(str, :shared)
       scr_arr || @default_script
@@ -128,6 +135,7 @@ module Dphil
       private
 
       def process_string!(str, ignore_control = false, &_block)
+        str = str.to_str
         return yield str if ignore_control
 
         scan = str.scan(Constants::TRANS_CTRL_WORD)
@@ -145,10 +153,9 @@ module Dphil
       end
 
       def detect_str_type(str, type)
-        scr_arr = Constants::CHARS_R[type].each_with_object([]) do |(script, regex), memo|
+        Constants::CHARS_R[type].each_with_object([]) do |(script, regex), memo|
           memo << script if str =~ regex
         end
-        scr_arr.length > 1 ? scr_arr : scr_arr.first
       end
 
       def detect_or_raise(str)
