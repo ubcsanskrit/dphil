@@ -6,14 +6,13 @@ module Dphil
   class LogFormatter < ::Logger::Formatter
     def colorize(severity, string)
       color = SEVERITY_MAP[severity] || :none
-      "#{COLOR_MAP[color]}#{string}#{COLOR_MAP[:none]}"
+      String.new("#{COLOR_MAP[color]}#{string}#{COLOR_MAP[:none]}")
     end
 
     def call(severity, timestamp, progname, msg)
-      out = ""
-      out += colorize(severity, "[#{VERSION}][#{timestamp.strftime('%Y-%m-%d %H:%M:%S %Z')}][#{severity}] ")
-      out += colorize("PROGNAME", "#{progname}: ") unless progname.nil?
-      out + (msg.is_a?(String) ? msg : msg.ai(indent: -2)) + "\n"
+      out = colorize(severity, "[#{timestamp.strftime('%Y-%m-%d %H:%M:%S %Z')}][v#{VERSION}] [#{severity}] ")
+      out << colorize("PROGNAME", "[#{progname}]") unless progname.nil?
+      "#{out}\n#{(msg.respond_to?(:to_str) ? msg : msg.ai(indent: -2))}\n"
     end
 
     COLOR_MAP = {

@@ -21,7 +21,7 @@ module Dphil
     end
 
     def gem_files_hash
-      Digest::SHA1.base64digest(gem_files_hashes.join("\n"))[/[A-Za-z1-9][A-Za-z0-9]{0,4}/]
+      Digest::SHA1.base64digest(gem_files_hashes.join("\n")).gsub(%r{^0+|[\+\=/]+}, "")[0, 5]
     end
   end
 
