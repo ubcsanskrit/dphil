@@ -35,20 +35,20 @@ describe Dphil::Transliterate do
 
   describe ".detect" do
     it "detects IAST" do
-      expect(described_class.detect(iast_up)).to eq(:iast)
-      expect(described_class.detect(iast)).to eq(:iast)
+      expect(described_class.detect(iast_up)).to eq([:iast])
+      expect(described_class.detect(iast)).to eq([:iast])
     end
 
     it "detects SLP1" do
-      expect(described_class.detect(slp1)).to eq(:slp1)
+      expect(described_class.detect(slp1)).to eq([:slp1])
     end
 
     it "detects KH" do
-      expect(described_class.detect(kh)).to eq(:kh)
+      expect(described_class.detect(kh)).to eq([:kh])
     end
 
-    it "returns nil if it can't tell" do
-      expect(described_class.detect(ascii)).to be_nil
+    it "returns empty if it can't tell" do
+      expect(described_class.detect(ascii)).to be_empty
     end
   end
 
