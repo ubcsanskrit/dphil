@@ -39,4 +39,35 @@ describe Dphil::VerseAnalysis do
       expect(a[:padas].join("")).to eq(v["verse"].gsub(/\s+/, " ").strip)
     end
   end
+
+  # it ".identify returns useful information for a defective sample" do
+  #   v = "kṣmābhṛtpuṃgava kośakandaramukhānnirgatya te saṃgara
+  #     krīḍāsūnmadavairivāraṇaghaṭākumbhasthalīḥ pāṭayan
+  #   daṃṣṭrālo navalagnamoktikamaṇistomairamṛglekhayā
+  #     jihvālaḥ karavāla eṣa tanute śārdūlavikrīḍitam"
+
+
+  #   a = described_class.identify(v)
+
+  #   ap a
+  #   b = described_class.find_mid(v)
+
+  #   ap b
+
+  #   # expect(a).to be_kind_of(Hash)
+  #   # expect(a[:status]).to eq("fuzzy match")
+  # end
+
+  # it ".identify returns useful information for a defective sample" do
+  #   v = "kṣetre kuru
+  #      yuyutsavaḥ
+  #   māmakāḥ pāṇḍavāś caiva
+  #     kim akur saṃjaya"
+  #   a = described_class.find_mid(v)
+
+  #   ap a
+
+  #   # expect(a).to be_kind_of(Hash)
+  #   # expect(a[:status]).to eq("fuzzy match")
+  # end
 end
