@@ -1,4 +1,6 @@
 # frozen_string_literal: true
+require "sanscript"
+
 module Dphil
   # Transliteration module for basic romanization formats.
   module Transliterate
