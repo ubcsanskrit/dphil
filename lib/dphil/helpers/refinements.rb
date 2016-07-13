@@ -23,115 +23,82 @@ module Dphil
           self
         end
 
-        def deep_dup
-          dup
-        rescue TypeError
-          self
-        end
-
-        def safe_copy
-          deep_dup
-        end
+        alias_method :deep_dup, :try_dup
+        alias_method :safe_copy, :try_dup
       end
 
-      class NilClass
+      refine NilClass do
         def try_dup
           self
         end
 
-        def deep_dup
-          self
-        end
-
-        def safe_copy
-          self
-        end
+        alias_method :deep_dup, :try_dup
+        alias_method :safe_copy, :try_dup
       end
 
-      class FalseClass
+      refine FalseClass do
         def try_dup
           self
         end
 
-        def deep_dup
-          self
-        end
-
-        def safe_copy
-          self
-        end
+        alias_method :deep_dup, :try_dup
+        alias_method :safe_copy, :try_dup
       end
 
-      class TrueClass
+      refine TrueClass do
         def try_dup
           self
         end
 
-        def deep_dup
-          self
-        end
-
-        def safe_copy
-          self
-        end
+        alias_method :deep_dup, :try_dup
+        alias_method :safe_copy, :try_dup
       end
 
-      class Symbol
+      refine Symbol do
         def try_dup
           self
         end
 
-        def deep_dup
-          self
-        end
-
-        def safe_copy
-          self
-        end
+        alias_method :deep_dup, :try_dup
+        alias_method :safe_copy, :try_dup
       end
 
-      class Numeric
+      refine Numeric do
         def try_dup
           self
         end
 
-        def deep_dup
-          self
-        end
-
-        def safe_copy
-          self
-        end
+        alias_method :deep_dup, :try_dup
+        alias_method :safe_copy, :try_dup
       end
 
       # Necessary to re-override Numeric
-      class BigDecimal
+      require "bigdecimal"
+      refine BigDecimal do
         def try_dup
           dup
         end
 
-        def deep_dup
-          dup
-        end
+        alias_method :deep_dup, :try_dup
 
         def safe_copy
           frozen? ? self : dup
         end
       end
 
-      class String
+      refine String do
         def safe_copy
           frozen? ? self : dup
         end
       end
 
-      class Array
+      refine Array do
         def deep_dup
-          map(&:deep_dup)
+          map { |value| value.deep_dup } # rubocop:disable Style/SymbolProc
         end
       end
 
-      class Hash
+      refine Hash do
         def deep_dup
           hash = dup
           each_pair do |key, value|
@@ -146,7 +113,7 @@ module Dphil
         end
       end
 
-      class Set
+      refine Set do
         def deep_dup
           set_a = to_a
           set_a.map! do |val|
