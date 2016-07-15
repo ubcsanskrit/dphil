@@ -40,7 +40,8 @@ module Dphil
       # Hash of meters with regular expressions for keys and names/padas as values
       regexes_h = yml_data["regexes"].each_with_object({}) do |(type, patterns), type_h|
         type_h[type.to_sym] = patterns.each_with_object({}) do |(pattern, meters), pattern_h|
-          pattern_h[pattern] = meters.each_with_object({}) do |(name, value), name_h|
+          new_pattern = Regexp.new(pattern.source.gsub(/^\^|\$$/, ""))
+          pattern_h[new_pattern] = meters.each_with_object({}) do |(name, value), name_h|
             name_h[Transliterate.unicode_downcase(name)] = value
           end
         end
