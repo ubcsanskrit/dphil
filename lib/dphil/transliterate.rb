@@ -22,72 +22,43 @@ module Dphil
       end
     end
 
-    def transliterate(str, ignore_control = false, from: nil, to:)
-      str = str.to_str
-      from = detect_or_raise(str) if from.nil?
-      from.delete(to)
-      from = from.first
-      return str if from == to
-      raise "Source script unsupported [:#{from}]" unless script_supported?(from)
-      raise "Destination script unsupported [:#{to}]" unless script_supported?(to)
-      public_send("#{from}_#{to}", str, ignore_control)
+    def transliterate(str, first, second = nil)
+      Sanscript::Transliterate.transliterate(str, first, second)
     rescue RuntimeError => e
       Dphil.logger.error "Transliteration Error: #{e}"
       return str
     end
 
     def script_supported?(script)
-      Constants::TRANS_SCRIPTS.include?(script)
+      Sanscript::Transliterate.scheme_names.include?(script)
     end
 
-    def iast_ascii(st, ignore_control = false)
-      process_string(st, ignore_control) do |out|
-        unicode_downcase!(out, true)
-        out.tr!(Constants::CHARS_IAST, Constants::CHARS_ASCII)
+    def to_ascii(str)
+      process_string(str) do |out|
+        out.unicode_normalize!(:nfd)
+        out.gsub!(/[^\u0000-\u007F]+/, "")
         out
       end
     end
 
-    def iast_kh(st, ignore_control = false)
-      process_string(st, ignore_control) do |out|
-        unicode_downcase!(out, true)
-        out.tr!(Constants::CHARS_IAST, Constants::CHARS_KH)
-        Constants::CHARS_COMP_IAST_KH.each { |k, v| out.gsub!(k, v) }
-        out
-      end
+    def iast_kh(str)
+      transliterate(str, :iast, :kh)
     end
 
-    def kh_iast(st, ignore_control = false)
-      process_string(st, ignore_control) do |out|
-        out.tr!(Constants::CHARS_KH, Constants::CHARS_IAST)
-        Constants::CHARS_COMP_IAST_KH.each { |k, v| out.gsub!(v, k) }
-        out
-      end
+    def kh_iast(str)
+      transliterate(str, :kh, :iast)
     end
 
-    def iast_slp1(st, ignore_control = false)
-      process_string(st, ignore_control) do |out|
-        unicode_downcase!(out, true)
-        Constants::CHARS_SLP1_IAST.each { |k, v| out.gsub!(v, k) }
-        out
-      end
+    def iast_slp1(str)
+      transliterate(str, :iast, :slp1)
     end
 
-    def slp1_iast(st, ignore_control = false)
-      process_string(st, ignore_control) do |out|
-        Constants::CHARS_SLP1_IAST.each { |k, v| out.gsub!(k, v) }
-        out
-      end
+    def slp1_iast(str)
+      transliterate(str, :slp1, :iast)
     end
 
-    def detect(str, ignore_control = false)
-      str = str.to_str
-      str = str.gsub(Constants::TRANS_CTRL_WORD, "") unless ignore_control
-      scr_arr = detect_str_type(str, :unique)
-      return scr_arr unless scr_arr.empty?
-
-      scr_arr = detect_str_type(str, :shared)
-      scr_arr || @default_script
+    def detect(str)
+      Sanscript::Detect.detect_script(str)
     end
 
     def normalize_slp1(st)
@@ -95,7 +66,7 @@ module Dphil
       out.gsub!(Constants::TRANS_CTRL_WORD) do |match|
         control_content = match[Constants::TRANS_CTRL_WORD_CONTENT, 1]
         next match if control_content&.match(Constants::TRANS_CTRL_WORD_PROCESSED)
-        "{{##{Digest::SHA1.hexdigest(control_content).rjust(40, '0')}#}}"
+        "{###{Digest::SHA1.hexdigest(control_content).rjust(40, '0')}##}"
       end
 
       process_string!(out) do |token|
@@ -144,30 +115,14 @@ module Dphil
         return yield str if scan.empty?
         return str if scan.first == str
 
-        str.gsub!(Constants::TRANS_CTRL_WORD, "\uFFFC")
+        str.gsub!(Constants::TRANS_CTRL_WORD, "\u0026\u0026")
         str = yield str
-        str.gsub!("\uFFFC") { scan.shift }
+        str.gsub!("\u0026\u0026") { scan.shift }
         str
       end
 
       def process_string(str, ignore_control = false, &block)
         process_string!(str.dup, ignore_control, &block)
-      end
-
-      def detect_str_type(str, type)
-        Constants::CHARS_R[type].each_with_object([]) do |(script, regex), memo|
-          memo << script if str =~ regex
-        end
-      end
-
-      def detect_or_raise(str)
-        script = detect(str)
-        if script.nil?
-          raise("Could not determine encoding for \"#{str}\" and no default specified.")
-        elsif script.is_a?(Array)
-          warn "Multiple encodings detected for \"#{str}\" #{script.inspect}."
-        end
-        script
       end
     end
   end

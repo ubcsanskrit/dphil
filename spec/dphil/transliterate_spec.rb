@@ -2,24 +2,31 @@
 require "spec_helper"
 
 describe Dphil::Transliterate do
-  iast_up = "ĀAĪIŪUṚ Ṝ Ḷ Ḹ ṬḌṄṆÑṂŚṢḤ || KAḤ KHAGAUGHĀṄCICCAUJĀ JHĀÑJÑO 'ṬAUṬHĪḌḌAṆḌHAṆAḤ | " \
-            "TATHODADHĪN PAPHARBĀBHĪRMAYO 'RILVĀŚIṢĀṂ SAHAḤ || {{Ś01-1.1}} {{Ś01-1.2BḤ}} .-_"
-  iast = "āaīiūuṛ ṝ ḷ ḹ ṭḍṅṇñṃśṣḥ || kaḥ khagaughāṅciccaujā jhāñjño 'ṭauṭhīḍḍaṇḍhaṇaḥ | " \
-         "tathodadhīn papharbābhīrmayo 'rilvāśiṣāṃ sahaḥ || {{Ś01-1.1}} {{Ś01-1.2BḤ}} .-_"
-  kh = "AaIiUuR RR lR lRR TDGNJMzSH || kaH khagaughAGciccaujA jhAJjJo 'TauThIDDaNDhaNaH | " \
-       "tathodadhIn papharbAbhIrmayo 'rilvAziSAM sahaH || {{Ś01-1.1}} {{Ś01-1.2BḤ}} .-_"
-  slp1 = "AaIiUuf F x X wqNRYMSzH || kaH KagOGANciccOjA JAYjYo 'wOWIqqaRQaRaH | " \
-         "taTodaDIn paParbABIrmayo 'rilvASizAM sahaH || {{Ś01-1.1}} {{Ś01-1.2BḤ}} .-_"
-  ascii = "aaiiuur r l l tdnnnmssh || kah khagaughanciccauja jhanjno 'tauthiddandhanah | " \
-          "tathodadhin papharbabhirmayo 'rilvasisam sahah || {{Ś01-1.1}} {{Ś01-1.2BḤ}} .-_"
+  iast_up = "Ā A Ī I Ū U Ṛ Ṝ Ḷ Ḹ Ṭ Ḍ Ṅ Ṇ Ñ Ṃ Ś Ṣ Ḥ || " \
+            "KAḤ KHAGAUGHĀṄCICCAUJĀ JHĀÑJÑO 'ṬAUṬHĪḌḌAṆḌHAṆAḤ | " \
+            "TATHODADHĪN PAPHARBĀBHĪRMAYO 'RILVĀŚIṢĀṂ SAHAḤ || {#Ś01-1.1#} {#Ś01-1.2BḤ#} .-_"
+  iast = "ā a ī i ū u ṛ ṝ ḷ ḹ ṭ ḍ ṅ ṇ ñ ṃ ś ṣ ḥ || " \
+         "kaḥ khagaughāṅciccaujā jhāñjño 'ṭauṭhīḍḍaṇḍhaṇaḥ | " \
+         "tathodadhīn papharbābhīrmayo 'rilvāśiṣāṃ sahaḥ || {#Ś01-1.1#} {#Ś01-1.2BḤ#} .-_"
+  kh = "A a I i U u R RR lR lRR T D G N J M z S H || " \
+       "kaH khagaughAGciccaujA jhAJjJo 'TauThIDDaNDhaNaH | " \
+       "tathodadhIn papharbAbhIrmayo 'rilvAziSAM sahaH || {#Ś01-1.1#} {#Ś01-1.2BḤ#} .-_"
+  slp1 = "A a I i U u f F x X w q N R Y M S z H || " \
+         "kaH KagOGANciccOjA JAYjYo 'wOWIqqaRQaRaH | " \
+         "taTodaDIn paParbABIrmayo 'rilvASizAM sahaH || {#Ś01-1.1#} {#Ś01-1.2BḤ#} .-_"
+  ascii = "a a i i u u r r l l t d n n n m s s h || " \
+          "kah khagaughanciccauja jhanjno 'tauthiddandhanah | " \
+          "tathodadhin papharbabhirmayo 'rilvasisam sahah || {#Ś01-1.1#} {#Ś01-1.2BḤ#} .-_"
+  unknown = "éâ"
 
-  norm = "AaIiUuf F x X wqMMMMSz || ka KagOGAMciccOjA JAMjMo wOWIqqaMQaMa | " \
+  norm = "A a I i U u f F x X w q N R Y M S z H || " \
+         "ka KagOGAMciccOjA JAMjMo wOWIqqaMQaMa | " \
          "taTodaDIM paParvABIrMayo rilvASizAM saha || " \
-         "{{#a232b8c9daf123038c5c13aee182144f774dc452#}} " \
-         "{{#c186324615c533a5167d622fbaa51e9725676eab#}} "
+         "{##a232b8c9daf123038c5c13aee182144f774dc452##} " \
+         "{##c186324615c533a5167d622fbaa51e9725676eab##} "
 
-  control_word = "{{test}}"
-  control_word_processed = "{{#a94a8fe5ccb19ba61c4c0873d391e987982fbbd3#}}"
+  control_word = "{#test#}"
+  control_word_processed = "{##a94a8fe5ccb19ba61c4c0873d391e987982fbbd3##}"
 
   it "downcases unicode properly (non-destructive)" do
     iast_up_copy = iast_up.dup
@@ -35,25 +42,25 @@ describe Dphil::Transliterate do
 
   describe ".detect" do
     it "detects IAST" do
-      expect(described_class.detect(iast_up)).to eq([:iast])
-      expect(described_class.detect(iast)).to eq([:iast])
+      expect(described_class.detect(iast_up)).to eq(:iast)
+      expect(described_class.detect(iast)).to eq(:iast)
     end
 
     it "detects SLP1" do
-      expect(described_class.detect(slp1)).to eq([:slp1])
+      expect(described_class.detect(slp1)).to eq(:slp1)
     end
 
     it "detects KH" do
-      expect(described_class.detect(kh)).to eq([:kh])
+      expect(described_class.detect(kh)).to eq(:hk)
     end
 
-    it "returns empty if it can't tell" do
-      expect(described_class.detect(ascii)).to be_empty
+    it "returns :unknown if it can't tell" do
+      expect(described_class.detect(unknown)).to eq(:unknown)
     end
   end
 
   it "transliterates IAST to ASCII" do
-    expect(described_class.iast_ascii(iast)).to eq(ascii)
+    expect(described_class.to_ascii(iast)).to eq(ascii)
   end
 
   it "transliterates IAST to KH" do

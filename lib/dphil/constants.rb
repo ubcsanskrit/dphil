@@ -79,8 +79,8 @@ module Dphil
       "H" => "ḥ",
     }.freeze
 
-    TRANS_CTRL_WORD = /\{{2}[^\}]*\}{2}/
-    TRANS_CTRL_WORD_CONTENT = /\{{2}([^\}]*)\}{2}/
+    TRANS_CTRL_WORD = /\{#.*?#\}/
+    TRANS_CTRL_WORD_CONTENT = /\{#(.*?)#\}/
     TRANS_CTRL_WORD_PROCESSED = /#[a-f0-9]{40}#/
   end
 end
