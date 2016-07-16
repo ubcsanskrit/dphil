@@ -36,4 +36,5 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency "hashie", "~> 3.0"
   spec.add_runtime_dependency "ice_nine", "~> 0.11"
   spec.add_runtime_dependency "amatch", "~> 0.3"
+  spec.add_runtime_dependency "sanscript", "~> 0.1"
 end
