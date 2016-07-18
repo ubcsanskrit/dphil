@@ -19,9 +19,9 @@ module Dphil
       end
     end
 
-    def syllable_weight(syllables)
+    def syllables_weights(syllables)
       syllables = syllables.to_ary
-      Dphil.cache("VerseAnalysis.syllable_weight", syllables) do
+      Dphil.cache("VerseAnalysis.syllables_weights", syllables) do
         syllables = syllables.map { |syl| Transliterate.iast_slp1(syl) }
         weight_arr = (0...syllables.length).map do |i|
           cur_syl = syllables[i].delete("'").strip
@@ -42,7 +42,7 @@ module Dphil
 
     def verse_weight(str)
       Dphil.cache("VerseAnalysis.verse_weight", str) do
-        syllable_weight(syllables(str))
+        syllables_weights(syllables(str))
       end
     end
 
@@ -179,7 +179,7 @@ module Dphil
 
     def analyze_syllables(syllables)
       v_syllables = syllables.dup
-      v_weight = syllable_weight(v_syllables)
+      v_weight = syllables_weights(v_syllables)
 
       meter_candidates = {}
 
@@ -246,7 +246,7 @@ module Dphil
     def identify(verse_string)
       # 1. Get basic information about input
       v_syllables = syllables(verse_string)
-      v_weight = syllable_weight(v_syllables)
+      v_weight = syllables_weights(v_syllables)
 
       # 2. Discover possible meter candidates
       # Should return list of meters with relevant information for generating correction if appropriate.

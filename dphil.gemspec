@@ -28,6 +28,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rubocop", "~> 0.41"
   spec.add_development_dependency "pry", "~> 0.10.3"
   spec.add_development_dependency "pry-byebug", "~> 3.4"
+  spec.add_development_dependency "yard", "~> 0.9"
 
   spec.add_runtime_dependency "awesome_print", "~> 1.7"
   spec.add_runtime_dependency "activesupport", "~> 5.0"
