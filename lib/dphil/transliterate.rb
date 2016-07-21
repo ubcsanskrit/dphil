@@ -23,7 +23,7 @@ module Dphil
     end
 
     def transliterate(str, first, second = nil)
-      Sanscript::Transliterate.transliterate(str, first, second)
+      Sanscript.transliterate(str, first, second, default_script: default_script)
     rescue RuntimeError => e
       Dphil.logger.error "Transliteration Error: #{e}"
       return str
