@@ -1,4 +1,11 @@
 ---
+- meter: none (one G)
+  verse: >
+    smā
+  syllables: [smā]
+  weights: >
+    G
+
 - meter: mandākrāntā
   verse: >
     smāraṃ smāraṃ bhuvana viditaṃ gauravaṃ pūrvajānāṃ
