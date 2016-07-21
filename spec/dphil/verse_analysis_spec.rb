@@ -15,7 +15,7 @@ describe Dphil::VerseAnalysis do
 
   it "returns correct weights of corresponding syllables" do
     sample_verses.each do |v|
-      expect(described_class.syllable_weight(v["syllables"])).to eq(v["weights"].gsub(/\s+/, ""))
+      expect(described_class.syllables_weights(v["syllables"])).to eq(v["weights"].gsub(/\s+/, ""))
     end
   end
 
