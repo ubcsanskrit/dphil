@@ -21,53 +21,29 @@ describe Dphil::VerseAnalysis do
 
   it "combines syllable and weight function into one method" do
     sample = sample_verses.first
-    expect(described_class.verse_weight(sample["verse"])).to eq(sample["weights"].gsub(/\s+/, ""))
+    expect(described_class.verse_weights(sample["verse"])).to eq(sample["weights"].gsub(/\s+/, ""))
   end
 
-  it ".identify returns information about a verse" do
-    sample = sample_verses.first
-    a = described_class.identify(sample["verse"])
-    expect(a).to be_kind_of(Hash)
+  it ".identify returns empty Array for empty verse" do
+    expect(described_class.identify_meter_manager("")).to be_a(Array).and be_empty
   end
 
-  it ".identify returns exact matches for sample set" do
+  it ".identify returns non-empty Array for sample set" do
     sample_verses.each do |v|
-      a = described_class.identify(v["verse"])
-      expect(a).to be_kind_of(Hash)
-      expect(a[:status]).to eq("exact match")
-      expect(a[:meter]).to eq(v["meter"])
-      expect(a[:padas].join("")).to eq(v["verse"].gsub(/\s+/, " ").strip)
+      expect(described_class.identify_meter_manager(v["verse"])).to be_a(Array).and not_be_empty
     end
   end
 
-  # it ".identify returns useful information for a defective sample" do
-  #   v = "kṣmābhṛtpuṃgava kośakandaramukhānnirgatya te saṃgara
-  #     krīḍāsūnmadavairivāraṇaghaṭākumbhasthalīḥ pāṭayan
-  #   daṃṣṭrālo navalagnamoktikamaṇistomairamṛglekhayā
-  #     jihvālaḥ karavāla eṣa tanute śārdūlavikrīḍitam"
+  it ".identify returns non-empty Array for defective sample set" do
+    sample_verses_defective.each do |v|
+      expect(described_class.identify_meter_manager(v["verse"])).to be_a(Array).and not_be_empty
+    end
+  end
 
 
-  #   a = described_class.identify(v)
+  it ".identify returns useful information for a defective sample" do
+    pending "WIP"
 
-  #   ap a
-  #   b = described_class.find_mid(v)
-
-  #   ap b
-
-  #   # expect(a).to be_kind_of(Hash)
-  #   # expect(a[:status]).to eq("fuzzy match")
-  # end
-
-  # it ".identify returns useful information for a defective sample" do
-  #   v = "kṣetre kuru
-  #      yuyutsavaḥ
-  #   māmakāḥ pāṇḍavāś caiva
-  #     kim akur saṃjaya"
-  #   a = described_class.find_mid(v)
-
-  #   ap a
-
-  #   # expect(a).to be_kind_of(Hash)
-  #   # expect(a[:status]).to eq("fuzzy match")
-  # end
+    raise
+  end
 end
