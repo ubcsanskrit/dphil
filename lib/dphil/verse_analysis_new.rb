@@ -14,7 +14,7 @@ module Dphil
       verse_string = verse_string.to_str.gsub(/[\|\.\,\\0-9]+/, "").gsub(/\s+/, " ").strip
       verse_string = Transliterate.iast_slp1(verse_string)
       syllables = verse_string.scan(Constants::R_SYL)
-      syllables.map { |syl| Transliterate.iast_slp1(syl) }
+      syllables.map { |syl| Transliterate.slp1_iast(syl) }
     end
 
     # Converts a list of syllables into their L/G weights.
