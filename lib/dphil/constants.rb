@@ -4,9 +4,9 @@ require "set"
 module Dphil
   using Helpers::Refinements
   module Constants
-    DEBUG = if defined?(::Rails) && ::Rails.env[/^(test|dev)/]
+    DEBUG = if defined?(::Rails) && ::Rails.env[/^dev/]
               true
-            elsif !ENV["RUBY_ENV"].nil? && ENV["RUBY_ENV"][/^(test|dev)/]
+            elsif !ENV["RUBY_ENV"].nil? && ENV["RUBY_ENV"][/^dev/]
               true
             else
               false
