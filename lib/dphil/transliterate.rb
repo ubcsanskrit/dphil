@@ -58,7 +58,7 @@ module Dphil
     end
 
     def detect(str)
-      Sanscript::Detect.detect_script(str)
+      Sanscript::Detect.detect_scheme(str)
     end
 
     def normalize_slp1(st)
