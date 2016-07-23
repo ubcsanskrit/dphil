@@ -12,6 +12,7 @@ require "dphil/metrical_data"
 # require "dphil/verse_analysis"
 require "dphil/verse_analysis_new"
 
+require "dphil/syllables"
 require "dphil/script_string"
 require "dphil/lemma"
 require "dphil/lemma_list"
