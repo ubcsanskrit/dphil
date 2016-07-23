@@ -19,7 +19,8 @@ module Dphil
       add = "MH"
 
       R_SYL = /[']?[#{con}]*[\s]*[#{vow}][#{con}#{add}]*(?![#{vow}])\s*/
-      R_GSYL = /[AIUFXeEoO]|[MH]$|[#{con}]{2}$/
+      R_GSYL = /[AIUFXeEoO]|[MH]$/
+      R_CCONF = /[#{con}]{2}$/
       R_CCON = /[#{con}]{2}/
     end
 

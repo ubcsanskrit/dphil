@@ -9,42 +9,52 @@ module Dphil
     # Converts a verse string into individual syllables.
     #
     # @param verse_string [String] the raw text of the verse.
+    # @param from [Symbol] specify source transliteration scheme (detect by default)
+    # @param to [Symbol] specify output transliteration scheme (defaults to source)
     # @return [Array] the text split into individual SLP1-encoded syllables.
-    def syllables(verse_string)
+    def syllables(verse_string, from: nil, to: nil)
       verse_string = verse_string.to_str.gsub(/[\|\.\,\\0-9]+/, "").gsub(/\s+/, " ").strip
-      verse_string = Transliterate.iast_slp1(verse_string)
+      from ||= Transliterate.detect(verse_string) || Transliterate.default_script
+      to ||= from
+      verse_string = Transliterate.transliterate(verse_string, from, :slp1)
       syllables = verse_string.scan(Constants::R_SYL)
-      syllables.map { |syl| Transliterate.slp1_iast(syl) }
+      syllables.map! { |syl| Transliterate.transliterate(syl, :slp1, to) } if to != :slp1
+      syllables
     end
 
     # Converts a list of syllables into their L/G weights.
     #
     # @param syllables [Array] a set of syllables
     # @return [String] the weight string of the syllables of the verse
-    def syllables_weights(syllables)
-      syllables = syllables.to_ary.map { |syl| Transliterate.iast_slp1(syl) }
+    def syllables_weights(syllables, from: nil, contextual: false)
+      from ||= Transliterate.detect(syllables.join("")) || Transliterate.default_script
+      syllables = syllables.to_ary.map { |syl| Transliterate.transliterate(syl, from, :slp1) } if from != :slp1
       weight_arr = (0...syllables.length).map do |i|
         cur_syl = syllables[i].delete("'").strip
         next_syl = syllables[i + 1]&.delete("'")&.strip
         if cur_syl =~ Constants::R_GSYL
-          # Guru if current syllable contains a long vowel, or end in a ṃ/ḥ/conjunct
+          # Guru if current syllable contains a long vowel, or end in a ṃ/ḥ
           "G"
+        elsif cur_syl =~ Constants::R_CCONF
+          # Contextually Guru if ending in a cluster
+          "g"
         elsif "#{cur_syl[-1]}#{next_syl&.slice(0)}" =~ Constants::R_CCON
-          # Guru if current syllable ends in a consonant cluster (look ahead)
-          "G"
+          # Contextually Guru if syllable-final and next syllable-inital make a
+          # consonant cluster.
+          "g"
         else
           "L"
         end
       end
-      weight_arr.join("")
+      contextual ? weight_arr.join("") : weight_arr.join("").upcase
     end
 
     # Convenience method to directly get weight string of verse
     #
     # @param verse_string [String] the raw text of the verse
     # @return [String] the weight string of the verse.
-    def verse_weights(verse_string)
-      syllables_weights(syllables(verse_string))
+    def verse_weights(verse_string, contextual: false)
+      syllables_weights(syllables(verse_string), contextual: contextual)
     end
 
     # Coordinates metrical identification for a verse string.
