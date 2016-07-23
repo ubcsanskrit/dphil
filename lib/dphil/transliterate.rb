@@ -2,9 +2,10 @@
 require "sanscript"
 
 module Dphil
+  using ::Ragabash::Refinements
   # Transliteration module for basic romanization formats.
   module Transliterate
-    using Helpers::Refinements
+
     @default_script = nil
 
     module_function

@@ -2,7 +2,7 @@
 require "awesome_print"
 
 module Dphil
-  using Helpers::Refinements
+  using ::Ragabash::Refinements
   class LogFormatter < ::Logger::Formatter
     def colorize(severity, string)
       color = SEVERITY_MAP[severity] || :none
