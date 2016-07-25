@@ -40,7 +40,6 @@ describe Dphil::VerseAnalysis do
     end
   end
 
-
   it ".identify returns useful information for a defective sample" do
     pending "WIP"
 
