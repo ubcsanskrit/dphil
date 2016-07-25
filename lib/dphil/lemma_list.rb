@@ -2,6 +2,7 @@
 require "nokogiri"
 
 module Dphil
+  using ::Ragabash::Refinements
   # An object containing a list of lemmata generated through SAX parsing of an
   #   XML document.
   # Immutable.
@@ -10,13 +11,12 @@ module Dphil
 
     attr_reader :name
 
-    @lemma_ignore_start_tags = Set.new(%w[TEI text body pre post div])
-    @lemma_ignore_end_tags = @lemma_ignore_start_tags + Set.new(%w[pb lb])
-
     def initialize(source)
       @members = []
       source = source.to_s.strip
       return if source.empty?
+      @lemma_ignore_start_tags = Set.new(%w[TEI text body pre post div])
+      @lemma_ignore_end_tags = @lemma_ignore_start_tags + Set.new(%w[pb lb])
       @index = 0
       @open_elements = []
       @current_pb = []
@@ -35,8 +35,8 @@ module Dphil
     end
 
     def members(limit = nil)
-      return members[0, limit] if limit.is_a? Numeric
-      members
+      return @members[0, limit] if limit.is_a? Numeric
+      @members
     end
 
     def [](*args)
@@ -64,7 +64,7 @@ module Dphil
       @members.map do |lemma|
         out = {
           t: lemma.text,
-          n: Dphil::Transliterate.normalize_iast(lemma.text),
+          n: Transliterate.normalize_iast(lemma.text),
           i: lemma.index,
           p: lemma.page,
           f: lemma.facs,
@@ -100,7 +100,7 @@ module Dphil
       return if @lemma_ignore_end_tags.include?(name)
 
       if @empty_element
-        @current_lemma[-1].gsub!(%r{/*>\z}, "/>")
+        @current_lemma[-1] = @current_lemma[-1].gsub(%r{/*>\z}, "/>")
         @empty_element = false
       else
         @current_lemma << "</#{name}>"
@@ -111,7 +111,7 @@ module Dphil
     def characters(string)
       @empty_element = false
       string.split(/(\s)/).reject(&:empty?).each do |lemma|
-        @current_chars << lemma.strip
+        @current_chars += lemma.strip
 
         if lemma =~ /\-$/
           @inside_hyphen = true
@@ -148,7 +148,7 @@ module Dphil
     end
 
     def append_lemma
-      return if @current_chars =~ /[^\s\-\.\|]+/ # if not .empty?
+      return unless @current_chars =~ /[^\s\-\.\|]+/ # if not .empty?
       new_lemma_source = @current_lemma.join("")
       new_lemma = Lemma.new(new_lemma_source, @index)
       @index += 1

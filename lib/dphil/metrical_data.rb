@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 require "psych"
-require "ice_nine"
 require "hashie"
 
 module Dphil
+  using ::Ragabash::Refinements
   #
   # Metrical Data structure imported and parsed from "metrical_data" module at:
   # https://github.com/shreevatsa/sanskrit
@@ -17,9 +17,9 @@ module Dphil
 
     # This loads and processes the data into the module.
     def self.load_data!
-      yml_data = Psych.load_file(File.join(__dir__, "..", "..", "vendor", "metrical_data.yml"))
+      yml_data = Psych.load_file(File.join(GEM_ROOT, "vendor", "metrical_data.yml"))
 
-      @version = IceNine.deep_freeze(yml_data["commit"])
+      @version = yml_data["commit"].deep_freeze
 
       # Hash of meters with names as keys and patterns as values
       meters_h = yml_data["meters"].each_with_object({}) do |(name, patterns), h|
@@ -29,21 +29,22 @@ module Dphil
 
       # Hash of meters with patterns for keys and names/padas as values
       patterns_h = yml_data["patterns"].each_with_object({}) do |(type, patterns), type_h|
-        type_h[type.to_sym] = patterns.each_with_object({}) do |(pattern, meters), pattern_h|
+        type_h[type.to_sym] = (patterns.each_with_object({}) do |(pattern, meters), pattern_h|
           pattern_h[pattern] = meters.each_with_object({}) do |(name, value), name_h|
             name_h[Transliterate.unicode_downcase(name)] = value
           end
-        end
+        end).sort_by { |(k, _)| k.to_s.length }.reverse.to_h
       end
       @patterns = IHashM.new(patterns_h)
 
       # Hash of meters with regular expressions for keys and names/padas as values
       regexes_h = yml_data["regexes"].each_with_object({}) do |(type, patterns), type_h|
-        type_h[type.to_sym] = patterns.each_with_object({}) do |(pattern, meters), pattern_h|
-          pattern_h[pattern] = meters.each_with_object({}) do |(name, value), name_h|
+        type_h[type.to_sym] = (patterns.each_with_object({}) do |(pattern, meters), pattern_h|
+          new_pattern = Regexp.new(pattern.source.gsub(/^\^|\$$/, ""))
+          pattern_h[new_pattern] = meters.each_with_object({}) do |(name, value), name_h|
             name_h[Transliterate.unicode_downcase(name)] = value
           end
-        end
+        end).sort_by { |(k, _)| k.to_s.length }.reverse.to_h
       end
       @regexes = IHashM.new(regexes_h)
 
@@ -60,7 +61,7 @@ module Dphil
 
       def initialize(*)
         super
-        IceNine.deep_freeze(self)
+        deep_freeze
       end
     end
 
