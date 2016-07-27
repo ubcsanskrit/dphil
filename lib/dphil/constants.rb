@@ -2,11 +2,11 @@
 require "set"
 
 module Dphil
-  using Helpers::Refinements
+  using ::Ragabash::Refinements
   module Constants
-    DEBUG = if defined?(::Rails) && ::Rails.env[/^(test|dev)/]
+    DEBUG = if defined?(::Rails) && ::Rails.env[/^dev/]
               true
-            elsif !ENV["RUBY_ENV"].nil? && ENV["RUBY_ENV"][/^(test|dev)/]
+            elsif !ENV["RUBY_ENV"].nil? && ENV["RUBY_ENV"][/^dev/]
               true
             else
               false
@@ -19,7 +19,8 @@ module Dphil
       add = "MH"
 
       R_SYL = /[']?[#{con}]*[\s]*[#{vow}][#{con}#{add}]*(?![#{vow}])\s*/
-      R_GSYL = /[AIUFXeEoO]|[MH]$|[#{con}]{2}$/
+      R_GSYL = /[AIUFXeEoO]|[MH]$/
+      R_CCONF = /[#{con}]{2}$/
       R_CCON = /[#{con}]{2}/
     end
 

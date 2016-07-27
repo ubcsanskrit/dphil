@@ -3,7 +3,7 @@ require "psych"
 require "hashie"
 
 module Dphil
-  using Helpers::Refinements
+  using ::Ragabash::Refinements
   #
   # Metrical Data structure imported and parsed from "metrical_data" module at:
   # https://github.com/shreevatsa/sanskrit

@@ -5,11 +5,11 @@ describe Dphil::LemmaList do
   let(:sample_tei_xml) { Dphil::TeiXML.new(File.read(File.join(__dir__, "..", "fixtures", "tei-document.xml"))) }
 
   it "instantiates from sample xml data" do
-    expect(described_class.new(sample_tei_xml)).to be_a(Dphil::LemmaList)
+    expect(described_class.new(sample_tei_xml)).to be_a(described_class)
   end
 
   it "instantiates from empty data" do
-    expect(described_class.new("")).to be_a(Dphil::LemmaList)
+    expect(described_class.new("")).to be_a(described_class)
   end
 
   describe "#members" do

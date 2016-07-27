@@ -5,7 +5,7 @@ require "dphil/log_formatter"
 
 # Namespace module definition
 module Dphil
-  using Helpers::Refinements
+  using ::Ragabash::Refinements
 
   module_function
 

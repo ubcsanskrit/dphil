@@ -54,8 +54,8 @@ describe Dphil::Transliterate do
       expect(described_class.detect(kh)).to eq(:hk)
     end
 
-    it "returns :unknown if it can't tell" do
-      expect(described_class.detect(unknown)).to eq(:unknown)
+    it "returns nil if it can't tell" do
+      expect(described_class.detect(unknown)).to be_nil
     end
   end
 

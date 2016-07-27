@@ -2,6 +2,8 @@
 require "codeclimate-test-reporter"
 CodeClimate::TestReporter.start
 
+ENV["RUBY_ENV"] = "test" # for logger debug purposes
+
 $LOAD_PATH.unshift File.expand_path("../../lib", __FILE__)
 require "dphil"
 

@@ -26,16 +26,17 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rspec", "~> 3.5"
   spec.add_development_dependency "codeclimate-test-reporter", "~> 0.6"
   spec.add_development_dependency "rubocop", "~> 0.41"
+  spec.add_development_dependency "rubocop-rspec", "~> 1.5"
   spec.add_development_dependency "pry", "~> 0.10.3"
   spec.add_development_dependency "pry-byebug", "~> 3.4"
   spec.add_development_dependency "yard", "~> 0.9"
 
+  spec.add_runtime_dependency "ragabash", "~> 0.1"
   spec.add_runtime_dependency "awesome_print", "~> 1.7"
   spec.add_runtime_dependency "activesupport", "~> 5.0"
   spec.add_runtime_dependency "nokogiri", "~> 1.6"
   spec.add_runtime_dependency "psych", "~> 2.0"
   spec.add_runtime_dependency "hashie", "~> 3.0"
-  spec.add_runtime_dependency "ice_nine", "~> 0.11"
   spec.add_runtime_dependency "amatch", "~> 0.3"
   spec.add_runtime_dependency "sanscript", "~> 0.1"
 end

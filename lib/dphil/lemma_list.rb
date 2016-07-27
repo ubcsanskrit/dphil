@@ -2,7 +2,7 @@
 require "nokogiri"
 
 module Dphil
-  using Helpers::Refinements
+  using ::Ragabash::Refinements
   # An object containing a list of lemmata generated through SAX parsing of an
   #   XML document.
   # Immutable.

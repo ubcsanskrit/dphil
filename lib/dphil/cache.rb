@@ -3,8 +3,7 @@ require "active_support/cache"
 require "active_support/notifications"
 
 module Dphil
-  using Helpers::Refinements
-
+  using ::Ragabash::Refinements
   module_function
 
   def cache(key, params = nil)
