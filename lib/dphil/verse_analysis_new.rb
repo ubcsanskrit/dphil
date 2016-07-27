@@ -80,7 +80,7 @@ module Dphil
 
       candidates.sort_by! { |value| value[:heuristic] }
       candidates.reverse!
-      probables = get_best_matches(candidates, syllables, 3)
+      probables = get_best_matches(candidates, syllables, 5)
       probables
     end
 
@@ -273,11 +273,12 @@ module Dphil
       e = 0
 
       meter_results.each do |key, val|
-        f = 0
         break if e == 1
         wc = w1.dup
         indexes = val[0][:matches]
         q = (val[0][:match_percent] * 100) / (guess_size * 25)
+
+        q += 25 if q == 50 && guess_size == 2 # to deal with problematic case when p=25 and guess=2, should be only one correction
 
         case q
         when 100
@@ -288,7 +289,7 @@ module Dphil
           portion = wc.slice!(max.begin, (max.end - max.begin + 1))
           pattern = get_specific_pattern(key, :pada, val[0][:pattern_type], portion)
           correct = corrected_string(portion, pattern)
-          wc.insert(max.begin, correct.join(""))
+          wc.insert(max.begin, correct)
           indexes = update_index_array(indexes, max, correct.length - portion.length)
           wc = remove_extra_syllables(wc, indexes)
 
@@ -305,7 +306,7 @@ module Dphil
               pattern = get_specific_pattern(key, :pada, val[0][:pattern_type], portion)
             end
             correct = corrected_string(portion, pattern)
-            wc.insert(max.begin, correct.join(""))
+            wc.insert(max.begin, correct)
             indexes = update_index_array(indexes, max, correct.length - portion.length)
           end
           wc = remove_extra_syllables(wc, indexes)
@@ -322,19 +323,110 @@ module Dphil
           end
         end
 
+        status = get_pada_status(key, wc, indexes, guess_size)
+        pada_weights = get_weight_by_pada(status, wc)
+
         acc = {
           len_assumption: guess_size.to_s + "/4",
           meter: key,
           type: val[0][:pattern_type],
-          match_indexes: indexes,
+          match_indexes: status,
           percent_match: val[0][:match_percent],
           edit_count: wc.scan(/[a-z]/).length,
-          correct_weights: wc,
+          correct_weights: pada_weights,
           heuristic: (2 * val[0][:match_percent]) + ((100 - (wc.scan(/[a-z]/).length * 100 / weight_string.length))),
         }
         extended_result << acc
       end
       extended_result
+    end
+
+    #
+    #
+    #
+    #
+    def get_pada_status(meter, correct_weights, indexes, guess_size)
+      len = metercount[meter]
+      cw = correct_weights.dup
+      index = indexes.dup
+
+      status = []
+      range = nil
+
+      pn = -1
+      pr = nil
+      ps = ""
+
+      # TO DO : identify which padas are actually missing
+      (1..guess_size).each do |i|
+        break if range.nil? && index.empty?
+        pn = i
+        range = index.slice!(0, 1)[0] if range.nil?
+
+        if cw.slice(range.begin, range.end - range.begin + 1).scan(/[a-z]/).length == 0
+          ps = "exact"
+          if (range.end - range.begin + 1) == len[i - 1]
+            pr = range
+            range = nil
+          else
+            pr = (range.begin..(range.begin + len[i - 1] - 1))
+            range = ((range.begin + len[i - 1])..range.end)
+          end
+        else
+          ps = "fuzzy"
+          temp = 1
+          rng = range.begin
+          while temp <= len[i - 1]
+            temp += 1 if cw[rng] != "d"
+            rng += 1
+          end
+          if rng > range.end
+            pr = range
+            range = nil
+          else
+            pr = (range.begin..(rng - 1))
+            range = (rng..range.end)
+          end
+        end
+        acc = {
+          pada_number: pn,
+          pada_range: pr,
+          pada_status: ps,
+        }
+        status << acc
+      end
+
+      ((guess_size + 1)..4).each do |j|
+        pn = j
+        pr = nil
+        ps = "missing"
+        acc = {
+          pada_number: pn,
+          pada_range: pr,
+          pada_status: ps,
+        }
+        status << acc
+      end
+      status
+    end
+
+    #
+    #
+    #
+    #
+    def get_weight_by_pada(status, corrected_weights)
+      cw = corrected_weights.dup
+      pada_weights = []
+      start = 0
+      status.each do |val|
+        if val[:pada_status] == "missing"
+          pada_weights << ""
+        else
+          pada_weights << cw.slice(start, (val[:pada_range].end - start + 1))
+          start = val[:pada_range].end + 1
+        end
+      end
+      pada_weights
     end
 
     #
@@ -355,14 +447,16 @@ module Dphil
       meter_search_fuzzy(wc, guess_size).each do |value|
         if value[:edit_distance] == edits
           wc = corrected_string(weight_string, value[:pattern])
+          status = get_pada_status(value[:meter], wc, [(0..(wc.length - 1))], guess_size)
+          pada_weights = get_weight_by_pada(status, wc)
           acc = {
             len_assumption: guess_size.to_s + "/4",
             meter: value[:meter],
             type: value[:type],
-            match_indexes: [0..(wc.length - 1)],
+            match_indexes: status,
             percent_match: per_match,
             edit_count: value[:edit_distance],
-            correct_weights: wc,
+            correct_weights: pada_weights,
             heuristic: (2 * per_match) + ((100 - (value[:edit_distance] * 100 / weight_string.length))),
           }
           best << acc
@@ -398,7 +492,8 @@ module Dphil
     #
     #
     #
-    def remove_extra_syllables(w1, indexes)
+    def remove_extra_syllables(weights, indexes)
+      w1 = weights.dup
       (0...w1.length).each do |u|
         flag = 0
         indexes.each do |v|
@@ -454,7 +549,7 @@ module Dphil
     #
     #
     def corrected_string(weights, pattern)
-      if pattern == ""
+      if pattern.empty?
         return weights
       end
       actual = weights.split("")
@@ -475,7 +570,7 @@ module Dphil
           if actual[i] == pattern[j]
             table[i][j] = table[i - 1][j - 1]
           else
-            table[i][j] = ([table[i - 1][j], table[i - 1][j - 1], table[i][j - 1]].min) + 1
+            table[i][j] = [table[i - 1][j], table[i - 1][j - 1], table[i][j - 1]].min + 1
           end
         end
       end
@@ -489,7 +584,9 @@ module Dphil
           i -= 1
           j -= 1
         else
-          x = [table[i - 1][j], table[i - 1][j - 1], table[i][j - 1]].min
+          x = [table[i - 1][j], table[i - 1][j - 1], table[i][j - 1]].min if (i > 0 && j > 0)
+          x = table[i][j - 1] if i == 0 # upper boundary case
+          x = table[i - 1][j] if j == 0 # left boundary case
           case x
           when table[i][j - 1]
             if pattern[j] == "L"
@@ -508,7 +605,7 @@ module Dphil
           end
         end
       end
-      correct
+      correct.join("")
     end
 
     #
@@ -541,15 +638,16 @@ module Dphil
     #
     #
     #
-    def fuzzy_correction(meter, correct, syllables)
+    def fuzzy_correction(meter, corrected_weights, syllables)
       k = 0
       n = 0 # for syllables
       p = 0
       temp = []
       v_padas = []
-      len = metercount[meter].dup
-      len.slice!(0, 4).each do |val|
-        (1..val).each do
+
+      corrected_weights.each do |correct|
+        (0...correct.length).each do |k|
+          # break if n >= syllables.length
           if correct[k] == "d"
             temp << ("[" + syllables[n] + "]")
             n += 1
@@ -593,7 +691,6 @@ module Dphil
             end
             n += 1
           end
-          k += 1
         end
         v_padas << temp.join("")
         temp = []
@@ -662,7 +759,7 @@ module Dphil
 
       edit_distance = str.match(pattern2)
       c = corrected_string(weight_string, pattern2)
-      c = c.join("")
+      # c = c.join("")
 
       pattern_string = []
       x1 = 0 # for pattern
