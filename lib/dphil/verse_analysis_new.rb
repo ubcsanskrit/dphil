@@ -61,12 +61,18 @@ module Dphil
       v_syllables = syllables(verse_string)
       v_weight = syllables_weights(v_syllables, contextual: true)
       v_meters = identify_meter_manager(verse_string)
+      unless v_meters.empty?
+        status = v_meters.first[:info]
+        meter = status.delete(:meter)
+        padas = v_meters.first[:corrected_padas]
+      end
       {
         verse: verse_string,
         syllables: v_syllables,
         weights: v_weight,
-        status: v_meters.count,
-        meter: v_meters.to_s,
+        status: status,
+        meter: meter,
+        padas: padas,
       }
     end
 
@@ -103,7 +109,7 @@ module Dphil
 
       candidates.sort_by! { |value| value[:heuristic] }
       candidates.reverse!
-      probables = get_best_matches(candidates, syllables, 5)
+      probables = get_best_matches(candidates, syllables, 2)
       probables
     end
 
