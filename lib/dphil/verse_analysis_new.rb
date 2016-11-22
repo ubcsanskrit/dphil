@@ -57,6 +57,19 @@ module Dphil
       syllables_weights(syllables(verse_string), contextual: contextual)
     end
 
+    def identify(verse_string)
+      v_syllables = syllables(verse_string)
+      v_weight = syllables_weights(v_syllables, contextual: true)
+      v_meters = identify_meter_manager(verse_string)
+      {
+        verse: verse_string,
+        syllables: v_syllables,
+        weights: v_weight,
+        status: v_meters.count,
+        meter: v_meters.to_s,
+      }
+    end
+
     # Coordinates metrical identification for a verse string.
     #
     # @param verse_string [String] a verse string
