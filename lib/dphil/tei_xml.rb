@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 module Dphil
-  using ::Ragabash::Refinements
   class TeiXML
+    using ::Ragabash::Refinements
     # Public: Initialize a TeiXML object
     #
     def initialize(source)

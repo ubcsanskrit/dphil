@@ -21,6 +21,5 @@ require "dphil/verse"
 
 # Namespace module definition
 module Dphil
-  using ::Ragabash::Refinements
   Transliterate.default_script = :iast
 end

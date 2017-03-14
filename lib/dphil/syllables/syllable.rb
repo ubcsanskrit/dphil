@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 module Dphil
-  using ::Ragabash::Refinements
   class Syllables
+    using ::Ragabash::Refinements
     class Syllable
       attr_reader :source, :weight, :parent, :index, :source_script
 

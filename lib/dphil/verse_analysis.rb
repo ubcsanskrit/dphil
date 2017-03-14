@@ -3,8 +3,8 @@ require "json"
 require "amatch"
 
 module Dphil
-  using ::Ragabash::Refinements
   module VerseAnalysis
+    using ::Ragabash::Refinements
     module_function
 
     include Amatch
