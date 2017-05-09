@@ -1,6 +1,6 @@
 require: rubocop-rspec
 AllCops:
-  TargetRubyVersion: 2.3
+  TargetRubyVersion: 2.4
 
 # Metrics
 Metrics/AbcSize:
@@ -61,6 +61,9 @@ Style/AsciiComments:
 
 Style/CollectionMethods:
   Enabled: true
+
+Style/ConditionalAssignment:
+  Enabled: false
 
 Style/Documentation:
   Enabled: false

@@ -1,10 +1,11 @@
 # coding: utf-8
 # frozen_string_literal: true
+
 lib = File.expand_path("../lib", __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require "dphil/version"
 
-Gem::Specification.new do |spec|
+Gem::Specification.new do |spec| # rubocop:disable BlockLength
   spec.name          = "dphil"
   spec.version       = Dphil::VERSION
   spec.authors       = ["Tim Bellefleur"]
@@ -19,7 +20,7 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
-  spec.required_ruby_version = ">= 2.3"
+  spec.required_ruby_version = "~> 2.4"
 
   spec.add_development_dependency "bundler", "~> 1.14"
   spec.add_development_dependency "rake", "~> 12.0"
@@ -30,12 +31,15 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "pry-byebug", "~> 3.4"
   spec.add_development_dependency "yard", "~> 0.9"
 
-  spec.add_runtime_dependency "ragabash", "~> 0.1"
+  spec.add_runtime_dependency "ragabash", "~> 0.3"
   spec.add_runtime_dependency "awesome_print", "~> 1.7"
   spec.add_runtime_dependency "activesupport", "~> 5.0"
   spec.add_runtime_dependency "nokogiri", "~> 1.6"
   spec.add_runtime_dependency "psych", "~> 2.0"
   spec.add_runtime_dependency "hashie", "~> 3.0"
   spec.add_runtime_dependency "amatch", "~> 0.3"
-  spec.add_runtime_dependency "sanscript", "~> 0.1"
+  spec.add_runtime_dependency "sanscript", "~> 0.8"
+  spec.add_runtime_dependency "oj", "~> 3.0"
+  spec.add_runtime_dependency "neatjson", "~> 0.8"
+  spec.add_runtime_dependency "json-ld", "~> 2.1"
 end
