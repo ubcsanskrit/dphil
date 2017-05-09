@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Dphil
   class Verse
     using ::Ragabash::Refinements

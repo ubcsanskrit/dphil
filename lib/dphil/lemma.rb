@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Dphil
   # Public: A storage object for words and groups of words from TEI XML data.
   # Also contains information about the source/location of the words.

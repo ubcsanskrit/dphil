@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Dphil
   class Syllables
     using ::Ragabash::Refinements
@@ -10,8 +11,8 @@ module Dphil
         @weight = weight.to_str.safe_copy.freeze
         @parent = opts[:parent]
         @index = opts[:index]&.to_i
-        @source_script = opts[:source_script] || (@parent.source_script unless @parent.nil?)
-        @slp1 = @source_script == :slp1 ? @source : opts[:slp1]&.to_str.safe_copy.freeze
+        @source_script = opts[:source_script] || (@parent&.source_script)
+        @slp1 = @source_script == :slp1 ? @source : opts[:slp1]&.to_str&.safe_copy.freeze
       end
 
       def inspect

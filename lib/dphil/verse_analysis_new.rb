@@ -1,9 +1,11 @@
 # frozen_string_literal: true
+
 require "amatch"
 
 module Dphil
   module VerseAnalysis
     using ::Ragabash::Refinements
+
     module_function
 
     # Converts a verse string into individual syllables.
@@ -244,14 +246,10 @@ module Dphil
     # @param range []
     # @return []
     def check_non_overlapping?(indexes, range)
-      if indexes.empty?
-        return true
-      end
+      return true if indexes.empty?
 
       indexes.each do |val|
-        if val.cover?(range.begin) || val.cover?(range.end)
-          return false
-        end
+        return false if val.cover?(range.begin) || val.cover?(range.end)
       end
       true
     end
@@ -269,22 +267,21 @@ module Dphil
         p = 0
         meter_results[meter_name].each do |val|
           val[:matches].each do |i|
-            if check_non_overlapping?(compact_index, i)
-              compact_index << i
-              case val[:size]
-              when :full
-                p += 100
-              when :half
-                p += 50
-              when :pada
-                p += 25
-              end
+            next unless check_non_overlapping?(compact_index, i)
+            compact_index << i
+            case val[:size]
+            when :full
+              p += 100
+            when :half
+              p += 50
+            when :pada
+              p += 25
             end
           end
         end
         acc = {
           pattern_type: meter_results[meter_name][0][:type],
-          matches: compact_index.sort_by { |a| a.to_s.split('..').first.to_i },
+          matches: compact_index.sort_by { |a| a.to_s.split("..").first.to_i },
           match_percent: p,
         }
         compact_results[meter_name] = [acc]
@@ -324,7 +321,7 @@ module Dphil
 
         when 30..50
           flag = 0
-          (1..2).each do
+          2.times do
             next if flag == 1
             max = get_unmatched_range(indexes, wc.length - 1)
             portion = wc.slice!(max.begin, (max.end - max.begin + 1))
@@ -392,7 +389,7 @@ module Dphil
         pn = i
         range = index.slice!(0, 1)[0] if range.nil?
 
-        if cw.slice(range.begin, range.end - range.begin + 1).scan(/[a-z]/).length == 0
+        if cw.slice(range.begin, range.end - range.begin + 1).scan(/[a-z]/).empty?
           ps = "exact"
           if (range.end - range.begin + 1) == len[i - 1]
             pr = range
@@ -468,28 +465,25 @@ module Dphil
       edits = 100
 
       meter_search_fuzzy(wc, guess_size).each do |value|
-        if value[:edit_distance] < edits
-          edits = value[:edit_distance]
-        end
+        edits = value[:edit_distance] if value[:edit_distance] < edits
       end
 
       meter_search_fuzzy(wc, guess_size).each do |value|
-        if value[:edit_distance] == edits
-          wc = corrected_string(weight_string, value[:pattern])
-          status = get_pada_status(value[:meter], wc, [(0..(wc.length - 1))], guess_size)
-          pada_weights = get_weight_by_pada(status, wc)
-          acc = {
-            len_assumption: guess_size.to_s + "/4",
-            meter: value[:meter],
-            type: value[:type],
-            match_indexes: status,
-            percent_match: per_match,
-            edit_count: value[:edit_distance],
-            correct_weights: pada_weights,
-            heuristic: (2 * per_match) + ((100 - (value[:edit_distance] * 100 / weight_string.length))),
-          }
-          best << acc
-        end
+        next unless value[:edit_distance] == edits
+        wc = corrected_string(weight_string, value[:pattern])
+        status = get_pada_status(value[:meter], wc, [(0..(wc.length - 1))], guess_size)
+        pada_weights = get_weight_by_pada(status, wc)
+        acc = {
+          len_assumption: guess_size.to_s + "/4",
+          meter: value[:meter],
+          type: value[:type],
+          match_indexes: status,
+          percent_match: per_match,
+          edit_count: value[:edit_distance],
+          correct_weights: pada_weights,
+          heuristic: (2 * per_match) + ((100 - (value[:edit_distance] * 100 / weight_string.length))),
+        }
+        best << acc
       end
       best
     end
@@ -502,17 +496,16 @@ module Dphil
       case type
       when :patterns
         if size == :pada
-          return MetricalData.meters[meter_name][0].dup
+          MetricalData.meters[meter_name][0].dup
         else
-          return MetricalData.meters[meter_name][0].dup + MetricalData.meters[meter_name][1].dup
+          MetricalData.meters[meter_name][0].dup + MetricalData.meters[meter_name][1].dup
         end
       when :regexes
         MetricalData.all[type][size].each do |p, meter|
-          if meter_name == meter.keys.first
-            p = p.source.gsub(/[\^\$\(\)]/, "")
-            r = closest_pattern_to_regex(weight_string, p)
-            return r[:pattern]
-          end
+          next unless meter_name == meter.keys.first
+          p = p.source.gsub(/[\^\$\(\)]/, "")
+          r = closest_pattern_to_regex(weight_string, p)
+          return r[:pattern]
         end
       end
     end
@@ -526,13 +519,9 @@ module Dphil
       (0...w1.length).each do |u|
         flag = 0
         indexes.each do |v|
-          if u >= v.begin && u <= v.end
-            flag = 1
-          end
+          flag = 1 if u >= v.begin && u <= v.end
         end
-        if flag == 0
-          w1[u] = "d"
-        end
+        w1[u] = "d" if flag == 0
       end
       w1
     end
@@ -559,7 +548,7 @@ module Dphil
     #
     def update_index_array(indexes, max, diff)
       indexes << max
-      indexes = indexes.sort_by { |a| a.to_s.split('..').first.to_i }
+      indexes = indexes.sort_by { |a| a.to_s.split("..").first.to_i }
       index2 = []
       indexes.each do |val|
         if val.begin < max.begin
@@ -578,9 +567,7 @@ module Dphil
     #
     #
     def corrected_string(weights, pattern)
-      if pattern.empty?
-        return weights
-      end
+      return weights if pattern.empty?
       actual = weights.split("")
       actual.insert(0, " ")
       pattern.insert(0, " ")
@@ -607,13 +594,13 @@ module Dphil
       correct = []
       i = actual.length - 1
       j = pattern.length - 1
-      while (i > 0 || j > 0)
+      while i > 0 || j > 0
         if actual[i] == pattern[j]
           correct.insert(0, actual[i])
           i -= 1
           j -= 1
         else
-          x = [table[i - 1][j], table[i - 1][j - 1], table[i][j - 1]].min if (i > 0 && j > 0)
+          x = [table[i - 1][j], table[i - 1][j - 1], table[i][j - 1]].min if i > 0 && j > 0
           x = table[i][j - 1] if i == 0 # upper boundary case
           x = table[i - 1][j] if j == 0 # left boundary case
           case x
@@ -667,7 +654,7 @@ module Dphil
     #
     #
     #
-    def fuzzy_correction(meter, corrected_weights, syllables)
+    def fuzzy_correction(_meter, corrected_weights, syllables)
       k = 0
       n = 0 # for syllables
       p = 0
@@ -747,7 +734,7 @@ module Dphil
             p2 = p.dup
             l = metercount[meter_name]
             (0...guess_size).each do |i|
-              pattern = pattern + p2.slice!(0, l[i])
+              pattern += p2.slice!(0, l[i])
             end
 
             next unless (pattern.length - syllable_count).abs <= length_variance * pattern.length
@@ -783,7 +770,7 @@ module Dphil
     #
     #
     def closest_pattern_to_regex(weight_string, pattern)
-      pattern2 = pattern.gsub(".", "L")
+      pattern2 = pattern.tr(".", "L")
       str = Amatch::Levenshtein.new(weight_string)
 
       edit_distance = str.match(pattern2)
@@ -807,7 +794,7 @@ module Dphil
           pattern_string << "G"
         elsif c[i] == "d"
           xw += 1
-        elsif (c[i] == "f" && pattern[x1] == ".")
+        elsif c[i] == "f" && pattern[x1] == "."
           x1 += 1
           edit_distance -= 1
           pattern_string << weight_string[xw]

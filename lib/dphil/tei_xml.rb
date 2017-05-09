@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Dphil
   class TeiXML
     using ::Ragabash::Refinements
@@ -41,13 +42,13 @@ module Dphil
       pb = page_of(segment)
       lb = line_of(segment)
 
-      source = <<EOS
-<TEI version="5.0" xmlns="http://www.tei-c.org/ns/1.0">
-  <pre>#{pb.to_xml unless pb.nil?}#{lb.to_xml unless lb.nil?}</pre>
-  #{segment.to_xml}
-  <post></post>
-</TEI>
-EOS
+      source = <<~EOS
+        <TEI version="5.0" xmlns="http://www.tei-c.org/ns/1.0">
+          <pre>#{pb&.to_xml}#{lb&.to_xml}</pre>
+          #{segment.to_xml}
+          <post></post>
+        </TEI>
+      EOS
       self.class.new(source)
     end
 
@@ -56,13 +57,13 @@ EOS
         pb = page_of(segment)
         lb = line_of(segment)
 
-        source = <<EOS
-<TEI version="5.0" xmlns="http://www.tei-c.org/ns/1.0">
-  <pre>#{pb.to_xml unless pb.nil?}#{lb.to_xml unless lb.nil?}</pre>
-  #{segment.to_xml}
-  <post></post>
-</TEI>
-EOS
+        source = <<~EOS
+          <TEI version="5.0" xmlns="http://www.tei-c.org/ns/1.0">
+            <pre>#{pb&.to_xml}#{lb&.to_xml}</pre>
+            #{segment.to_xml}
+            <post></post>
+          </TEI>
+        EOS
         self.class.new(source)
       end
     end
