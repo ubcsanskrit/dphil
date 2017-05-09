@@ -34,13 +34,13 @@ module Dphil
       weight_arr = (0...syllables.length).map do |i|
         cur_syl = syllables[i].delete("'").strip
         next_syl = syllables[i + 1]&.delete("'")&.strip
-        if cur_syl =~ Constants::R_GSYL
+        if cur_syl.match?(Constants::R_GSYL)
           # Guru if current syllable contains a long vowel, or end in a ṃ/ḥ
           "G"
-        elsif cur_syl =~ Constants::R_CCONF
+        elsif cur_syl.match?(Constants::R_CCONF)
           # Contextually Guru if ending in a cluster
           "g"
-        elsif "#{cur_syl[-1]}#{next_syl&.slice(0)}" =~ Constants::R_CCON
+        elsif "#{cur_syl[-1]}#{next_syl&.slice(0)}".match?(Constants::R_CCON)
           # Contextually Guru if syllable-final and next syllable-inital make a
           # consonant cluster.
           "g"

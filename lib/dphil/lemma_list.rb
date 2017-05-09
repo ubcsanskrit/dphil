@@ -114,9 +114,9 @@ module Dphil
       string.split(/(\s)/).reject(&:empty?).each do |lemma|
         @current_chars += lemma.strip
 
-        if lemma =~ /\-$/
+        if lemma.match?(/\-$/)
           @inside_hyphen = true
-        elsif lemma =~ /^\-?[^\s]/
+        elsif lemma.match?(/^\-?[^\s]/)
           @inside_hyphen = false
         end
 
@@ -149,7 +149,7 @@ module Dphil
     end
 
     def append_lemma
-      return unless @current_chars =~ /[^\s\-\.\|]+/ # if not .empty?
+      return unless @current_chars.match?(/[^\s\-\.\|]+/) # if not .empty?
       new_lemma_source = @current_lemma.join("")
       new_lemma = Lemma.new(new_lemma_source, @index)
       @index += 1
