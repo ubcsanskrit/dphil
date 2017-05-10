@@ -2,17 +2,19 @@
 
 module Dphil
   class Tree
-    attr_reader :nodes, :tree
+    attr_reader :nodes, :stats, :tree
 
     def initialize(input)
       if input.respond_to?(:to_str)
-        @nodes = nodes_from_lengths(input.to_str)
-      elsif input&.key?("nodes")
+        paup = parse_paup_log(input.to_str)
+        @nodes = nodes_from_lengths(paup[:lengths])
+        @stats = paup[:stats]
+      elsif input&.key?("nodes") && input&.key?("stats")
         @nodes = parse_json_nodes(input["nodes"])
-      elsif input.respond_to?(:read)
-        @nodes = nodes_from_lengths(input.read)
+        @stats = parse_json_stats(input["stats"])
       else
-        raise ArgumentError, 'Input must respond to #to_str, #read, or #["nodes"]'
+        raise ArgumentError, "Input must be a String or " \
+                             "a Hash with `nodes` & `stats` keys."
       end
       @tree = tree_from_nodes(nodes)
       IceNine.deep_freeze(self)
@@ -21,6 +23,7 @@ module Dphil
     def to_h
       {
         nodes: nodes,
+        stats: stats,
         tree: tree,
       }
     end
@@ -46,7 +49,44 @@ module Dphil
       node.children&.map { |id| nodes[id] }
     end
 
+    def tree_length
+      stats[:length]
+    end
+
+    def ci
+      stats[:ci]
+    end
+
     private
+
+    PAUP_TREE_STATS = {
+      "Tree length" => :length,
+      "Consistency index (CI)" => :ci,
+      "Homoplasy index (HI)" => :hi,
+      "CI excluding uninformative characters" => :ci_ex,
+      "HI excluding uninformative characters" => :hi_ex,
+      "Retention index (RI)" => :ri,
+      "Rescaled consistency index (RC)" => :rc,
+    }.freeze
+
+    private_constant :PAUP_TREE_STATS
+
+    def parse_paup_log(input)
+      regex = /Branch lengths and linkages.*?\n\-{40,}\n(.*?)\n\-{40,}\n^Sum.*?(^Tree length =.*?)\n\n/m
+      match = input.match(regex)&.captures
+      raise ArgumentError, "Branch data could not be found in input" if match.nil?
+
+      lengths = match[0]&.split("\n")&.map { |l| l.strip.split(/\s{3,}/) }
+      stats = match[1]&.split("\n")&.each_with_object({}) do |l, acc|
+        key, val = l.split(" = ")
+        acc[PAUP_TREE_STATS[key]] = (val["."] ? val.to_f : val.to_i)
+      end
+
+      {
+        lengths: lengths,
+        stats: stats,
+      }
+    end
 
     def parse_json_nodes(json_nodes)
       json_nodes.each_with_object({}) do |(id, node), acc|
@@ -54,16 +94,18 @@ module Dphil
       end
     end
 
-    def nodes_from_lengths(input)
-      if input.match?(/^\s*\{.*?(?:'nodes'|"nodes")/m)
-        return parse_json_nodes(JSON.parse(input)["nodes"])
+    def parse_json_stats(json_stats)
+      json_stats = json_stats.symbolize_keys
+      missing_keys = (PAUP_TREE_STATS.values - json_stats.keys)
+      raise ArgumentError, "Missing `stats` keys: #{missing_keys}" unless missing_keys.empty?
+      json_stats.each_with_object({}) do |(k, v), acc|
+        raise ArgumentError, "Stat `#{k}` is not a Numeric" unless v.is_a?(Numeric)
+        acc[k] = v
       end
+    end
 
-      input = input[/Branch lengths and linkages.*?\n\-{40,}\n(.*?)\n\-{40,}\nSum/m, 1]
-              &.split("\n")&.map { |l| l.strip.split(/\s{3,}/) }
-      raise ArgumentError, "Branch data could not be found in input" if input.nil?
-
-      input.each_with_object({}) do |arr, hash|
+    def nodes_from_lengths(lengths)
+      lengths.each_with_object({}) do |arr, hash|
         name, id = arr[0].match(/^(.*?)\s?\(?([0-9]{1,4})\)?$/).captures
         id = id.to_i
         parent = arr[1].to_i
