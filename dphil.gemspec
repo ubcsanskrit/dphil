@@ -33,7 +33,7 @@ Gem::Specification.new do |spec| # rubocop:disable BlockLength
 
   spec.add_runtime_dependency "ragabash", "~> 0.3"
   spec.add_runtime_dependency "awesome_print", "~> 1.7"
-  spec.add_runtime_dependency "activesupport", "~> 5.0"
+  spec.add_runtime_dependency "activesupport", "~> 5.1"
   spec.add_runtime_dependency "nokogiri", "~> 1.6"
   spec.add_runtime_dependency "psych", "~> 2.0"
   spec.add_runtime_dependency "hashie", "~> 3.0"

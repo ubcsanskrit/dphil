@@ -20,6 +20,9 @@ require "dphil/lemma_list"
 require "dphil/tei_xml"
 require "dphil/verse"
 
+require "dphil/tree"
+require "dphil/tree_node"
+
 # Namespace module definition
 module Dphil
   Transliterate.default_script = :iast
