@@ -3,19 +3,16 @@
 module Dphil
   class Tree
     attr_reader :nodes, :tree
-    alias root tree
 
-    def self.json_create(o)
-      new(nil, o) if o["json_class"] == "Dphil::Tree"
-    end
-
-    def initialize(input, json_data = nil)
-      if json_data&.[]("nodes").is_a?(Hash)
-        @nodes = json_data["nodes"].each_with_object({}) do |(id, node), acc|
-          acc[id.to_i] = node
-        end
+    def initialize(input)
+      if input.respond_to?(:to_str)
+        @nodes = nodes_from_lengths(input.to_str)
+      elsif input&.key?("nodes")
+        @nodes = parse_json_nodes(input["nodes"])
+      elsif input.respond_to?(:read)
+        @nodes = nodes_from_lengths(input.read)
       else
-        @nodes = nodes_from_lengths(input)
+        raise ArgumentError, 'Input must respond to #to_str, #read, or #["nodes"]'
       end
       @tree = tree_from_nodes(nodes)
       IceNine.deep_freeze(self)
@@ -30,9 +27,11 @@ module Dphil
     alias as_json to_h
 
     def to_json(*args)
-      out = { "json_class" => self.class.name }
-      out.merge!(as_json)
-      out.to_json(*args)
+      as_json.to_json(*args)
+    end
+
+    def root
+      nodes[tree.id]
     end
 
     def get_node(id)
@@ -49,9 +48,20 @@ module Dphil
 
     private
 
+    def parse_json_nodes(json_nodes)
+      json_nodes.each_with_object({}) do |(id, node), acc|
+        acc[id.to_i] = TreeNode.new(node)
+      end
+    end
+
     def nodes_from_lengths(input)
+      if input.match?(/^\s*\{.*?(?:'nodes'|"nodes")/m)
+        return parse_json_nodes(JSON.parse(input)["nodes"])
+      end
+
       input = input[/Branch lengths and linkages.*?\n\-{40,}\n(.*?)\n\-{40,}\nSum/m, 1]
-              .split("\n").map { |l| l.strip.split(/\s{3,}/) }
+              &.split("\n")&.map { |l| l.strip.split(/\s{3,}/) }
+      raise ArgumentError, "Branch data could not be found in input" if input.nil?
 
       input.each_with_object({}) do |arr, hash|
         name, id = arr[0].match(/^(.*?)\s?\(?([0-9]{1,4})\)?$/).captures

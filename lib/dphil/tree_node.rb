@@ -4,11 +4,8 @@ module Dphil
   class TreeNode
     attr_reader :id, :name, :length, :parent, :children
 
-    def self.json_create(o)
-      new(o.symbolize_keys) if o["json_class"] == "Dphil::TreeNode"
-    end
-
-    def initialize(**opts)
+    def initialize(opts = {})
+      opts = opts.symbolize_keys
       self.id = opts[:id]
       self.name = opts[:name]
       self.length = opts[:length]
@@ -55,9 +52,7 @@ module Dphil
     alias as_json to_h
 
     def to_json(*args)
-      out = { "json_class" => self.class.name }
-      out.merge!(as_json)
-      out.to_json(*args)
+      as_json.to_json(*args)
     end
 
     def merge!(node)
