@@ -1,5 +1,13 @@
 # frozen_string_literal: true
 
+require "simplecov"
+require "coveralls"
+SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
+  SimpleCov::Formatter::HTMLFormatter,
+  Coveralls::SimpleCov::Formatter
+]
+SimpleCov.start
+
 ENV["RUBY_ENV"] = "test" # for logger debug purposes
 
 $LOAD_PATH.unshift File.expand_path("../../lib", __FILE__)
