@@ -24,7 +24,7 @@ module Dphil
       end
 
       def prev
-        return unless @parent && @index && @index > 0
+        return unless @parent && @index && @index.positive?
         @parent[@index - 1]
       end
 

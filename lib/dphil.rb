@@ -22,6 +22,7 @@ require "dphil/verse"
 
 require "dphil/tree"
 require "dphil/tree_node"
+require "dphil/change_list"
 
 # Namespace module definition
 module Dphil
