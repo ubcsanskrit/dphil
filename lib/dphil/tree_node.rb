@@ -1,11 +1,13 @@
 # frozen_string_literal: true
 
 module Dphil
+  #
+  # Node in a Phylogenetic tree
+  #
   class TreeNode
     attr_reader :id, :name, :length, :parent, :children
 
     def initialize(opts = {})
-      opts = opts.symbolize_keys
       self.id = opts[:id]
       self.name = opts[:name]
       self.length = opts[:length]

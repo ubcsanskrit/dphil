@@ -1,6 +1,11 @@
 # frozen_string_literal: true
 
 module Dphil
+  #
+  # Phylogenetic Tree generated from parsing PAUP output.
+  #
+  # Immutable.
+  #
   class Tree
     attr_reader :nodes, :stats, :tree
 
@@ -9,12 +14,12 @@ module Dphil
         paup = parse_paup_log(input.to_str)
         @nodes = nodes_from_lengths(paup[:lengths])
         @stats = paup[:stats]
-      elsif input&.key?("nodes") && input&.key?("stats")
-        @nodes = parse_json_nodes(input["nodes"])
-        @stats = parse_json_stats(input["stats"])
+      elsif input&.key?(:nodes) && input&.key?(:stats)
+        @nodes = parse_json_nodes(input[:nodes])
+        @stats = parse_json_stats(input[:stats])
       else
         raise ArgumentError, "Input must be a String or " \
-                             "a Hash with `nodes` & `stats` keys."
+                             "a Hash with `:nodes` & `:stats` keys."
       end
       @tree = tree_from_nodes(nodes)
       IceNine.deep_freeze(self)
@@ -90,12 +95,11 @@ module Dphil
 
     def parse_json_nodes(json_nodes)
       json_nodes.each_with_object({}) do |(id, node), acc|
-        acc[id.to_i] = TreeNode.new(node)
+        acc[id.to_s.to_i] = TreeNode.new(node)
       end
     end
 
     def parse_json_stats(json_stats)
-      json_stats = json_stats.symbolize_keys
       missing_keys = (PAUP_TREE_STATS.values - json_stats.keys)
       raise ArgumentError, "Missing `stats` keys: #{missing_keys}" unless missing_keys.empty?
       json_stats.each_with_object({}) do |(k, v), acc|

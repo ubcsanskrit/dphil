@@ -2,6 +2,7 @@
 
 require "active_support/core_ext/object/try"
 require "ragabash"
+require "json"
 
 require "dphil/version"
 require "dphil/constants"
@@ -22,6 +23,8 @@ require "dphil/verse"
 
 require "dphil/tree"
 require "dphil/tree_node"
+require "dphil/character"
+require "dphil/character_matrix"
 require "dphil/change_list"
 
 # Namespace module definition
