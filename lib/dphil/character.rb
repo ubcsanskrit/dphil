@@ -105,27 +105,45 @@ module Dphil
       @symbols_taxa ||= states_taxa.transform_keys { |state| symbols[state] }.freeze
     end
 
+    # Get state from symbol
     # @param  symbol [String] a symbol
     # @return [String, nil] the associated text-state, or Nil if not found
     def get_state(symbol)
       states[normalize_text(symbol)]
     end
 
+    # Get symbol from state
     # @param state [String] a text-state
     # @return [String, nil] the associated symbol, or Nil if not found
     def get_symbol(state)
       symbols[normalize_text(state)]
     end
 
+    # Get taxa from state
+    # @param  symbol [String] a text-state
+    # @return [Array<Integer>] the associated taxa IDs
+    def get_taxa_state(state)
+      states_taxa[normalize_text(state)]
+    end
+
+    # Get taxa from symbol
+    # @param  symbol [String] a symbol
+    # @return [Array<Integer>] the associated taxa IDs
+    def get_taxa_symbol(symbol)
+      symbols_taxa[normalize_text(symbol)]
+    end
+
+    # Get state from taxon
     # @param  taxon_id [Integer] a taxon ID
     # @return [String, nil] the associated text-state, or Nil if not found
-    def get_taxon_state(taxon_id)
+    def get_state_taxon(taxon_id)
       taxa_states[taxon_id.to_i]
     end
 
+    # Get symbol from taxon
     # @param  taxon_id [Integer] a taxon ID
     # @return [String, nil] the associated symbol, or Nil if not found
-    def get_taxon_symbol(taxon_id)
+    def get_symbol_taxon(taxon_id)
       taxa_symbols[taxon_id.to_i]
     end
 
@@ -139,7 +157,7 @@ module Dphil
           q.breakable
           q.group(1, "{", "}") do
             q.seplist(states) do |symbol, state|
-              q.text %(#{state.inspect}(#{symbol})=#{states_taxa[state]})
+              q.text "#{state.inspect}(#{symbol})=#{states_taxa[state]}"
             end
           end
         end
