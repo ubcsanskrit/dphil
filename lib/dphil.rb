@@ -2,6 +2,7 @@
 
 require "active_support/core_ext/object/try"
 require "ragabash"
+require "csv"
 require "json"
 require "set"
 require "unf"
