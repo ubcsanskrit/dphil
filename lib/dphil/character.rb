@@ -188,6 +188,7 @@ module Dphil
     # @param text [String] an arbitrary string of text
     # @return [String] a Unicode-normalized, stripped, frozen copy
     def normalize_text(text)
+      return if text.nil?
       text = UNF::Normalizer.normalize(text.to_s, :nfc)
       text.strip!
       text.freeze
