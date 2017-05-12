@@ -147,6 +147,19 @@ module Dphil
       taxa_symbols[taxon_id.to_i]
     end
 
+    # Check if character is parsimony-informative
+    # (At least 2 variants occurring in at least 2 places)
+    # @return [Boolean] whether the character provides useful information
+    def informative?
+      @informative ||= (states.size > 1 && states_taxa.count { |_, v| v.size > 1 } > 1)
+    end
+
+    # Check if the character is invariant
+    # @return [Boolean] whether the character is constant (invariant)
+    def constant?
+      @constant ||= states.size <= 1
+    end
+
     # Pretty-print the object
     # (used by Pry in particular)
     def pretty_print(q)
