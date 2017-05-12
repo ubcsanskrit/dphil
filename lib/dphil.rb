@@ -25,6 +25,7 @@ require "dphil/lemma_list"
 require "dphil/tei_xml"
 require "dphil/verse"
 
+require "dphil/paup"
 require "dphil/tree"
 require "dphil/tree_node"
 require "dphil/character"

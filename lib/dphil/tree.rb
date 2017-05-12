@@ -7,19 +7,16 @@ module Dphil
   # Immutable.
   #
   class Tree
-    attr_reader :nodes, :stats, :tree
+    attr_reader :id, :nodes, :stats, :tree
 
-    def initialize(input)
-      if input.respond_to?(:to_str)
-        paup = parse_paup_log(input.to_str)
-        @nodes = nodes_from_lengths(paup[:lengths])
-        @stats = paup[:stats]
-      elsif input&.key?(:nodes) && input&.key?(:stats)
-        @nodes = parse_json_nodes(input[:nodes])
-        @stats = parse_json_stats(input[:stats])
-      else
-        raise ArgumentError, "Input must be a String or " \
-                             "a Hash with `:nodes` & `:stats` keys."
+    def initialize(id = nil, lengths = nil, stats = nil, **opts)
+      @id = (opts[:id] || id).to_i
+      if lengths.respond_to?(:to_str) && stats.respond_to?(:to_str)
+        @nodes = nodes_from_lengths(parse_paup_lengths(lengths))
+        @stats = parse_paup_stats(stats)
+      elsif (opts.keys & %i[nodes stats]).length == 2
+        @nodes = parse_json_nodes(opts[:nodes])
+        @stats = parse_json_stats(opts[:stats])
       end
       @tree = tree_from_nodes(nodes)
       IceNine.deep_freeze(self)
@@ -76,21 +73,15 @@ module Dphil
 
     private_constant :PAUP_TREE_STATS
 
-    def parse_paup_log(input)
-      regex = /Branch lengths and linkages.*?\n\-{40,}\n(.*?)\n\-{40,}\n^Sum.*?(^Tree length =.*?)\n\n/m
-      match = input.match(regex)&.captures
-      raise ArgumentError, "Branch data could not be found in input" if match.nil?
+    def parse_paup_lengths(lengths)
+      lengths.to_s&.split("\n")&.map { |l| l.strip.split(/\s{3,}/) }
+    end
 
-      lengths = match[0]&.split("\n")&.map { |l| l.strip.split(/\s{3,}/) }
-      stats = match[1]&.split("\n")&.each_with_object({}) do |l, acc|
+    def parse_paup_stats(stats)
+      stats.to_s&.split("\n")&.each_with_object({}) do |l, acc|
         key, val = l.split(" = ")
         acc[PAUP_TREE_STATS[key]] = (val["."] ? val.to_f : val.to_i)
       end
-
-      {
-        lengths: lengths,
-        stats: stats,
-      }
     end
 
     def parse_json_nodes(json_nodes)
