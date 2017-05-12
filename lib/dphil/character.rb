@@ -79,7 +79,7 @@ module Dphil
     # @param  taxon [Integer] a taxon ID
     # @return [String] the text state associated with the taxon's character state
     def taxa_state(taxon)
-      taxa_states[taxon]
+      taxa_states[taxon.to_i]
     end
 
     # @!attribute [r] taxa_symbols
@@ -93,7 +93,7 @@ module Dphil
     # @param  taxon [Integer] a taxon ID
     # @return [String] the symbol associated with the taxon's character state
     def taxa_symbol(taxon)
-      taxa_symbols[taxon]
+      taxa_symbols[taxon.to_i]
     end
 
     # @!attribute [r] states_taxa
