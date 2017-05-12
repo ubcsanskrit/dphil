@@ -19,6 +19,7 @@ module Dphil
       @id = (opts[:id] || id)&.to_s.to_i
       @taxa_states = (opts[:states] || states)
                      .to_h.each_with_object({}) do |(taxon, state), acc|
+        next if state.blank?
         taxon = taxon.to_s if taxon.is_a?(Symbol)
         acc[taxon.to_i] = normalize_text(state)
       end
