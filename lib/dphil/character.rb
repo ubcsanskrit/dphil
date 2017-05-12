@@ -7,14 +7,14 @@ module Dphil
   # Immutable.
   #
   class Character
-    # Instantiates a new Character.
+    # Instantiates a new Character
     # @overload initialize(id = nil, states = nil)
-    #   @param id [Integer] a Character ID
-    #   @param states [Hash] a Hash of `taxon_ID => text_state`
+    #   @param id [Integer] a character ID
+    #   @param states [Hash<Integer, String]] taxa and text-states +{ taxon_id => text_state }+
     # @overload initialize(**opts = {})
-    #   @param [Hash] opts the options or keyword value Hash
-    #   @option opts [Integer] :id a Character ID
-    #   @option opts [Hash] :states a Hash of `taxon_ID => text_state`
+    #   @param [Hash] opts options or keyword values
+    #   @option opts [Integer] :id a character ID
+    #   @option opts [Hash<Integer, String]] :states taxa and text-states +{ taxon_id => text_state }+
     def initialize(id = nil, states = nil, **opts)
       @id = (opts[:id] || id)&.to_s.to_i
       @taxa_states = (opts[:states] || states)
@@ -24,92 +24,108 @@ module Dphil
       end
 
       unique_states = weighted_uniq(@taxa_states.values)
-      if unique_states.count > SYMBOL_ARRAY.count
+      if unique_states.size > SYMBOL_ARRAY.size
         raise ArgumentError,
-              "Too many states (found #{unique_states.count}, " \
-              "max #{SYMBOL_ARRAY.count})"
+              "Too many states (found #{unique_states.size}, " \
+              "max #{SYMBOL_ARRAY.size})"
       end
 
       @states = {}
-      @frequency = {}
-      unique_states.each_with_index do |(state, frequency), index|
-        symbol = SYMBOL_ARRAY[index]
-        @states[symbol] = state
-        @frequency[symbol] = frequency
+      @state_totals = unique_states
+      unique_states.each_key.with_index do |state, index|
+        @states[SYMBOL_ARRAY[index]] = state
       end
       instance_variables.each { |ivar| instance_variable_get(ivar).freeze }
     end
 
-    # @return [Integer] the ID of the character
+    # @!attribute [r] id
+    # @return [Integer] character ID
     attr_reader :id
 
     # @!attribute [r] taxa
-    # @return [Array] the list of taxon IDs
+    # @return [Set<Integer>] taxon IDs
     def taxa
-      taxa_states.keys
+      @taxa ||= Set.new(taxa_states.keys).freeze
     end
 
-    # @return [Hash] the Hash of character state frequencies, keyed by symbol
-    attr_reader :frequency
-
-    # @return [Hash] the Hash of text states, keyed by symbol
+    # @!attribute [r] states
+    # @return [Hash<String, String>] text-states by symbol
     attr_reader :states
 
-    # @param  symbol [String] a symbol associated with a character state
-    # @return [String] the text state associated with the character state
-    def state(symbol)
-      states[normalize_text(symbol)]
-    end
-
     # @!attribute [r] symbols
-    # @return [Hash] the Hash of symbols, keyed by text state
+    # @return [Hash<String, String>] symbols by text-state
     def symbols
       @symbols ||= states.invert.freeze
     end
 
-    # @param state [String] a text state associated with a character state
-    # @return [String] the symbol associated with the character state
-    def symbol(state)
-      symbols[normalize_text(state)]
+    # @!attribute [r] state_list
+    # @return [Array<String>] text-states
+    def state_list
+      @state_list ||= states.values.freeze
     end
 
-    # @return [Hash] the Hash of text states, keyed by taxon
+    # @!attribute [r] symbol_list
+    # @return [Array<String>] symbols
+    def symbol_list
+      @symbol_list ||= states.keys.freeze
+    end
+
+    # @!attribute [r] state_totals
+    # @return [Hash<String, Integer>] character state totals by text-state
+    attr_reader :state_totals
+
+    # @!attribute [r] symbol_totals
+    # @return [Hash<String, Integer>] character state totals by symbol
+    def symbol_totals
+      @symbol_totals ||= state_totals.transform_keys { |state| symbols[state] }.freeze
+    end
+
+    # @!attribute [r] taxa_states
+    # @return [Hash<Integer, String>] text-states by taxon ID
     attr_reader :taxa_states
 
-    # @param  taxon [Integer] a taxon ID
-    # @return [String] the text state associated with the taxon's character state
-    def taxa_state(taxon)
-      taxa_states[taxon.to_i]
-    end
-
     # @!attribute [r] taxa_symbols
-    # @return [Hash] a Hash of symbols, keyed by taxa IDs
+    # @return [Hash<Integer, String>] symbols by taxa IDs
     def taxa_symbols
-      @taxa_symbols ||= (taxa_states.each_with_object({}) do |(taxon, state), acc|
-        acc[taxon] = symbols[state]
-      end).freeze
-    end
-
-    # @param  taxon [Integer] a taxon ID
-    # @return [String] the symbol associated with the taxon's character state
-    def taxa_symbol(taxon)
-      taxa_symbols[taxon.to_i]
+      @taxa_symbols ||= taxa_states.transform_values { |state| symbols[state] }.freeze
     end
 
     # @!attribute [r] states_taxa
-    # @return [Hash] a Hash of taxa, keyed by text state
+    # @return [Hash<String, Integer>] taxa IDs by text-state
     def states_taxa
-      @states_taxa ||= (states.each_with_object({}) do |(_symbol, state), acc|
-        acc[state] = taxa_states.select { |_taxon, tstate| state == tstate }.keys
+      @states_taxa ||= (states.each_value.each_with_object({}) do |state, acc|
+        acc[state] = taxa_states.select { |_, tstate| state == tstate }.keys
       end).freeze
     end
 
     # @!attribute [r] symbols_taxa
-    # @return [Hash] a Hash of taxa, keyed by symbol
+    # @return [Hash<String, Integer>] taxa IDs by symbol
     def symbols_taxa
-      @symbols_taxa ||= (states_taxa.each_with_object({}) do |(state, taxa), acc|
-        acc[symbols[state]] = taxa
-      end).freeze
+      @symbols_taxa ||= states_taxa.transform_keys { |state| symbols[state] }.freeze
+    end
+
+    # @param  symbol [String] a symbol
+    # @return [String, nil] the associated text-state, or Nil if not found
+    def get_state(symbol)
+      states[normalize_text(symbol)]
+    end
+
+    # @param state [String] a text-state
+    # @return [String, nil] the associated symbol, or Nil if not found
+    def get_symbol(state)
+      symbols[normalize_text(state)]
+    end
+
+    # @param  taxon_id [Integer] a taxon ID
+    # @return [String, nil] the associated text-state, or Nil if not found
+    def get_taxon_state(taxon_id)
+      taxa_states[taxon_id.to_i]
+    end
+
+    # @param  taxon_id [Integer] a taxon ID
+    # @return [String, nil] the associated symbol, or Nil if not found
+    def get_taxon_symbol(taxon_id)
+      taxa_symbols[taxon_id.to_i]
     end
 
     # Pretty-print the object
