@@ -2,13 +2,15 @@
 # frozen_string_literal: true
 
 require "bundler/setup"
+require "pry"
 
 ENV["RUBY_ENV"] = "development" # for logger debug purposes
 require "dphil"
-require "json"
 
 # You can add fixtures and/or initialization code here to make experimenting
 # with your gem easier. You can also use a different console, if you like.
 
-require "pry"
+@root_dir = File.expand_path(File.join(__dir__, ".."))
+@tmp_dir = File.join(@root_dir, "tmp")
+
 Pry.start
