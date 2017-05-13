@@ -1,12 +1,18 @@
 # frozen_string_literal: true
 
+require "active_support/inflector"
+require "active_support/json"
+require "active_support/core_ext/object/json"
 require "active_support/core_ext/object/try"
-require "ragabash"
+require "active_support/core_ext/hash/indifferent_access"
+
 require "csv"
 require "json"
 require "set"
 require "unf"
 require "pp"
+
+require "ragabash"
 
 require "dphil/version"
 require "dphil/constants"
