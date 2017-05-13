@@ -7,6 +7,8 @@ module Dphil
   # Immutable.
   #
   class Character
+    include Dphil::LDOutput
+
     # Instantiates a new Character
     # @overload initialize(id = nil, states = nil)
     #   @param id [Integer] a character ID
@@ -86,7 +88,7 @@ module Dphil
     attr_reader :taxa_states
 
     # @!attribute [r] taxa_symbols
-    # @return [Hash<Integer, String>] symbols by taxa IDs
+    # @return [Hash<Integer, String>] symbols by taxon ID
     def taxa_symbols
       @taxa_symbols ||= taxa_states.transform_values { |state| symbols[state] }.freeze
     end

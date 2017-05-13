@@ -5,6 +5,8 @@ module Dphil
   # A matrix of character states across taxa.
   #
   class CharacterMatrix
+    include LDOutput
+
     # Instantiate a new CharacterMatrix from a UTF-8 CSV file
     # @param infile [#read] the file/IO object to read
     # @param transpose [Boolean] transpose the table 90° (headers in first column)
