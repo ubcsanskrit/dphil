@@ -160,6 +160,27 @@ module Dphil
       @constant ||= states.size <= 1
     end
 
+    def to_h
+      {
+        id: id,
+        states: states,
+        symbols: symbols,
+        state_totals: state_totals,
+        taxa_states: taxa_states,
+        states_taxa: states_taxa,
+        is_informative: informative?,
+        is_constant: constant?,
+      }
+    end
+
+    def as_json(*args)
+      to_h.as_json(*args)
+    end
+
+    def to_json(*args)
+      as_json(*args).to_json(*args)
+    end
+
     # Pretty-print the object
     # (used by Pry in particular)
     def pretty_print(q)
