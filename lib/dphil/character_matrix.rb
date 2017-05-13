@@ -80,16 +80,12 @@ module Dphil
     def to_h
       {
         taxa_names: taxa_names,
-        characters: characters.transform_values(&:to_h),
+        characters: characters,
       }
     end
 
-    def as_json(*args)
-      to_h.as_json(*args)
-    end
-
-    def to_json(*args)
-      as_json(*args).to_json(*args)
+    def as_json(options = nil)
+      to_h.as_json(options)
     end
 
     private

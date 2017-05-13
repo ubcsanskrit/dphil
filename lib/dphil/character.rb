@@ -175,12 +175,8 @@ module Dphil
       }
     end
 
-    def as_json(*args)
-      to_h.as_json(*args)
-    end
-
-    def to_json(*args)
-      as_json(*args).to_json(*args)
+    def as_json(options = nil)
+      to_h.as_json(options)
     end
 
     # Pretty-print the object

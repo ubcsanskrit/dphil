@@ -51,10 +51,9 @@ module Dphil
         children: children,
       }
     end
-    alias as_json to_h
 
-    def to_json(*args)
-      as_json.to_json(*args)
+    def as_json(options = nil)
+      to_h.as_json(options)
     end
 
     def merge!(node)

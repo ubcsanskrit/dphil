@@ -7,6 +7,7 @@ module Dphil
   # Immutable.
   #
   class Tree
+    include LDOutput
     attr_reader :id, :nodes, :stats, :tree
 
     def initialize(id = nil, lengths = nil, stats = nil, **opts)
@@ -29,10 +30,9 @@ module Dphil
         tree: tree,
       }
     end
-    alias as_json to_h
 
-    def to_json(*args)
-      as_json.to_json(*args)
+    def as_json(options = nil)
+      to_h.as_json(options)
     end
 
     def root

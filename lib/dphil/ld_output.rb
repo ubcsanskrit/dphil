@@ -4,39 +4,24 @@ module Dphil
   #
   # Mixin module for Linked Data output
   #
-  # Requires that a class implements +to_h+
+  # Requires that a class implements +#as_json+
   #
   module LDOutput
     # Outputs a Linked Data Hash
-    def as_jsonld(camelize: true, compact: true, **options)
-      data = to_h
-      data = camelize_symbol_keys(data) if camelize
-      data = data.as_json(options)
-      return data if options[:data_only]
-
+    def as_jsonld(**options)
       ld = {
-        "@context" => options[:context] || Constants::LD_CONTEXTS[self.class.name],
-        "@type" => options[:ld_type] || Constants::LD_TYPES[self.class.name],
-      }.merge!(data)
-      ld_expanded = JSON::LD::API.expand(ld)
+        "@context" => options.delete(:context) || Constants::LD_CONTEXTS[self.class.name],
+        "@type" => options.delete(:ld_type) || Constants::LD_TYPES[self.class.name],
+      }.merge!(as_json(options))
 
-      return ld_expanded unless compact
+      ld_expanded = JSON::LD::API.expand(ld)
+      return ld_expanded if options[:compact] == false
+
       JSON::LD::API.compact(ld_expanded, ld["@context"])
     end
 
-    def to_jsonld(*args)
-      as_jsonld(*args).to_json(*args)
+    def to_jsonld(**options)
+      as_jsonld(options).to_json(options)
     end
-
-    private
-
-    def camelize_symbol_keys(hash)
-      hash.deep_transform_keys do |k|
-        next k unless k.is_a?(Symbol)
-        @@camel_cache[k] ||= k.to_s.camelize(:lower).freeze
-      end
-    end
-
-    @@camel_cache = {} # rubocop:disable ClassVars
   end
 end
