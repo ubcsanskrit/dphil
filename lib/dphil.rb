@@ -16,6 +16,7 @@ require "pp"
 require "ragabash"
 
 require "dphil/version"
+require "dphil/refinements"
 require "dphil/constants"
 require "dphil/cache"
 require "dphil/logger"
