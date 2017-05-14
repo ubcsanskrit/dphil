@@ -73,6 +73,8 @@ module Dphil
       }
 
       ld_context_tree = {
+        "rootId" => { "@id" => "ubcs:treeRootId" },
+        "root_id" => { "@id" => "ubcs:treeRootId" },
         "nodes" => {
           "@id" => "ubcs:treeNode",
           "@container" => "@index",

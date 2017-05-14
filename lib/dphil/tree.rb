@@ -26,6 +26,7 @@ module Dphil
     def to_h
       {
         id: id,
+        root_id: tree.id,
         nodes: nodes,
         stats: stats,
       }
