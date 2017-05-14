@@ -5,6 +5,7 @@ module Dphil
   # Node in a Phylogenetic tree
   #
   class TreeNode
+    include LDOutput
     attr_reader :id, :name, :length, :parent, :children
 
     def initialize(opts = {})
