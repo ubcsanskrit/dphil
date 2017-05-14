@@ -40,6 +40,7 @@ require "dphil/tree_node"
 require "dphil/character"
 require "dphil/character_matrix"
 require "dphil/change_list"
+require "dphil/ld_data_set"
 
 # Namespace module definition
 module Dphil

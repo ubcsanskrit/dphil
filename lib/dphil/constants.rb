@@ -94,11 +94,24 @@ module Dphil
         },
       }
 
+      ld_context_dataset = {
+        "matrix" => {
+          "@id" => "ubcs:characterMatrix",
+          "@context" => ld_context_matrix,
+        },
+        "trees" => {
+          "@id" => "ubcs:tree",
+          "@container" => "@index",
+          "@context" => ld_context_tree,
+        },
+      }
+
       LD_TYPES = {
         "Dphil::Character" => "ubcs:phyloCharacter",
         "Dphil::CharacterMatrix" => "ubcs:characterMatrix",
         "Dphil::TreeNode" => "ubcs:treeNode",
         "Dphil::Tree" => "ubcs:tree",
+        "Dphil::LDDataSet" => "ubcs:dataSet",
       }.deep_freeze
 
       LD_CONTEXTS = {
@@ -106,6 +119,7 @@ module Dphil
         "Dphil::CharacterMatrix" => ld_context_global.merge(ld_context_matrix),
         "Dphil::TreeNode" => ld_context_global.merge(ld_context_tree_node),
         "Dphil::Tree" => ld_context_global.merge(ld_context_tree),
+        "Dphil::LDDataSet" => ld_context_global.merge(ld_context_dataset),
       }.deep_freeze
     end
   end
