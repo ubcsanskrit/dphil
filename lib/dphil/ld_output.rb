@@ -7,6 +7,7 @@ module Dphil
   # Requires that a class implements +#as_json+
   #
   module LDOutput
+    using Dphil::Refinements::NaturalSort
     # Outputs a Linked Data Hash
     def as_jsonld(**options)
       ld = {
@@ -17,7 +18,8 @@ module Dphil
       ld_expanded = JSON::LD::API.expand(ld)
       return ld_expanded if options[:compact] == false
 
-      JSON::LD::API.compact(ld_expanded, ld["@context"])
+      ld_compact = JSON::LD::API.compact(ld_expanded, ld["@context"])
+      { "@context" => ld_compact.delete("@context") }.merge!(ld_compact.natural_sort_keys)
     end
 
     def to_jsonld(**options)
