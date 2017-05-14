@@ -49,10 +49,10 @@ module Dphil
         "taxa_states" => { "@id" => "ubcs:charStateByTaxon", "@container" => "@index" },
         "statesTaxa" => { "@id" => "ubcs:taxonByCharState", "@container" => "@index" },
         "states_taxa" => { "@id" => "ubcs:taxonByCharState", "@container" => "@index" },
-        "isInformative" => { "@id" => "ubcs:charStateIsInformative", "@type" => "xsd:boolean" },
-        "is_informative" => { "@id" => "ubcs:charStateIsInformative", "@type" => "xsd:boolean" },
-        "isConstant" => { "@id" => "ubcs:charStateIsConstant", "@type" => "xsd:boolean" },
-        "is_constant" => { "@id" => "ubcs:charStateIsConstant", "@type" => "xsd:boolean" },
+        "isInformative" => { "@id" => "ubcs:charStateIsInformative" },
+        "is_informative" => { "@id" => "ubcs:charStateIsInformative" },
+        "isConstant" => { "@id" => "ubcs:charStateIsConstant" },
+        "is_constant" => { "@id" => "ubcs:charStateIsConstant" },
       }
 
       ld_context_matrix = {
@@ -65,14 +65,47 @@ module Dphil
         },
       }
 
+      ld_context_tree_node = {
+        "name" => { "@id" => "ubcs:treeNodeName" },
+        "length" => { "@id" => "ubcs:branchLength" },
+        "parent" => { "@id" => "ubcs:treeNodeParent" },
+        "children" => { "@id" => "ubcs:treeNodeChildren" },
+      }
+
+      ld_context_tree = {
+        "nodes" => {
+          "@id" => "ubcs:treeNode",
+          "@container" => "@index",
+          "@context" => ld_context_tree_node,
+        },
+        "stats" => {
+          "@id" => "ubcs:treeStats",
+          "@context" => {
+            "ci" => { "@id" => "ubcs:treeCI" },
+            "ciEx" => { "@id" => "ubcs:treeCIEx" },
+            "ci_ex" => { "@id" => "ubcs:treeCIEx" },
+            "hi" => { "@id" => "ubcs:treeHI" },
+            "hiEx" => { "@id" => "ubcs:treeHIEx" },
+            "hi_ex" => { "@id" => "ubcs:treeHIEx" },
+            "length" => { "@id" => "ubcs:treeLengh" },
+            "rc" => { "@id" => "ubcs:treeRC" },
+            "ri" => { "@id" => "ubcs:treeRI" },
+          },
+        },
+      }
+
       LD_TYPES = {
         "Dphil::Character" => "ubcs:phyloCharacter",
         "Dphil::CharacterMatrix" => "ubcs:characterMatrix",
+        "Dphil::TreeNode" => "ubcs:treeNode",
+        "Dphil::Tree" => "ubcs:tree",
       }.deep_freeze
 
       LD_CONTEXTS = {
         "Dphil::Character" => ld_context_global.merge(ld_context_character),
         "Dphil::CharacterMatrix" => ld_context_global.merge(ld_context_matrix),
+        "Dphil::TreeNode" => ld_context_global.merge(ld_context_tree_node),
+        "Dphil::Tree" => ld_context_global.merge(ld_context_tree),
       }.deep_freeze
     end
   end
