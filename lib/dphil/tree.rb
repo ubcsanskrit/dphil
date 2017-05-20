@@ -95,7 +95,7 @@ module Dphil
       missing_keys = (PAUP_TREE_STATS.values - json_stats.keys)
       raise ArgumentError, "Missing `stats` keys: #{missing_keys}" unless missing_keys.empty?
       json_stats.each_with_object({}) do |(k, v), acc|
-        raise ArgumentError, "Stat `#{k}` is not a Numeric" unless v.is_a?(Numeric)
+        raise ArgumentError, "Stat `#{k}` is not a Numeric" unless v.is_a?(Numeric) || v.nil?
         acc[k] = v
       end
     end
