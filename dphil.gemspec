@@ -44,4 +44,5 @@ Gem::Specification.new do |spec| # rubocop:disable BlockLength
   spec.add_runtime_dependency "neatjson", "~> 0.8"
   spec.add_runtime_dependency "json-ld", "~> 2.1"
   spec.add_runtime_dependency "unf"
+  spec.add_runtime_dependency "bio"
 end
