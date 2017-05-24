@@ -13,7 +13,7 @@ Gem::Specification.new do |spec| # rubocop:disable BlockLength
 
   spec.summary       = "UBC Sanskrit Digital Philology Gem (all-in-one)"
   spec.homepage      = "https://github.com/ubcsanskrit/dphil"
-  spec.license       = "MIT"
+  spec.license       = "Apache-2.0"
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^spec/}) }
   spec.bindir        = "exe"
