@@ -3,6 +3,11 @@ inherit_from: .rubocop_todo.yml
 AllCops:
   TargetRubyVersion: 2.4
   DisplayCopNames: true
+  Include:
+    - "**/Gemfile"
+    - "**/Rakefile"
+    - "**/*.gemspec"
+    - "**/*.rake"
 
 # Metrics
 Metrics/AbcSize:
@@ -11,7 +16,7 @@ Metrics/AbcSize:
 
 Metrics/BlockLength:
   Exclude:
-    - "**/*_spec.rb"
+    - "spec/**/*_spec.rb"
 
 Metrics/BlockNesting:
   Enabled: true
