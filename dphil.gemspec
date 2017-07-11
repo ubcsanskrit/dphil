@@ -16,8 +16,8 @@ Gem::Specification.new do |spec| # rubocop:disable BlockLength
   spec.license       = "Apache-2.0"
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^spec/}) }
-  spec.bindir        = "exe"
-  spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
+  spec.bindir        = "bin"
+  spec.executables   = %w[csv2cx csv2nex cx2nex]
   spec.require_paths = ["lib"]
 
   spec.required_ruby_version = "~> 2.4"
