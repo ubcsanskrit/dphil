@@ -15,9 +15,9 @@ Gem::Specification.new do |spec| # rubocop:disable BlockLength
   spec.homepage      = "https://github.com/ubcsanskrit/dphil"
   spec.license       = "Apache-2.0"
 
-  spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^spec/}) }
-  spec.bindir        = "bin"
-  spec.executables   = %w[dphil]
+  spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(bin|config|spec)/|^\.}) }
+  spec.bindir        = "exe"
+  spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
   spec.required_ruby_version = "~> 2.4"
