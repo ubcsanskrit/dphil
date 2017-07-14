@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 module Dphil
+  #
+  # CSV to NEXUS file converter class
+  #
   class Csv2NexConverter
     include Dphil::Converter
 
@@ -22,6 +25,7 @@ module Dphil
       end
     end
 
+    # Perform the conversion and return a string result
     def convert
       # Setup taxa information and orientation
       taxa_count = @csv.first.count
@@ -63,7 +67,7 @@ module Dphil
           FORMAT DATATYPE = STANDARD RESPECTCASE GAP = - MISSING = ? SYMBOLS = "#{ALPHABET.join(' ')}";
           CHARSTATELABELS #{character_labels.join(', ')};
           MATRIX
-            #{character_matrix.join("\n\t\t")}
+            #{character_matrix.join("\n    ")}
         ;
 
         END;
