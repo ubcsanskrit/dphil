@@ -5,6 +5,7 @@ require "active_support/json"
 require "active_support/core_ext/object/json"
 require "active_support/core_ext/object/try"
 require "active_support/core_ext/hash/indifferent_access"
+require "active_support/core_ext/string/indent"
 
 require "csv"
 require "json"
@@ -42,6 +43,9 @@ require "dphil/character"
 require "dphil/character_matrix"
 require "dphil/change_list"
 require "dphil/ld_data_set"
+
+require "dphil/converter"
+require "dphil/converters/csv2nex"
 
 # Namespace module definition
 module Dphil
