@@ -6,7 +6,9 @@ SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new [
   SimpleCov::Formatter::HTMLFormatter,
   Coveralls::SimpleCov::Formatter,
 ]
-SimpleCov.start
+SimpleCov.start do
+  add_filter "/spec/"
+end
 
 ENV["RUBY_ENV"] = "test" # for logger debug purposes
 
