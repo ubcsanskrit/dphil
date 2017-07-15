@@ -17,6 +17,7 @@ Metrics/AbcSize:
 Metrics/BlockLength:
   Exclude:
     - "spec/**/*_spec.rb"
+    - "lib/dphil/cli_commands/*.rb"
 
 Metrics/BlockNesting:
   Enabled: true

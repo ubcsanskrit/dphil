@@ -15,14 +15,13 @@ module Dphil
       @csv = @csv.transpose if opts[:transpose]
 
       # Load paup file
-      if opts[:paup].nil?
-        @paup = ""
-      else
-        @paup = load_file(opts[:paup])
-        @paup << "\n" unless @paup.blank? || @paup[-1] == "\n"
-        @paup.indent!(2)
-        @paup.freeze
+      if opts[:paup_data].nil?
+        opts[:paup_data] = File.join(GEM_ROOT, "vendor", "default_commands.paup")
       end
+      @paup = load_file(opts[:paup_data])
+      @paup << "\n" unless @paup.blank? || @paup[-1] == "\n"
+      @paup.indent!(2)
+      @paup.freeze
     end
 
     # Perform the conversion and return a string result

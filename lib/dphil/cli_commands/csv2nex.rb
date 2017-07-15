@@ -14,10 +14,10 @@ Dphil::CLI.module_eval do
     c.desc "Transpose rows/columns in CSV"
     c.switch :t, :transpose, negatable: false
 
-    c.desc "Include PAUP commands from a file in NEX output as a PAUP block"
-    c.flag :p, :paup, arg_name: "file"
+    c.desc "Include custom PAUP commands from a file in PAUP block of NEXUS output"
+    c.flag :d, :paup_data, arg_name: "file"
 
-    c.desc "Write output to file instead of STDOUT"
+    c.desc "Write NEXUS output to file instead of STDOUT"
     c.flag :o, :outfile, arg_name: "file"
 
     c.action do |_, copts, args|
