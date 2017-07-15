@@ -1,0 +1,18 @@
+Log File=paup.log Replace=Yes;
+Set Monitor=no;
+Set Criterion=parsimony;
+Set Root=midpoint;
+Set SemiGraph=yes;
+Set StoreBrLens=yes;
+Set Autoclose=yes;
+PSet Opt=MINF;
+PSet StepMatrix=ObsOnly;
+PSet GapMode=missing;
+HSearch AddSeq=Random ReconLimit=Infinity;
+SortTrees;
+RootTrees rootMethod=midpoint;
+PSet Opt=ACCTran;
+ConTree / strict=no majrule=yes rootMethod=midpoint saveSupport=both treefile=con.tree replace=yes;
+DescribeTrees ALL / plot=phylogram rootMethod=midpoint brLens=yes labelNode=yes
+                chgList=yes taxLabels=full showTaxNum=yes;
+Factory;

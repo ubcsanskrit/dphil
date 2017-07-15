@@ -1,7 +1,8 @@
 # frozen_string_literal: true
+
 module Dphil
-  using ::Ragabash::Refinements
   class Syllables
+    using ::Ragabash::Refinements
     class Syllable
       attr_reader :source, :weight, :parent, :index, :source_script
 
@@ -10,8 +11,8 @@ module Dphil
         @weight = weight.to_str.safe_copy.freeze
         @parent = opts[:parent]
         @index = opts[:index]&.to_i
-        @source_script = opts[:source_script] || (@parent.source_script unless @parent.nil?)
-        @slp1 = @source_script == :slp1 ? @source : opts[:slp1]&.to_str.safe_copy.freeze
+        @source_script = opts[:source_script] || (@parent&.source_script)
+        @slp1 = @source_script == :slp1 ? @source : opts[:slp1]&.to_str&.safe_copy.freeze
       end
 
       def inspect
@@ -23,7 +24,7 @@ module Dphil
       end
 
       def prev
-        return unless @parent && @index && @index > 0
+        return unless @parent && @index && @index.positive?
         @parent[@index - 1]
       end
 

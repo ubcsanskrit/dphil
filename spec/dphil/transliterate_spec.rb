@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "spec_helper"
 
 describe Dphil::Transliterate do
@@ -30,8 +31,10 @@ describe Dphil::Transliterate do
 
   it "downcases unicode properly (non-destructive)" do
     iast_up_copy = iast_up.dup
-    expect(described_class.unicode_downcase(iast_up_copy)).to eq(iast)
-    expect(iast_up_copy).to eq(iast_up)
+    aggregate_failures do
+      expect(described_class.unicode_downcase(iast_up_copy)).to eq(iast)
+      expect(iast_up_copy).to eq(iast_up)
+    end
   end
 
   it "downcases unicode properly (destructive)" do
@@ -41,8 +44,11 @@ describe Dphil::Transliterate do
   end
 
   describe ".detect" do
-    it "detects IAST" do
+    it "detects IAST (uppercase)" do
       expect(described_class.detect(iast_up)).to eq(:iast)
+    end
+
+    it "detects IAST (lowercase)" do
       expect(described_class.detect(iast)).to eq(:iast)
     end
 

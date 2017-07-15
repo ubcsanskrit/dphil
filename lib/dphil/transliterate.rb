@@ -1,10 +1,11 @@
 # frozen_string_literal: true
+
 require "sanscript"
 
 module Dphil
-  using ::Ragabash::Refinements
   # Transliteration module for basic romanization formats.
   module Transliterate
+    using ::Ragabash::Refinements
 
     @default_script = nil
 

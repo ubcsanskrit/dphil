@@ -1,12 +1,11 @@
 # frozen_string_literal: true
+
 require "active_support/logger"
 
 require "dphil/log_formatter"
 
 # Namespace module definition
 module Dphil
-  using ::Ragabash::Refinements
-
   module_function
 
   def logger

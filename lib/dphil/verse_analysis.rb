@@ -1,10 +1,12 @@
 # frozen_string_literal: true
+
 require "json"
 require "amatch"
 
 module Dphil
-  using ::Ragabash::Refinements
   module VerseAnalysis
+    using ::Ragabash::Refinements
+
     module_function
 
     include Amatch
@@ -71,8 +73,8 @@ module Dphil
           end
           acc << {
             meter: meter_name,
-            type: "#{type}",
-            size: "#{size}",
+            type: type.to_s,
+            size: size.to_s,
             pattern: pattern_string,
             scope: meter_scope,
             padas: padas,
@@ -105,7 +107,7 @@ module Dphil
             next if pattern.source["|"]
             pattern = pattern.source.gsub!(/[\^\$\(\)]/, "")
             next if (pattern.length - syllable_count).abs > length_variance
-            pattern2 = pattern.gsub(".", "L")
+            pattern2 = pattern.tr(".", "L")
 
             edit_distance = str.match(pattern2)
             c = corrected_string(weight_string, pattern2)
@@ -116,7 +118,7 @@ module Dphil
             xw = 0 # for weight string
             pattern = pattern.lstrip
             (0...c.length).each do |i|
-              if (c[i] == "L" || c[i] == "G")
+              if c[i] == "L" || c[i] == "G"
                 x1 += 1
                 pattern_string << c[i]
                 xw += 1
@@ -128,7 +130,7 @@ module Dphil
                 pattern_string << "G"
               elsif c[i] == "d"
                 xw += 1
-              elsif (c[i] == "f" && pattern[x1] == ".")
+              elsif c[i] == "f" && pattern[x1] == "."
                 x1 += 1
                 edit_distance -= 1
                 pattern_string << weight_string[xw]
@@ -203,29 +205,25 @@ module Dphil
         status = "fuzzy match"
       else
         v_weight_halves = weight_try_half(v_weight, meter_candidates.keys.first)
-        unless v_weight_halves.nil?
-          v_weight_halves.each_with_index do |v_weight_half, index|
-            padas = index == 0 ? [1, 2] : [3, 4]
-            meter_search_exact(v_weight_half, :half, padas).each do |val|
-              if meter_candidates[val[:meter]].nil?
-                meter_candidates[val[:meter]] = [val]
-              else
-                meter_candidates[val[:meter]] << val
-              end
+        v_weight_halves&.each_with_index do |v_weight_half, index|
+          padas = index == 0 ? [1, 2] : [3, 4]
+          meter_search_exact(v_weight_half, :half, padas).each do |val|
+            if meter_candidates[val[:meter]].nil?
+              meter_candidates[val[:meter]] = [val]
+            else
+              meter_candidates[val[:meter]] << val
             end
           end
         end
 
         v_weight_padas = weight_try_pada(v_weight, meter_candidates.keys.first)
-        unless v_weight_padas.nil?
-          v_weight_padas.each_with_index do |v_weight_pada, index|
-            pada = [index + 1]
-            meter_search_exact(v_weight_pada, :pada, pada).each do |val|
-              if meter_candidates[val[:meter]].nil?
-                meter_candidates[val[:meter]] = [val]
-              else
-                meter_candidates[val[:meter]] << val
-              end
+        v_weight_padas&.each_with_index do |v_weight_pada, index|
+          pada = [index + 1]
+          meter_search_exact(v_weight_pada, :pada, pada).each do |val|
+            if meter_candidates[val[:meter]].nil?
+              meter_candidates[val[:meter]] = [val]
+            else
+              meter_candidates[val[:meter]] << val
             end
           end
         end
@@ -286,11 +284,10 @@ module Dphil
         d = 100.0
         pattern = []
         meter_candidates.each do |(key, val)|
-          if val[0][:edit_distance].to_i < d #multiple verses with same edit distance???
-            d = val[0][:edit_distance]
-            meter = key
-            pattern = val[0][:pattern].split("")
-          end
+          next unless val[0][:edit_distance].to_i < d # multiple verses with same edit distance???
+          d = val[0][:edit_distance]
+          meter = key
+          pattern = val[0][:pattern].split("")
         end
 
         defect_percentage = Rational(d, meter_candidates[meter][0][:pattern].length)
@@ -305,10 +302,10 @@ module Dphil
       }
 
       v_meters = {
-          name: meter,
-          size: "full/half/pada",
-          defectiveness: defect_percentage,
-          corrections: [v_corrections],
+        name: meter,
+        size: "full/half/pada",
+        defectiveness: defect_percentage,
+        corrections: [v_corrections],
       }
 
       result = {
@@ -326,7 +323,6 @@ module Dphil
 
       result
     end
-
 
     def corrected_string(weights, pattern)
       actual = weights.split("")
@@ -347,7 +343,7 @@ module Dphil
           if actual[i] == pattern[j]
             table[i][j] = table[i - 1][j - 1]
           else
-            table[i][j] = ([table[i - 1][j], table[i - 1][j - 1], table[i][j - 1]].min) + 1
+            table[i][j] = [table[i - 1][j], table[i - 1][j - 1], table[i][j - 1]].min + 1
           end
         end
       end
@@ -355,7 +351,7 @@ module Dphil
       correct = []
       i = actual.length - 1
       j = pattern.length - 1
-      while (i > 0 || j > 0)
+      while i > 0 || j > 0
         if actual[i] == pattern[j]
           correct.insert(0, actual[i])
           i -= 1
@@ -371,7 +367,7 @@ module Dphil
             end
             j -= 1
           when table[i - 1][j - 1]
-            correct.insert(0, "f")  #to mark substitution in string
+            correct.insert(0, "f") # to mark substitution in string
             i -= 1
             j -= 1
           when table[i - 1][j]
@@ -382,7 +378,6 @@ module Dphil
       end
       correct
     end
-
 
     def fuzzy_correction(weights, meter, pattern, syllables)
       correct = corrected_string(weights, pattern)
@@ -395,12 +390,12 @@ module Dphil
       len = metercount[meter].dup
       len.slice!(0, 4).each do |val|
         (1..val).each do
-          if correct[k] == "d"    # still to figure out
+          if correct[k] == "d" # still to figure out
             temp << ("(" + syllables[n] + ")")
             n += 1
           elsif correct[k] == "f"
             temp << ("(" + syllables[n] + ")")
-            n += 1                  # still to figure out
+            n += 1 # still to figure out
           elsif correct[k] == "g"
             case p
             when 0
@@ -486,7 +481,7 @@ module Dphil
         end
         e = []
       end
-      return nil
+      nil
     end
 
     def find_mid(verse)

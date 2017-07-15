@@ -1,7 +1,8 @@
 # frozen_string_literal: true
+
 module Dphil
-  using ::Ragabash::Refinements
   class Verse
+    using ::Ragabash::Refinements
     attr_reader :ms, :id, :verse, :syllables, :weights, :identify
 
     def initialize(verse, ms: nil, id: nil)

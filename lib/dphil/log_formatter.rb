@@ -1,9 +1,11 @@
 # frozen_string_literal: true
+
 require "awesome_print"
 
 module Dphil
-  using ::Ragabash::Refinements
   class LogFormatter < ::Logger::Formatter
+    using ::Ragabash::Refinements
+
     def colorize(severity, string)
       color = SEVERITY_MAP[severity] || :none
       String.new("#{COLOR_MAP[color]}#{string}#{COLOR_MAP[:none]}")

@@ -1,9 +1,10 @@
 # frozen_string_literal: true
+
 require "forwardable"
 
 module Dphil
-  using ::Ragabash::Refinements
   class ScriptString
+    using ::Ragabash::Refinements
     extend Forwardable
     def_delegators :@string, :<=>, :==, :===, :to_s, :to_str, :empty?, :length
     attr_reader :string

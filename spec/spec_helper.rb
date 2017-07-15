@@ -1,6 +1,14 @@
 # frozen_string_literal: true
-require "codeclimate-test-reporter"
-CodeClimate::TestReporter.start
+
+require "simplecov"
+require "coveralls"
+SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new [
+  SimpleCov::Formatter::HTMLFormatter,
+  Coveralls::SimpleCov::Formatter,
+]
+SimpleCov.start do
+  add_filter "/spec/"
+end
 
 ENV["RUBY_ENV"] = "test" # for logger debug purposes
 

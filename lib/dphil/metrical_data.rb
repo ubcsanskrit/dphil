@@ -1,14 +1,15 @@
 # frozen_string_literal: true
+
 require "psych"
 require "hashie"
 
 module Dphil
-  using ::Ragabash::Refinements
   #
   # Metrical Data structure imported and parsed from "metrical_data" module at:
   # https://github.com/shreevatsa/sanskrit
   #
   module MetricalData
+    using ::Ragabash::Refinements
     class << self
       attr_reader :version, :meters, :patterns, :regexes, :all
     end

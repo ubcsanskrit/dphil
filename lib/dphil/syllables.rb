@@ -1,11 +1,12 @@
 # frozen_string_literal: true
+
 require "forwardable"
 
 require "dphil/syllables/syllable"
 
 module Dphil
-  using ::Ragabash::Refinements
   class Syllables
+    using ::Ragabash::Refinements
     include Enumerable
     extend Forwardable
     def_delegators :@syllables, :[], :each, :first, :last, :length
