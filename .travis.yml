@@ -8,5 +8,8 @@ matrix:
   allow_failures:
   - rvm: ruby-head
 before_install:
+  - gem update bundler
   - curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain stable; export PATH="$HOME/.cargo/bin:$PATH"
+  - rustc --version
+  - cargo --version
 script: bundle exec rake spec SPEC_OPTS="--format p"
