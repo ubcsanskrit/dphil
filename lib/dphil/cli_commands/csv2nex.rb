@@ -26,8 +26,11 @@ Dphil::CLI.module_eval do
       if copts[:outfile].nil?
         puts nexus_output
       else
-        bytes = File.write(copts[:outfile], nexus_output)
-        puts "#{bytes} bytes written to #{copts[:outfile]}"
+        abs_outfile = Pathname.new(copts[:outfile]).expand_path
+        rel_outfile = abs_outfile.relative_path_from(Pathname.getwd)
+        puts "#{File.write(abs_outfile, nexus_output)} bytes written to #{rel_outfile}"
+        puts "You can process this file using PAUP with the command\n" \
+             "`paup4 [options] #{rel_outfile}`"
       end
     end
   end
