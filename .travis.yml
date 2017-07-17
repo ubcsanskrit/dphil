@@ -1,7 +1,12 @@
+dist: trusty
+sudo: false
 language: ruby
 rvm:
   - 2.4.1
+  - ruby-head
+matrix:
+  allow_failures:
+  - rvm: ruby-head
+before_install:
+  - curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain stable; export PATH="$HOME/.cargo/bin:$PATH"
 script: bundle exec rake spec SPEC_OPTS="--format p"
-addons:
-  code_climate:
-    repo_token: 7a8729db8d28ece935336bae76c859dc0e7ad29882c418c5fadc3c8e014c1089
