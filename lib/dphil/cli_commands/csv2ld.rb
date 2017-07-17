@@ -62,8 +62,9 @@ Dphil::CLI.module_eval do
       if copts[:outfile].nil?
         puts @dataset_ld
       else
-        bytes = File.write(copts[:outfile], @dataset_ld)
-        puts "#{bytes} bytes written to #{copts[:outfile]}"
+        abs_outfile = Pathname.new(copts[:outfile]).expand_path
+        rel_outfile = abs_outfile.relative_path_from(Pathname.getwd)
+        puts "#{File.write(copts[:outfile], @dataset_ld)} bytes written to #{rel_outfile}"
       end
     end
   end
