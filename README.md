@@ -1,5 +1,6 @@
 # Dphil
 
+[![Gem Version](https://badge.fury.io/rb/dphil.svg)](https://badge.fury.io/rb/dphil)
 [![Dependency Status](https://gemnasium.com/badges/github.com/ubcsanskrit/dphil.svg)](https://gemnasium.com/github.com/ubcsanskrit/dphil)
 [![Build Status](https://travis-ci.org/ubcsanskrit/dphil.svg?branch=master)](https://travis-ci.org/ubcsanskrit/dphil)
 [![Coverage Status](https://coveralls.io/repos/github/ubcsanskrit/dphil/badge.svg?branch=master)](https://coveralls.io/github/ubcsanskrit/dphil?branch=master)
