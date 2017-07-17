@@ -6,7 +6,7 @@ require "zlib"
 module Dphil
   GEM_ROOT = Pathname.new(File.join(__dir__, "..", "..")).realpath.freeze
 
-  VERSION = "0.1.3"
+  VERSION = "0.1.4"
 
   VERSION_CHECKSUM = begin
     gem_files = (
