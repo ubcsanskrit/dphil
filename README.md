@@ -26,7 +26,11 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+Library documentation available at [rubydoc.info](http://www.rubydoc.info/github/ubcsanskrit/dphil/master)
+
+For CLI help, execute:
+
+    dphil help
 
 ## Contributing
 
