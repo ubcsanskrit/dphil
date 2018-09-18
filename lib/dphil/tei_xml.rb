@@ -89,7 +89,7 @@ module Dphil
     #
     # Returns a new document.
     def subst(expr, subst_text = nil)
-      source = parsed_xml.dup
+      source = xml.dup
       subst_text = subst_text.to_s.gsub(/\s+/, "_") unless subst_text.nil?
 
       source.search(expr).each do |node|
