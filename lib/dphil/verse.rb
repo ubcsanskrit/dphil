@@ -2,7 +2,7 @@
 
 module Dphil
   class Verse
-    using ::Ragabash::Refinements
+    using Dphil::Refinements
     attr_reader :ms, :id, :verse, :syllables, :weights, :identify
 
     def initialize(verse, ms: nil, id: nil)

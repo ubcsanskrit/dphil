@@ -2,7 +2,7 @@
 
 module Dphil
   class TeiXML
-    using ::Ragabash::Refinements
+    using Dphil::Refinements
     # Public: Initialize a TeiXML object
     #
     def initialize(source)
@@ -12,14 +12,15 @@ module Dphil
 
     # Return or re-parse xml
     def xml
-      @xml ||= begin
-        xml = Nokogiri::XML(@raw_xml) { |config| config.strict.noent }
-        xml.encoding = "UTF-8"
-        xml.remove_namespaces!
-        xml_normalize!(xml)
-      rescue Nokogiri::XML::SyntaxError => e
-        raise "TEIDocument (source: #{@raw_xml}) caught exception: #{e}"
-      end
+      @xml ||=
+        begin
+          xml = Nokogiri::XML(@raw_xml) { |config| config.strict.noent }
+          xml.encoding = "UTF-8"
+          xml.remove_namespaces!
+          xml_normalize!(xml)
+        rescue Nokogiri::XML::SyntaxError => e
+          raise "TEIDocument (source: #{@raw_xml}) caught exception: #{e}"
+        end
     end
 
     def to_xml
@@ -42,13 +43,13 @@ module Dphil
       pb = page_of(segment)
       lb = line_of(segment)
 
-      source = <<~EOS
+      source = <<~TEIDOC
         <TEI version="5.0" xmlns="http://www.tei-c.org/ns/1.0">
           <pre>#{pb&.to_xml}#{lb&.to_xml}</pre>
           #{segment.to_xml}
           <post></post>
         </TEI>
-      EOS
+      TEIDOC
       self.class.new(source)
     end
 
@@ -57,13 +58,13 @@ module Dphil
         pb = page_of(segment)
         lb = line_of(segment)
 
-        source = <<~EOS
+        source = <<~TEIDOC
           <TEI version="5.0" xmlns="http://www.tei-c.org/ns/1.0">
             <pre>#{pb&.to_xml}#{lb&.to_xml}</pre>
             #{segment.to_xml}
             <post></post>
           </TEI>
-        EOS
+        TEIDOC
         self.class.new(source)
       end
     end
@@ -94,7 +95,7 @@ module Dphil
 
       source.search(expr).each do |node|
         set = Nokogiri::XML::NodeSet.new(source)
-        escaped_text = ":#{node.attribute('id').to_s.gsub(/\s+/, '_')}"
+        escaped_text = ":#{node.attribute('id').to_s.gsub(/\s+/, '_').tr('-.', '–·')}"
         text_content = "#{subst_text || node.name}#{escaped_text}"
         set << Nokogiri::XML::Text.new(" {{#{text_content}}} ", source)
         node.replace(set + node.search("pb, lb"))

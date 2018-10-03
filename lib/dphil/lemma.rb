@@ -5,7 +5,6 @@ module Dphil
   # Also contains information about the source/location of the words.
   # Immutable.
   class Lemma
-    using ::Ragabash::Refinements
     # Public: Returns the raw source data for the lemma.
     attr_reader :source, :text, :page, :facs, :line, :index
 
@@ -24,7 +23,7 @@ module Dphil
       @facs = xml.css("pb").map { |el| el.attr("facs") }.join(",")
       @line = xml.css("lb").map { |el| el.attr("n") }.join(",")
     rescue Nokogiri::XML::SyntaxError => e
-      $stderr.puts "Error in Lemma.new(`#{source}`, ...): #{e}"
+      warn "Error in Lemma.new(`#{source}`, ...): #{e}"
       abort
     end
 

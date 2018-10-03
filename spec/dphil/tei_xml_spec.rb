@@ -18,11 +18,11 @@ describe Dphil::TeiXML do
     it { expect(sample).to respond_to(:empty?) }
 
     it "sample instance should not be empty" do
-      expect(sample.empty?).to be_falsey
+      expect(sample).not_to be_empty
     end
 
     it "empty sample instance should be empty" do
-      expect(empty_sample.empty?).to be_truthy
+      expect(empty_sample).to be_empty
     end
   end
 end

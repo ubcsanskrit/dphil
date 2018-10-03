@@ -4,7 +4,7 @@ require "amatch"
 
 module Dphil
   module VerseAnalysis
-    using ::Ragabash::Refinements
+    using Dphil::Refinements
 
     module_function
 

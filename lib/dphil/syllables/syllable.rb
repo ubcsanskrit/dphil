@@ -2,7 +2,7 @@
 
 module Dphil
   class Syllables
-    using ::Ragabash::Refinements
+    using Dphil::Refinements
     class Syllable
       attr_reader :source, :weight, :parent, :index, :source_script
 

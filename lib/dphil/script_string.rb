@@ -4,7 +4,6 @@ require "forwardable"
 
 module Dphil
   class ScriptString
-    using ::Ragabash::Refinements
     extend Forwardable
     def_delegators :@string, :<=>, :==, :===, :to_s, :to_str, :empty?, :length
     attr_reader :string

@@ -7,7 +7,7 @@ module Dphil
     module_function
 
     def tree_from_nex(filename, tree_id: nil, taxa_map: nil) # rubocop:disable MethodLength
-      data = File.read(filename).to_s[/^\s*tree MajRule = \[&R\](.*)$/, 1]
+      data = File.read(filename).to_s[/^\s*tree [A-Za-z]+ = \[&R\](.*)$/, 1]
       tree = Bio::Newick.new(data).tree
       new_taxa_id = (taxa_map&.keys&.max || 0) + 1
       tree_hsh = tree.nodes.each_with_object({}) do |n, acc|

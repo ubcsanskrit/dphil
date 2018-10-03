@@ -7,7 +7,6 @@ module Dphil
   #   XML document.
   # Immutable.
   class LemmaList < ::Nokogiri::XML::SAX::Document
-    using ::Ragabash::Refinements
     include Enumerable
 
     attr_reader :name
@@ -111,6 +110,7 @@ module Dphil
 
     def characters(string)
       @empty_element = false
+      string = string.gsub(/[|]+/, "")
       string.split(/(\s)/).reject(&:empty?).each do |lemma|
         @current_chars += lemma.strip
 
@@ -149,7 +149,7 @@ module Dphil
     end
 
     def append_lemma
-      return unless @current_chars.match?(/[^\s\-\.\|]+/) # if not .empty?
+      return unless @current_chars.match?(/[^\s\-\.\|\_\\]+/) # if not .empty?
       new_lemma_source = @current_lemma.join("")
       new_lemma = Lemma.new(new_lemma_source, @index)
       @index += 1

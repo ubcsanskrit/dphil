@@ -2,11 +2,8 @@ dist: trusty
 sudo: false
 language: ruby
 rvm:
-  - 2.4.1
-  - ruby-head
-matrix:
-  allow_failures:
-  - rvm: ruby-head
+  - 2.5.1
+  - 2.4.4
 before_install:
   - gem update bundler
   - curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain stable; export PATH="$HOME/.cargo/bin:$PATH"

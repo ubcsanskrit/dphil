@@ -6,9 +6,9 @@ require "dphil/syllables/syllable"
 
 module Dphil
   class Syllables
-    using ::Ragabash::Refinements
     include Enumerable
     extend Forwardable
+    using Dphil::Refinements
     def_delegators :@syllables, :[], :each, :first, :last, :length
 
     attr_reader :source, :source_script, :weights, :syllables

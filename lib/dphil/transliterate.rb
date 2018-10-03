@@ -5,8 +5,6 @@ require "sanscript"
 module Dphil
   # Transliteration module for basic romanization formats.
   module Transliterate
-    using ::Ragabash::Refinements
-
     @default_script = nil
 
     module_function
@@ -28,7 +26,7 @@ module Dphil
       Sanscript.transliterate(str, first, second, default_script: default_script)
     rescue RuntimeError => e
       Dphil.logger.error "Transliteration Error: #{e}"
-      return str
+      str
     end
 
     def script_supported?(script)
@@ -63,8 +61,8 @@ module Dphil
       Sanscript::Detect.detect_scheme(str)
     end
 
-    def normalize_slp1(st)
-      out = st.dup
+    def normalize_slp1(str)
+      out = str.dup
       out.gsub!(Constants::TRANS_CTRL_WORD) do |match|
         control_content = match[Constants::TRANS_CTRL_WORD_CONTENT, 1]
         next match if control_content&.match(Constants::TRANS_CTRL_WORD_PROCESSED)
@@ -91,8 +89,8 @@ module Dphil
       process_string!(str, &UNICODE_DOWNCASE_PROC)
     end
 
-    def unicode_downcase(st, ignore_control = false)
-      unicode_downcase!(st.dup, ignore_control)
+    def unicode_downcase(str, ignore_control = false)
+      unicode_downcase!(str.dup, ignore_control)
     end
 
     UNICODE_DOWNCASE_PROC = lambda do |str|

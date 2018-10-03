@@ -3,11 +3,10 @@ inherit_from: .rubocop_todo.yml
 AllCops:
   TargetRubyVersion: 2.4
   DisplayCopNames: true
-  Include:
-    - "**/Gemfile"
-    - "**/Rakefile"
-    - "**/*.gemspec"
-    - "**/*.rake"
+
+# Layout
+Layout/EmptyLineAfterGuardClause:
+  Enabled: false
 
 # Metrics
 Metrics/AbcSize:
@@ -47,6 +46,14 @@ Metrics/ParameterLists:
 Metrics/PerceivedComplexity:
   Enabled: false
 
+# Naming
+Naming/UncommunicativeMethodParamName:
+  Enabled: false
+
+# RSpect
+RSpec/ContextWording:
+  Enabled: false
+
 # Style
 Style/AsciiComments:
   Enabled: false
@@ -82,7 +89,10 @@ Style/StringLiterals:
 Style/SymbolArray:
   Enabled: true
 
-Style/TrailingCommaInLiteral:
+Style/TrailingCommaInArrayLiteral:
+  EnforcedStyleForMultiline: comma
+
+Style/TrailingCommaInHashLiteral:
   EnforcedStyleForMultiline: comma
 
 Style/TrivialAccessors:

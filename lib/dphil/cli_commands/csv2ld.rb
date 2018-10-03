@@ -2,12 +2,12 @@
 
 Dphil::CLI.module_eval do
   desc "Convert a CSV-format collation file into a JSON-LD dataset"
-  long_desc <<~EOS
+  long_desc <<~DESC
     Convert a CSV-format collation file into a JSON-LD dataset, generating trees
     using PAUP as part of the process.
     This expects each column of the CSV to represent data for a single taxon,
     and the first row to contain the names of the taxa.
-  EOS
+  DESC
 
   arg :csv_file
 

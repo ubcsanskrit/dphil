@@ -4,4 +4,5 @@ AllCops:
     - 'vendor/**/*'
     - 'lib/dphil/verse_analysis.rb'
     - 'lib/dphil/verse_analysis_new.rb'
-    - 'bin/msubh'
+    - '~*/**/*'
+    - '**/~*'

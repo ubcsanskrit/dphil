@@ -4,7 +4,8 @@ require "set"
 
 module Dphil
   module Constants
-    using ::Ragabash::Refinements
+    using Dphil::Refinements
+
     DEBUG = if defined?(::Rails) && ::Rails.env[/^dev/]
               true
             elsif !ENV["RUBY_ENV"].nil? && ENV["RUBY_ENV"][/^dev/]

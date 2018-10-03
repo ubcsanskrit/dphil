@@ -14,8 +14,6 @@ require "set"
 require "unf"
 require "pp"
 
-require "ragabash"
-
 require "dphil/version"
 require "dphil/refinements"
 require "dphil/constants"

@@ -9,12 +9,10 @@ module Dphil
   # https://github.com/shreevatsa/sanskrit
   #
   module MetricalData
-    using ::Ragabash::Refinements
+    using Dphil::Refinements
     class << self
       attr_reader :version, :meters, :patterns, :regexes, :all
     end
-
-    private_class_method
 
     # This loads and processes the data into the module.
     def self.load_data!
