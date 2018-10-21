@@ -33,6 +33,9 @@ require "dphil/lemma_list"
 require "dphil/tei_xml"
 require "dphil/verse"
 
+require "dphil/compare"
+require "dphil/collate_x"
+
 require "dphil/paup"
 require "dphil/tree"
 require "dphil/tree_node"

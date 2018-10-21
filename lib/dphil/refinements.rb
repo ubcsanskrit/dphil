@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "ice_nine"
+require "dphil/refinements/enhanced_array"
 require "dphil/refinements/natural_sort"
 
 module Dphil
