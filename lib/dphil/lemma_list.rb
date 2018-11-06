@@ -114,7 +114,7 @@ module Dphil
       string.split(/(\s)/).reject(&:empty?).each do |lemma|
         @current_chars += lemma.strip
 
-        if lemma.match?(/\-$/)
+        if lemma.match?(/\-\\?\s*$/)
           @inside_hyphen = true
         elsif lemma.match?(/^\-?[^\s]/)
           @inside_hyphen = false

@@ -1,80 +1,144 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<?xml-stylesheet href="https://dl.dropbox.com/u/110155/ubc-VP/mss.css" type="text/css" ?>
-
 <TEI version="5.0" xmlns="http://www.tei-c.org/ns/1.0">
 <teiHeader>
   <fileDesc>
     <titleStmt>
-      <title>Vetālapañcaviṃśati</title>
-      <author>Śivadāsa</author>
+        <title>
+    <title type="main">IO 4096</title>
+    <title type="sub">Vaitālapañcaviṃśati of Vallabhadāsa</title>
+</title>
     </titleStmt>
-    <publicationStmt></publicationStmt>
+    <publicationStmt>
+        <distributor ref="https://viaf.org/viaf/313489927">Adheesh Sathaye, University of British Columbia</distributor>
+    </publicationStmt>
     <sourceDesc>
       <msDesc>
         <msIdentifier>
-          <repository>Koba Tirth</repository>
-          <settlement>Koba, Gujarat</settlement>
-          <idno>5502</idno>
+         <repository ref="https://viaf.org/viaf/121814978">British Library</repository>
+         <placeName>
+           <settlement>London</settlement>
+           <country>United Kingdom</country>
+         <geo>51.530200 -0.127582</geo></placeName>
+         <idno>IO 4096</idno>
         </msIdentifier>
-        <msContents></msContents>
+        <msContents>
+            <msItem>
+              <title ref="https://viaf.org/viaf/182013094">Vaitālapañcaviṃśati</title>
+              <author ref="https://viaf.org/viaf/36952200">Vallabhadāsa</author>
+              <textLang mainLang="san" otherLangs=""/>
+            </msItem>
+        </msContents>
         <physDesc>
-          mostly pṛṣṭamātra "e","o", "ai" "au";
+            <objectDesc>
+                <supportDesc material="paper">
+                    <extent>
+                        <measure quantity="97" unit="folios"/>
+                        <dimensions type="leaf" unit="in">
+                            <height>5.25</height>
+                            <width>6.75</width>
+                        </dimensions>
+                    </extent>
+                    <foliation>Folio 70 numbered twice.</foliation>
+                    <condition>
+                    <ab>Complete.</ab></condition>
+                </supportDesc>
+            <layoutDesc><layout writtenLines="9 10"/></layoutDesc></objectDesc>
+            <handDesc>
+                <handNote scope="sole" script="devanagari" scribe=""/>
+            </handDesc>
         </physDesc>
         <history>
-          <origPlace>Patan</origPlace>
-          <origDate when="1384-05-23">VS 1441, Jye. S, 3, Śukra (Friday)</origDate>
+          <origin>
+            <origDate calendar="VS" when-iso="1808-07-31">V.S. 1865 śrā. ś. 9 manda</origDate>
+          </origin>
         </history>
       </msDesc>
     </sourceDesc>
+    <notesStmt>
+        <note>Formerly IO 2239.</note>
+    </notesStmt>
   </fileDesc>
 </teiHeader>
 <text>
+<front>
+  <pb n="1r" facs="4"/>
+  <lb n="1"/><unclear>vaitālapaṃcaviṃśati</unclear>
+  <lb n="2"/><div xml:lang="en">Gaikawar</div>
+</front>
 <body>
 
-...
+  <pb n="1v" facs="5"/>
+    <fw type="header" place="top left">vai.paṃcavīśī-</fw>
+    <fw type="pageNum" place="left margin">1</fw>
+    <lb n="1"/><div type="frame" id="Ś0" city="pratiṣṭāna" king="vikramasena"><div type="scene" id="Ś0.0">: śrīgaṇeśāya namaḥ || śrīgurubh<damage reason="hole">yo</damage> namaḥ || śrīsadāśivāya nama
+    <lb n="2"/>|| <div type="verse" id="Ś0-1">praṇamya śirasā devaṃ gaṇanāthaṃ vināyakaṃ | lokānāṃ hitakāmā-
+    <lb n="3"/>-ya kariṣye haṃ kathām imāṃ || 1 ||</div> asti dakṣiṇāpathe pratiṣṭhānaṃ nā-
+    <lb n="4"/>-ma nagaraṃ tatra rājā vikramaseno nāmā maṃtrivargapuraskṛtaḥ || 1 ||
+    <lb n="5"/><div type="verse" id="Ś0-5">kaṃdarppa iva rūpāḍhyo hariva janavallabhaḥ | samudra iva maryādī sa-
+    <lb n="6"/>-mānaḥ sarvatāsatāṃ || 2 ||</div> <div type="verse" id="Ś0-8"> prabhūtakāṃtitejasvī udyamī ca pratāpa-
+    <lb n="7"/>-vān | visphūrjhadravitejāḍhyo babhūva kulanaṃdanaḥ || 3 ||</div> </div><div type="scene" id="Ś0.1">evaṃ gu-
+    <lb n="8"/>-ṇavaśiṣṭo rājā yāvad āsthānam upaviṣṭas tiṣṭati | tāvat kṣāṃti-
+    <lb n="9"/>-śilo nāmā digaṃbaraḥ || kare phalaṃ gṛhītvā rājasabhāyām āgata-
+    <fw type="pageNum" place="buttom right">siva. 1</fw>
 
-<pb n="19r" facs="37"/>
-  <lb n="1"/>...<div type="story" id="Ś17" num="17" title="" city="ujjayanī" king="mahāsena"><div type="verse" id="Ś17-1" num="1" source="">brahmā yena kulālavaṃ niyamito brahmāṃḍabhāṃḍodare viṣṇur yena daśāva-
-  <lb n="2"/>-tāragahane kṣiptaḥ sadā śaṃkare | rudro yena kapālapāṇipuṭake bhikṣāṭanaṃ kāritaḥ sūryo bhrāmyati nitya-
-  <lb n="3"/>-m eva gagane tasmai namaḥ karmaṇe || 1 </div>asti ujjayanī nāma nagarī | tatra mahāseno nāma rājā | tasya devaśa-
-  <lb n="4"/>-rmā nāma brāhmaṇaḥ | tasya putro guṇakaro nāma | yat kim api gṛhe tiṣṭati tat sarvaṃ dyūtena hārayati | kuṭaṃbe-
-  <lb n="5"/><del rend="strikethrough">seno nāma rājā |</del> -na militvā nirvvāṭitaḥ | gataḥ saḥ anyadeśe śūnyadevakule upaviṣṭaḥ | tatra tena yogī dṛṣṭaḥ
-  <lb n="6"/>gatvā namaskāraḥ kṛtaḥ | yoginoktaṃ | yas tvaṃ | tenoktaṃ bubhukṣito 'haṃ brāhmaṇaḥ | kapālodanaṃ gṛhītvā bhuṃkṣva | te-
-  <lb n="7"/>-noktaṃ | kapālasthaṃ bhojanaṃ na karoti | ciṃtitaṃ yoginā | dhyānena smṛtā vidyā samāyātā _ yakṣiṇī
-  <lb n="8"/>bhagavan ādeśo dīyatāṃ | bhaṇitaṃ yoginā | asya brāhmaṇasya bhavyaṃ bhojanaṃ dātavyaṃ | iti śrutvā yakṣiṇyā ra-
-  <lb n="9"/>-citaṃ divyabhojanaṃ tatra brāhmaṇaṃ nītvā divyabhojanaṃ vilāsavilepaṃ tāṃbūlasuṣmādibhiḥ sukhaśayyāyāṃ rā-
-  <lb n="10"/>-trau tena brāhmaṇena saha krīḍitā prabhātasamaye yakṣiṇī gatā | sa brāhmaṇaḥ ekākī saṃjātaḥ | tena yogi-
-  <lb n="11"/>-nā bhaṇitaṃ brāhmaṇa kim udvignacittaḥ brāhmaṇenoktaṃ | yakṣiṇyā viyogena mariṣyāmi | yo<del rend="strikethrough">mina</del>gino-
-  <lb n="12"/>-noktaṃ sā devī vidyābalena āgachati | tenoktaṃ | prabho mama vidyāṃ kathaya | ahaṃ sādhayiṣyāmi | yoginoktaṃ
+  <pb n="2r" facs="6"/>
+    <lb n="1"/>-ḥ|| rājahaste phalaṃ dattaṃ | mahārājenāsanam āvāpitaṃ | kṣaṇam e-
+    <lb n="2"/>-kam āsane sthitvā etato nijamārge gataḥ | nityam eva ekaṃ pha-
+    <lb n="3"/>-laṃ bheṭanakaṃ karoti </div><div type="scene" id="Ś0.2">ekasmin divase rājahastāt markaṭa-
+    <lb n="4"/>-rkaṭakena phalaṃ gṛhītvā bhakṣayitum āradhbaṃ tanmadhyād ratnam e-
+    <lb n="5"/>-kaṃ āsthānabhūmau patitaṃ | kim etad āścaryaṃ </div><div type="scene" id="Ś0.3">rājñoktaṃ | bho digaṃ-
+    <lb n="6"/>-bara mahāratnaṃ tvayā kimartham ānītaṃ | digaṃbareṇoktaṃ || <div type="verse" id="Ś0-10"> rikta-
+    <lb n="7"/>-pāṇir na paśyeta rājānaṃ devatāṃ guruṃ | naimittike nimittaṃ hi
+    <lb n="8"/>phalena phalam ādiśet || 4 ||</div> mahārāja mayā mahāratnāni īdṛ-
+    <lb n="9"/>-dṛśāni anekāni phalamadhyesthitāni dvādaśavarṣaparyaṃtaṃ
 
-<pb n="19v" facs="38"/>
-  <lb n="1"/>idaṃ maṃtraṃ gṛhītvā jalamadhye sthitvā ekacitto bhūtvā sādhaya | gato sau jalamadhye | tena maṃtraḥ sādhitaḥ | sarvaṃ mayāmayaṃ
-  <lb n="2"/>dṛṣṭaṃ nisṛto jalamadhyāt kathita saṃyogino māyāvisūraṃ bhaṇitaṃ yoginā agnipraveśaṃ kuru | tena guṇākareno-
-  <lb n="3"/>-ktaṃ | kuṭaṃbasya militvā samāgamiṣyāmi | paścāt agni sādhayiṣyāmi | evaṃ bhaṇitvā gataḥ | kuṭaṃbasya pārśve sarvaiḥ
-  <lb n="4"/>kaṃṭhe lagitvā rodayitum ārabdhaṃ | pitroktaṃ |  vatsa guṇākara etāvaṃti divasāni kutaḥ sthitaḥ kathaṃ gṛhaṃ vismṛ-
-  <lb n="5"/>-taṃ | <div type="verse" id="Ś17-2" num="" source="">pativratā dharmaśīlā sadācārakriyānvitā | tasyāś ca varjanāt putra | bhrūṇahatyānvito bhavet |</div> <div type="verse" id="Ś17-3" num="" source="CM82">na gārha-
-  <lb n="6"/>-sthāt paro dharmo na sukhaṃ gṛhiṇīparaṃ | na tīrthaṃ pitṛmātṛbhyo na devaḥ keśavāt paraḥ |</div> <div type="verse" id="Ś17-4" num="" source="">mātaraṃ pitaraṃ caiva ye
-  <lb n="7"/>niṃdaṃti narādhamāḥ | na teṣām ūrdhvagama<del rend="strikethrough">ṃ</del>nam evam āha prajāpatiḥ |</div><div type="verse" id="Ś17-5" num="" source="SMS9641">kāmārttāṃ ya striyāṃ dīnāṃ prārthayaṃtī punaḥ punaḥ
-  <lb n="8"/>bhajamānāṃ na bhuṃjīta taṃ vai cāṃḍāladarśanaṃ | </div> putra uvāca | <div type="verse" id="Ś17-6" num="" source="BhŚ375">amedhyapūrṇe kṛmijālasaṃkule svabhāvadurgraṃdhinim a-
-  <lb n="9"/>-śaucipūrite | kalevare mūtrapurīṣabhājane ramaṃti mūrkhā viramaṃti paṃḍitāḥ |</div><div type="verse" id="Ś17-7" num="" source="SMS9248"> kasya mātā pitā kasya bhāryā ka-
-  <lb n="10"/>-sya suto pi vā | jāto jāto hi jīvānāṃ bhavaṃty eva pare pare |</div><div type="verse" id="Ś17-8" num="" source="">mṛtaś cāhaṃ punar jāto jātaś cāhaṃ punar mṛtaḥ | nānāyo-
-  <lb n="11"/>-nisahasrāṇi mayā dṛṣṭā nināya te |</div><div type="verse" id="Ś17-9" num="" source="">śukraśoṇitasaṃyogād dehaḥ saṃjāyate punaḥ | nitya miṇmūtrapū-
-  <lb n="12"/>-rṇaś ca tenāyam aśuciḥ smṛtaḥ |</div><div type="verse" id="Ś17-10" num="" source="">yathātarviṣṭayā pūrṇaḥ śuciḥ syān na bahir ghaṭaḥ | yan na śodhyamāno yaṃ deho ya-
-  <fw type="pageNum" place="right margin">19</fw>
+  <pb n="2v" facs="7"/>
+    <fw type="header" place="top left">vai.paṃcavīśī.</fw>
+    <fw type="pageNum" place="left margin">2</fw>
+    <lb n="1"/>tava ha|ste samarpitāni | digaṃbaravacanaṃ ākarṇya rājñā bhāṃḍā-\
+    <lb n="2"/>-gāriko hy ākāritaḥ | bho bhāṃḍāgārika | phalāniṃ gaṇayitvā yā-
+    <lb n="3"/>-ni bhāṃḍāgāre kṣiptāni sarvāṇy ānaya | bhāṃḍāgārikas tāṃni gṛ-\
+    <lb n="4"/>-hītvā samāgataḥ ||</div><div type="scene" id="Ś0.4"> tato jñā ratnasamūhaṃ dṛṣṭvā bhaṇitaṃ bho ṛṣe
+    <lb n="5"/>vṛttāṃta kathaya | mahārāja kāryam asti etāvan mātraṇi ratnā-\
+    <lb n="6"/>-ni vikrayitvā kāryaṃ kriyate | rājñoktaṃ tat kim asti | yan mana-
+    <lb n="7"/>-sepisitaṃ kāryaṃ tat kathaya | ṛṣiṇoktaṃ ||<div type="verse" id="Ś0-12">siddham auṣadhīmaṃtraṃ ca
+    <lb n="8"/>| gṛhachidraṃ ca maithunaṃ | kubhuktaṃ kupsitaṃ marma matimān na prakāśa-
+    <lb n="9"/>-yet || 5 ||</div> <div type="verse" id="Ś0-14">giripṛṣṭe samāruhya prāsāde vā raho smataḥ | araṇye
+    <fw type="pageNum" place="right margin">2</fw>
 
-<pb n="20r" facs="39"/>
-  <lb n="1"/>-m aśuciḥ smṛtaḥ | </div><div type="verse" id="Ś17-11" num="" source="">dehaḥ saṃśodhyamāno pi paṃcagavyakuśāṃbubhiḥ | ghṛṇyamāṇa ivāṃgāro nirmalatvaṃ na gachati | śrotriya-
-  <lb n="2"/>-sya satataṃ pravahaṃti girir iva | kaṣamūtrapurīṣādyaiḥ sadehaḥ śudhyate kathaṃ |</div><div type="verse" id="Ś17-13" num="" source="BhŚ375">agnau kriyāvatī devo divi devo
-  <lb n="3"/>manīṣiṇāṃ | pratimā tulyabuddhīnāṃ yogināṃ hṛdaye hariḥ |</div>mayā yogaśāstram abhyasitaṃ | nāhaṃ gṛhāśramaṃ ka-
-  <lb n="4"/>-riṣyāmi | vidyābalena saṃsāre punar āgamanaṃ chetsyāmi | evaṃ kathayitvā svagṛhān niḥsṛtaḥ | yatra yogī tiṣṭa-
-  <lb n="5"/>-ti tatra samāyātaḥ | yoginaḥ pārśve āgatya prajvalito gni<del rend="strikethrough">r</del>madhye praviṣṭaḥ smaritā vidyā | sā yakṣiṇī na samāyātā |
-  <lb n="6"/>kathitaṃ yoginā nāgatā vidyā | iti kathānakaṃ kathayitvā vaitālenoktaṃ | rājan kathaya kena kāraṇena vaṭayakṣi-
-  <lb n="7"/>-ṇī na samāyātā | rājñoktaṃ | sādhakasya cittaṃ bhaṇitvā nāgatā devī | <div type="verse" id="Ś17-14" num="" source="SMS7466">ekacitto lābhayet siddhi dvidhācitto vina-
-  <lb n="8"/>-syati |</div> <div type="verse" id="Ś17-15" num="" source="SMSVIII">tyāgena hīnasya kuto sti kīrtiḥ satyena hīnasya kuto sti pūjā | nyāyena hīnasya kuto sti lakṣmī dhyāne-
-  <lb n="9"/>-na hīnasya kuto sti siddhiḥ | </div> vetālenoktaṃ | kathaṃ sādhako dvidhācittaḥ | rājñoktaṃ | maṃtraṃ sādhayitvā kuṭaṃbapārśve gataḥ |
-  <lb n="10"/>yogino pi īdṛśasya dvidhācittasya chātrasya kathaṃ vidyā dattā | anena kāraṇena nāgatā | kupitā tasyopari | <div type="verse" id="Ś17-16" num="" source="SR91.31">kiṃ ka-
-  <lb n="11"/>-roti naraḥ prājñaḥ preryamāṇaḥ svakarmabhiḥ | prāg eva hi manuṣyāṇāṃ buddhiḥ karmānusāriṇī |</div> evaṃ śrutvā vetālo gataḥ | sapta-
-  <lb n="12"/>-daśyakaṃ kathānakaṃ samāptaṃ || 17 </div>
+  <pb n="3r" facs="8"/>
+    <fw type="header" place="top left"></fw>
+    <lb n="1"/>nirjhale deśe tatra maṃtro vidhīyate || 6 ||</div> bho deva aham ekāṃte
+    <lb n="2"/>kathayiṣyāmi | tato rājñā ekāṃnaṃ pradattaṃ | </div><div type="scene" id="Ś0.5">ṛṣiṇoktaṃ | ma-
+    <lb n="3"/>-hārāja nadītīre mahāśmaśāne aśvanakṛṣṇacaturdaśyāṃ a-
+    <lb n="4"/>-ghoramaṃtraṃ sādhayiṣyāmi | mama tvam uttarasādhako bhava | aṣṭa-\
+      <lb n="5"/>-mahāsiddhayo bhaviṣyaṃti || <div type="verse" id="Ś0-15">aṇimā mahimā caiva laghimā gari-
+      <lb n="6"/>-mā tathā | īśatvaṃ ca vaśitvaṃ ca prāptiḥ kāmyam eva ca || 7 ||</div><div type="verse" id="Ś0-16"> pumāṃ-
+    <lb n="7"/>-s tu dhīrasaṃpattau bhavaty uttarasādhakaḥ || yasmād adhīro maṃtrasya si-
+    <lb n="8"/>-ddhasyāpi vināśaka || 8 ||</div> <div type="verse" id="Ś0-17">dhīras tu sarvadā tveṃ hi dvātriṃśallakṣa-\
+    <lb n="9"/>-ṇānvitaḥ | ato haṃ karttum ichāmi tvām evottarasādhakaṃ || 9 ||</div> i-
+
+  <pb n="3v" facs="9"/>
+    <fw type="header" place="top left">vai. paṃ. vīśī.</fw>
+    <fw type="pageNum" place="left margin">3</fw>
+    <lb n="1"/>-ty ukte sati rājñā pratipannaṃ | evaṃ kariṣyāmi tadanaṃtaraṃ tasmin
+    <lb n="2"/>kāle digaṃbaraḥ || </div><div type="scene" id="Ś0.6">sarvopaskaradravyāṇi gṛhītvā niśīthasa-
+    <lb n="3"/>-maye mahāśmaśāne gataḥ || pṛṣṭato pi rājā pi saṃprāptaḥ || digaṃba-
+    <lb n="4"/>-reṇoktaṃ | bho vīra yojanārddhe śaṃśapīvṛkṣasya śāṣāyāṃ mṛkam ava-
+    <lb n="5"/>-laṃbitam asti | tatra gatvā mṛtakam ādāya śīghram āgacha | ya-
+    <lb n="6"/>-di vadasi tarhi tan mṛtakaṃ pur vṛkṣe yāsyati | </div><div type="scene" id="Ś0.7"> rāja tadvacanam ā-
+    <lb n="7"/>-karṇya śaṃśapīvṛkṣasyoparisthitaṃ mṛtakam avalokya vṛkṣasyā-
+    <lb n="8"/>-rohaṇaṃ kṛtaṃ | pāśaṃ vichedya khaḍgena pātitaṃ bhūtale patitaṃ śaba
+    <lb n="9"/>kīdṛśaṃ || <div type="verse" id="Ś0-31">nīlajīmūtasaṃkāśaṃ urdhvakeśaṃ bhayāvahaṃ | varttulākṣaṃ
+    <fw type="pageNum" place="right margin"></fw>
+
+  <pb n="4r" facs="10"/>
+    <fw type="header" place="top left"></fw>
+    <lb n="1"/>ca nirmāṃsaṃ pretamudrāvibhūṣitaṃ | nimnodaraṃ sīdrakāyaṃ mahadbhī-\
+    <lb n="2"/>-ti pradāyakaṃ || 10 ||</div> tato rājā yāvad uttīrṇas tāva chavaṃ tatrauvā-
+    <lb n="3"/>-valaṃbya āste | punar api mṛtakapāśaṃ chedya skaṃdhe kṛtvā yāvan mā-
+    <lb n="4"/>-rge gacati </div><div type="scene" id="Ś0.8"> tāva chabasaṃsthena vaitālenoktaṃ | he rājan <div type="verse" id="Ś0-32">gītaśā-
+    <lb n="5"/>-stravinodena kālo gachati dhīmatāṃ | vyasanena hi mūrkhaṇāṃ ni-
+    <lb n="6"/>-drayā kalahena vai || 11 ||</div> tāvat śrūyatāṃ mahārāja |</div> </div>
 
 </body>
 </text>
