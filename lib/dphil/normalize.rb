@@ -9,7 +9,7 @@ module Dphil
       [
         {
           desc: "Retain control characters",
-          search: /(\{{2}[\}]*?\}{2})/,
+          search: /(\{\{.*?\}\})/,
           replace: [1],
         },
         {
@@ -46,6 +46,16 @@ module Dphil
           desc: "Final āḥ + voiced -> ā",
           search: /\BAH(?=\s[aAiIuUeEoOgGjJqQdDbBnmyrlv])/,
           replace: "A",
+        },
+        {
+          desc: "Bho[s] variants",
+          search: /\bBo[rSzsH]?\b/,
+          replace: "BoH",
+        },
+        {
+          desc: "Avagraha cases (like o pi -> aḥ api)",
+          search: /\Bo\s(?=[pvsh][aAiIuUeEoO])\b/,
+          replace: "aH a",
         },
         {
           desc: "Final aḥ/ar/o + voiced consonants -> aḥ",
@@ -107,15 +117,36 @@ module Dphil
           search: /e(?=\si)/,
           replace: "a",
         },
+        # {
+        #   desc: "Final i + vowel",
+        #   search: /i(?=\s[aAuUfFeEoO])/,
+        #   replace: "y",
+        # },
+        # {
+        #   desc: "Final u + vowel",
+        #   search: /u(?=\s[aAiIfFeEoO])/,
+        #   replace: "v",
+        # },
+        # Invert the two above.
         {
-          desc: "Final i + vowel",
-          search: /i(?=\s[aAuUfFeEoO])/,
-          replace: "y",
+          desc: "Final y + vowel",
+          search: /y(?=\s[aAuUfFeEoO])/,
+          replace: "i",
         },
         {
-          desc: "Final u + vowel",
-          search: /u(?=\s[aAiIfFeEoO])/,
-          replace: "v",
+          desc: "Final v + vowel",
+          search: /v(?=\s[aAiIfFeEoO])/,
+          replace: "u",
+        },
+        {
+          desc: "-e[nṇ]okta- -> a_ukta",
+          search: /\B(?<=e[nR])o(?=kt)\B/,
+          replace: "a_u",
+        },
+        {
+          desc: "-(in|y)okta- -> ā_ukta",
+          search: /\B(?<=in|y)o(?=kt)\B/,
+          replace: "A_u",
         },
       ]
     )
@@ -125,13 +156,13 @@ module Dphil
     def normalize_slp1(*lemmata)
       lemmata.map! { |l| l.to_s.strip }
       lemmata.reject!(&:blank?)
-      normalize_internal(lemmata.join(" "))
+      normalize_internal(lemmata)
     end
 
     def normalize_iast(*lemmata)
       lemmata.map! { |l| Dphil::Transliterate.iast_slp1(l.to_s.strip) }
       lemmata.reject!(&:blank?)
-      out = normalize_internal(lemmata.join(" "))
+      out = normalize_internal(lemmata)
       out.map! { |l| Dphil::Transliterate.slp1_iast(l) }
       out
     end
@@ -139,27 +170,32 @@ module Dphil
     class << self
       private
 
-      def normalize_internal(lemma)
+      def normalize_internal(lemmata)
+        lemma_sizes = lemmata.map { |l| l.blank? ? 0 : 1 + l.scan(/\s+/).size }
+        lemma = lemmata.join(" ")
+
         replacements = []
         # STDERR.puts(lemma)
         RULES.each do |rule|
           # STDERR.puts(rule[:desc])
-          lemma.gsub!(rule[:search]) do |match|
+          lemma.gsub!(rule[:search]) do
             if rule[:replace].is_a?(Array)
-              replacements << rule[:replace].map { |n| match[n] }.join("")
+              replacements << rule[:replace].map { |n| Regexp.last_match[n] }.join("")
             else
               replacements << rule[:replace]
             end
             "\u001A#{replacements.length - 1}\u001A"
           end
-          # STDERR.puts(lemma) if lemma.starts_with?("{")
+          # STDERR.puts(lemma)
         end
 
-        lemma.gsub!(/\u001A(\d+)\u001A/) do |match|
-          replacements[match[1].to_i]
+        lemma.gsub!(/\u001A(\d+)\u001A/) do
+          replacements[Regexp.last_match[1].to_i]
         end
 
-        lemma.split(/\s+/)
+        norm_result = lemma.split(/\s+/)
+        # STDERR.puts("#{lemma_sizes.inspect} #{norm_result.inspect}")
+        lemma_sizes.map { |ls| norm_result.shift(ls).join(" ").tr("_", " ") }
       end
     end
   end

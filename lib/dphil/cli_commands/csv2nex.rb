@@ -14,6 +14,9 @@ Dphil::CLI.module_eval do
     c.desc "Transpose rows/columns in CSV"
     c.switch :t, :transpose, negatable: false
 
+    c.desc "Filter for only 'Type 2' variants"
+    c.switch :"2", :type2, negatable: false
+
     c.desc "Include custom PAUP commands from a file in PAUP block of NEXUS output"
     c.flag :d, :paup_data, arg_name: "file"
 

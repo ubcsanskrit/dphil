@@ -23,7 +23,15 @@ module Dphil
     end
 
     def transliterate(str, first, second = nil)
-      Sanscript.transliterate(str, first, second, default_script: default_script)
+      ctrl_matches = []
+      str = str.gsub(/(\{\{.*?\}\})/) do
+        ctrl_matches << Regexp.last_match[1]
+        "\u0026#{ctrl_matches.length - 1}\u0026"
+      end
+      str = Sanscript.transliterate(str, first, second, default_script: default_script)
+      str.gsub(/\u0026(\d+)\u0026/) do |_|
+        ctrl_matches[Regexp.last_match[1].to_i]
+      end
     rescue RuntimeError => e
       Dphil.logger.error "Transliteration Error: #{e}"
       str
