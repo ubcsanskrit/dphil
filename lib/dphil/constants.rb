@@ -20,15 +20,15 @@ module Dphil
       con = "kKgGNcCjJYwWqQRtTdDnpPbBmyrlvzSsh"
       add = "MH"
 
-      R_SYL = /[']?[#{con}]*[\s]*[#{vow}][#{con}#{add}]*(?![#{vow}])\s*/
-      R_GSYL = /[AIUFXeEoO]|[MH]$/
-      R_CCONF = /[#{con}]{2}$/
-      R_CCON = /[#{con}]{2}/
+      R_SYL = /[']?[#{con}]*[\s]*[#{vow}][#{con}#{add}]*(?![#{vow}])\s*/.freeze
+      R_GSYL = /[AIUFXeEoO]|[MH]$/.freeze
+      R_CCONF = /[#{con}]{2}$/.freeze
+      R_CCON = /[#{con}]{2}/.freeze
     end
 
-    TRANS_CTRL_WORD = /\{#.*?#\}/
-    TRANS_CTRL_WORD_CONTENT = /\{#(.*?)#\}/
-    TRANS_CTRL_WORD_PROCESSED = /#[a-f0-9]{40}#/
+    TRANS_CTRL_WORD = /\{#.*?#\}/.freeze
+    TRANS_CTRL_WORD_CONTENT = /\{#(.*?)#\}/.freeze
+    TRANS_CTRL_WORD_PROCESSED = /#[a-f0-9]{40}#/.freeze
 
     # Linked Data types and contexts
     begin

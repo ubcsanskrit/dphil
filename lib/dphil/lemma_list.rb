@@ -61,10 +61,21 @@ module Dphil
     end
 
     def cx_tokens
-      @members.map do |lemma|
+      textnorm_override = nil
+      @members.each_with_index.map do |lemma, i|
+        if textnorm_override
+          lemma_text = textnorm_override
+          textnorm_override = nil
+        else
+          lemma_text = lemma.text
+        end
+        next_lemma = @members.fetch(i + 1, nil)&.text
+        normalized = Normalize.normalize_iast(lemma_text, next_lemma)
+        textnorm_override = normalized[1] if normalized.length == 2
+
         out = {
           t: lemma.text,
-          n: Transliterate.normalize_iast(lemma.text),
+          n: normalized[0],
           i: lemma.index,
           p: lemma.page,
           f: lemma.facs,

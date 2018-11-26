@@ -43,4 +43,13 @@ describe Dphil::LemmaList do
       expect(described_class.new("").size).to be_zero
     end
   end
+
+  describe "#cx_tokens" do
+    it "is not empty with sample data" do
+      expect(described_class.new(sample_tei_xml).cx_tokens).to not_be_empty
+    end
+    it "is empty with empty data" do
+      expect(described_class.new("").cx_tokens).to be_empty
+    end
+  end
 end

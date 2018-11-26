@@ -21,6 +21,7 @@ require "dphil/cache"
 require "dphil/logger"
 require "dphil/ld_output"
 
+require "dphil/normalize"
 require "dphil/transliterate"
 require "dphil/metrical_data"
 # require "dphil/verse_analysis"
